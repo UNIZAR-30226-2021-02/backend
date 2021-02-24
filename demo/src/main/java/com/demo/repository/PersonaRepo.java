@@ -4,7 +4,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.demo.model.Persona;
 
-public interface Repo extends JpaRepository<Persona,Integer>{
+public interface PersonaRepo extends JpaRepository<Persona,Integer>{
 
 	
 	

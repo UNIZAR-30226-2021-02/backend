@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.demo.model.Persona;
-import com.demo.repository.Repo;
+import com.demo.repository.PersonaRepo;
 
 @RestController
 @RequestMapping(value = "/api")
@@ -23,7 +23,7 @@ public class RestDemoController {
 
 	
 	@Autowired
-	private Repo repo;
+	private PersonaRepo repo;
 	
 	@GetMapping(value = "/all")
 	public List<Persona> listar(){

@@ -6,7 +6,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import com.demo.model.Persona;
-import com.demo.repository.Repo;
+import com.demo.repository.PersonaRepo;
 
 
 
@@ -15,7 +15,7 @@ public class AppController {
 
 	
 	@Autowired
-	private Repo r;
+	private PersonaRepo r;
 	
 	@GetMapping("/hola")
 	public String hola(){
