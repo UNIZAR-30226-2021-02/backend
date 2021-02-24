@@ -8,4 +8,10 @@ En la terminal con docker instalado y en la raiz de nuestro proyecto
 - docker build -f Dockerfile -t dockerdemo .
 - docker run dockerdemo
 
+
+
+Para crear el contenedor usar script docker_build.sh
+
+Para ejecutar el contenedor usar script docker_run.sh
+
 El proyecto se compila con java 15
