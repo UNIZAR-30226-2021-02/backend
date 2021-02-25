@@ -14,4 +14,6 @@ Para crear el contenedor usar script docker_build.sh
 
 Para ejecutar el contenedor usar script docker_run.sh
 
-El proyecto se compila con java 15
+El proyecto se compila con java 15 (JDK 15)
+
+POSTGRES 13.2
