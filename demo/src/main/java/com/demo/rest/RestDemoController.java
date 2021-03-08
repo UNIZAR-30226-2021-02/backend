@@ -65,7 +65,7 @@ public class RestDemoController {
 	}
 	
 	@PostMapping(value = "/register")
-	public void register(@RequestBody Usuario usuario) {
+	public ResponseEntity<Usuario> register(@RequestBody Usuario usuario) {
 		
 		Usuario u = new Usuario();
 		String nombreUsuario = usuario.getNombre();
@@ -74,10 +74,12 @@ public class RestDemoController {
 			u.setPassword(encoder.encode(usuario.getPassword()));
 			usuarioRepo.save(u);
 			System.out.println("Como el usuario no existe, se crea");
+			return new ResponseEntity<Usuario>(HttpStatus.CREATED);
 		
 		}
 		else {
 			System.out.println("El usuario ya existe, por lo que no lo creamos");
+			return new ResponseEntity<Usuario>(HttpStatus.EXPECTATION_FAILED);
 		}
 		
 	}
