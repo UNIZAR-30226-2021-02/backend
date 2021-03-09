@@ -32,11 +32,11 @@ public class UserService implements UserDetailsService{
 		
 		List<GrantedAuthority> roles = new ArrayList<>();
 		
-		roles.add(new SimpleGrantedAuthority("ADMIN"));
+		roles.add(new SimpleGrantedAuthority("USER"));
 		
 		UserDetails userDetails =  new User(u.getNombre(),u.getPassword(),roles);
 		
-		return (UserDetails) userDetails;
+		return  userDetails;
 	}
 
 
