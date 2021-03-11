@@ -5,9 +5,10 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.session.web.http.HttpSessionIdResolver;
+
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,10 +18,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-
+import com.demo.controller.JWTController;
+import com.demo.controller.authController;
 import com.demo.model.Persona;
 import com.demo.model.Usuario;
 import com.demo.repository.PersonaRepo;
+import com.demo.repository.TokenRepo;
 import com.demo.repository.UsuarioRepo;
 import com.demo.service.UserService;
 
@@ -29,7 +32,11 @@ import com.demo.service.UserService;
 public class RestDemoController {
 
 	
+	@Autowired
+	private authController jwt;
 	
+	@Autowired
+	private TokenRepo tokenRepo;
 	
 	@Autowired
 	private PersonaRepo repo;
@@ -80,6 +87,7 @@ public class RestDemoController {
 		if(usuarioRepo.findByNombre(nombreUsuario)==null) {
 			u.setNombre(nombreUsuario);
 			u.setPassword(encoder.encode(usuario.getPassword()));
+			u.setRole("USER");
 			usuarioRepo.save(u);
 			System.out.println("Como el usuario no existe, se crea");
 			return new ResponseEntity<Usuario>(HttpStatus.CREATED);
@@ -92,13 +100,18 @@ public class RestDemoController {
 		}
 		
 	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	@PostMapping(value = "/login")
-	public void login(@RequestBody Usuario usuario) {
-		
-		
-		
-			
-			
+	public ResponseEntity<Usuario> login(@RequestBody Usuario usuario) {
+	
 			
 			
 			if(usuarioRepo.findByNombre(usuario.getNombre())!=null){
@@ -106,9 +119,19 @@ public class RestDemoController {
 			
 			if(BCrypt.checkpw(usuario.getPassword(),usuarioRepo.findByNombre(usuario.getNombre()).getPassword())) {
 				
+				service.loadUserByUsername(usuario.getNombre());
 				
 				System.out.println("Logeado correctamente");
 				
+						String token = jwt.getJWTToken(usuario.getNombre());
+
+						usuario.setToken(token);
+						
+						tokenRepo.addToken(usuario.getNombre(), token);
+						tokenRepo.printTokens();
+						System.out.println("----------------");
+						return new ResponseEntity<Usuario>(usuario,HttpStatus.OK);
+						
 			}
 			else {
 				System.out.println("Contraseña incorrecta");
@@ -119,7 +142,7 @@ public class RestDemoController {
 			System.out.println("Usuario incorrecto");
 		}
 		
-		
+		return null;
 	}
 	
 }

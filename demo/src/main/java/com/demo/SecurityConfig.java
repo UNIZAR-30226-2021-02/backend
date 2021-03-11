@@ -10,7 +10,9 @@ import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import com.demo.security.JWTAuthorizationFilter;
 import com.demo.service.UserService;
 
 @Configuration
@@ -40,18 +42,18 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	    @Override
 	public void configure(HttpSecurity http) throws Exception {
-	       http.csrf().disable().authorizeRequests()
+	       http.csrf().disable()
+	       .addFilterAfter(new JWTAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class)
+	        .authorizeRequests()
 	        .antMatchers("/").permitAll()
 	        .antMatchers("v2/api-docs").permitAll()
 	        .antMatchers("swagger-ui.html").permitAll()
-	        .antMatchers(HttpMethod.GET,"/api/all").permitAll()
-	        .antMatchers(HttpMethod.POST, "/api/save").permitAll()
-	        .antMatchers(HttpMethod.POST,"/newuser/*").permitAll()
-	        .antMatchers(HttpMethod.GET,"/master/*").permitAll()
-	        .antMatchers(HttpMethod.POST,"/api/*").permitAll()
-	         .antMatchers(HttpMethod.GET,"/exploreCourse").permitAll()
-	        .anyRequest().authenticated();
-	        
+	       .antMatchers(HttpMethod.POST, "/api/login").permitAll()
+	       .antMatchers(HttpMethod.POST, "/api/register").permitAll()
+			.anyRequest().authenticated();
+				
+				
+				;
 	        
 	        
 	}

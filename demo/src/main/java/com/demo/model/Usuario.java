@@ -5,6 +5,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
+import org.springframework.boot.context.properties.bind.DefaultValue;
+
 @Entity
 public class Usuario {
 
@@ -12,11 +14,22 @@ public class Usuario {
 	private int id;
 	private String nombre;
 	private String password;
+	private String token;
+	
+	private String role;
 	
 	public int getId() {
 		return id;
 	}
 	
+	public String getToken() {
+		return token;
+	}
+
+	public void setToken(String token) {
+		this.token = token;
+	}
+
 	public void setId(int id) {
 		this.id = id;
 	}
@@ -35,6 +48,14 @@ public class Usuario {
 	
 	public void setPassword(String password) {
 		this.password = password;
+	}
+	
+	public void setRole(String role) {
+		this.role = role;
+	}
+	
+	public String getRole() {
+		return role;
 	}
 		
 }
