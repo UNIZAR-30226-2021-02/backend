@@ -18,11 +18,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.demo.controller.JWTController;
-import com.demo.controller.authController;
-import com.demo.model.Persona;
+
+import com.demo.controller.AuthController;
 import com.demo.model.Usuario;
-import com.demo.repository.PersonaRepo;
 import com.demo.repository.TokenRepo;
 import com.demo.repository.UsuarioRepo;
 import com.demo.service.UserService;
@@ -33,13 +31,11 @@ public class RestDemoController {
 
 	
 	@Autowired
-	private authController jwt;
+	private AuthController jwt;
 	
 	@Autowired
 	private TokenRepo tokenRepo;
 	
-	@Autowired
-	private PersonaRepo repo;
 	
 	@Autowired 
 	private UsuarioRepo usuarioRepo;
@@ -52,32 +48,17 @@ public class RestDemoController {
 	private BCryptPasswordEncoder encoder;
 	
 	@GetMapping(value = "/all")
-	public List<Persona> listar(){
-		return repo.findAll();
+	public List<Usuario> listar(){
+		return usuarioRepo.findAll();
 	}
 	
 	@GetMapping(value = "/find/{id}")
-	public Persona find(@PathVariable Integer id) {
-		return repo.getOne(id);
+	public Usuario find(@PathVariable Integer id) {
+		return usuarioRepo.getOne(id);
 	}
 	
-	@PostMapping(value = "/save")
-	public void save(@RequestBody Persona persona){
-		repo.save(persona);
-		
-	}
+
 	
-	@PutMapping(value = "/update")
-	public void modify(@RequestBody Persona persona){
-		repo.save(persona);
-		
-	}
-	
-	@DeleteMapping(value = "delete/{id}")
-	public void delete(@PathVariable("id") Integer id){
-		
-		repo.deleteById(id);
-	}
 	
 	@PostMapping(value = "/register")
 	public ResponseEntity<Usuario> register(@RequestBody Usuario usuario) {
@@ -90,7 +71,10 @@ public class RestDemoController {
 			u.setRole("USER");
 			usuarioRepo.save(u);
 			System.out.println("Como el usuario no existe, se crea");
-			return new ResponseEntity<Usuario>(HttpStatus.CREATED);
+			
+			String token = jwt.getJWTToken(nombreUsuario);
+			u.setToken(token);
+			return new ResponseEntity<Usuario>(u,HttpStatus.CREATED);
 		
 		}
 		else {
@@ -101,13 +85,7 @@ public class RestDemoController {
 		
 	}
 	
-	
-	
-	
-	
-	
-	
-	
+
 	
 	@PostMapping(value = "/login")
 	public ResponseEntity<Usuario> login(@RequestBody Usuario usuario) {

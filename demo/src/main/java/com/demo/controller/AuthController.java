@@ -20,7 +20,7 @@ import com.demo.model.Usuario;
 	import io.jsonwebtoken.SignatureAlgorithm;
 
 	@RestController
-	public class authController {
+	public class AuthController {
 
 		
 
