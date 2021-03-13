@@ -135,7 +135,7 @@ public class RestDemoController {
 	public ResponseEntity<byte[]> getImage() throws IOException{
 		InputStream in = getClass().getResourceAsStream("prueba.jpg");
 		byte[] image = IOUtils.toByteArray(in);
-		
+		//comentarios
 		return new ResponseEntity<byte[]>(image,HttpStatus.OK);
 		
 	}
