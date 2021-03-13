@@ -1,9 +1,13 @@
 package com.demo.rest;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 
+import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.bcrypt.BCrypt;
@@ -24,6 +28,8 @@ import com.demo.model.Usuario;
 import com.demo.repository.TokenRepo;
 import com.demo.repository.UsuarioRepo;
 import com.demo.service.UserService;
+
+
 
 @RestController
 @RequestMapping(value = "/api")
@@ -121,6 +127,17 @@ public class RestDemoController {
 		}
 		
 		return null;
+	}
+	
+	
+	
+	@GetMapping(value = "/returnImage", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
+	public ResponseEntity<byte[]> getImage() throws IOException{
+		InputStream in = getClass().getResourceAsStream("prueba.jpg");
+		byte[] image = IOUtils.toByteArray(in);
+		
+		return new ResponseEntity<byte[]>(image,HttpStatus.OK);
+		
 	}
 	
 }
