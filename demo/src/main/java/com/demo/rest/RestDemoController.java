@@ -2,6 +2,7 @@ package com.demo.rest;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.io.IOUtils;
@@ -19,12 +20,15 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 
 import com.demo.controller.AuthController;
+import com.demo.model.Amigo;
 import com.demo.model.Usuario;
+import com.demo.repository.AmigoRepo;
 import com.demo.repository.TokenRepo;
 import com.demo.repository.UsuarioRepo;
 import com.demo.service.UserService;
@@ -48,6 +52,10 @@ public class RestDemoController {
 	
 	
 	@Autowired
+	private AmigoRepo amigoRepo;
+	
+	
+	@Autowired
 	private UserService service;
 
 	@Autowired
@@ -58,10 +66,7 @@ public class RestDemoController {
 		return usuarioRepo.findAll();
 	}
 	
-	@GetMapping(value = "/find/{id}")
-	public Usuario find(@PathVariable Integer id) {
-		return usuarioRepo.getOne(id);
-	}
+	
 	
 
 	
@@ -71,8 +76,11 @@ public class RestDemoController {
 		
 		Usuario u = new Usuario();
 		String nombreUsuario = usuario.getNombre();
-		if(usuarioRepo.findByNombre(nombreUsuario)==null) {
+		String mail = usuario.getMail();
+		System.out.println(mail);
+		if(usuarioRepo.findByMail(mail)==null) {
 			u.setNombre(nombreUsuario);
+			u.setMail(mail);
 			u.setPassword(encoder.encode(usuario.getPassword()));
 			u.setRole("USER");
 			usuarioRepo.save(u);
@@ -138,6 +146,44 @@ public class RestDemoController {
 		//comentarios
 		return new ResponseEntity<byte[]>(image,HttpStatus.OK);
 		
+	}
+	
+	
+	
+	
+	@PostMapping(value = "/acceptFriend")
+	public ResponseEntity<Usuario> acceptFriend(@RequestBody Usuario usuario,@RequestHeader String identificador){
+		
+		String nombreUsuario = usuario.getNombre();
+		Usuario u = usuarioRepo.findByNombre(nombreUsuario);
+		
+		String mail = u.getMail();
+		System.out.println(identificador);
+		Amigo amigo1 = new Amigo();
+		amigo1.setMailAmigo(usuarioRepo.findByNombre(identificador).getMail());
+		amigo1.setMailUsuario(u.getMail());
+		
+		amigoRepo.save(amigo1);
+		
+		
+		Amigo amigo2 = new Amigo();
+		amigo2.setMailAmigo(u.getMail());
+		amigo2.setMailUsuario(usuarioRepo.findByNombre(identificador).getMail());
+		
+	
+		amigoRepo.save(amigo2);
+		
+		return new ResponseEntity<Usuario>(HttpStatus.OK);
+	}
+	
+	
+	@GetMapping(value = "/listFriends")
+	public ResponseEntity<List<String>> listFriends(@RequestHeader String identificador){
+		
+		
+		List<String> listaAmigos = new ArrayList<>();
+		
+		return new ResponseEntity<List<String>>(listaAmigos,HttpStatus.OK);
 	}
 	
 }

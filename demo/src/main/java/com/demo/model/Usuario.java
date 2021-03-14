@@ -10,16 +10,16 @@ import org.springframework.boot.context.properties.bind.DefaultValue;
 @Entity
 public class Usuario {
 
-	@Id@GeneratedValue(strategy=GenerationType.AUTO)
-	private int id;
+	@Id
+	private String mail;
 	private String nombre;
 	private String password;
 	private String token;
 	
 	private String role;
 	
-	public int getId() {
-		return id;
+	public String getMail() {
+		return mail;
 	}
 	
 	public String getToken() {
@@ -30,8 +30,8 @@ public class Usuario {
 		this.token = token;
 	}
 
-	public void setId(int id) {
-		this.id = id;
+	public void setMail(String mail) {
+		this.mail = mail;
 	}
 	
 	public String getNombre() {
