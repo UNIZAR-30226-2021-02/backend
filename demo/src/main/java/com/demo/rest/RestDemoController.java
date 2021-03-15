@@ -58,8 +58,7 @@ public class RestDemoController {
 	@Autowired
 	private UserService service;
 
-	@Autowired
-	private BCryptPasswordEncoder encoder;
+
 	
 	@GetMapping(value = "/all")
 	public List<Usuario> listar(){
@@ -81,7 +80,7 @@ public class RestDemoController {
 		if(usuarioRepo.findByMail(mail)==null&&usuarioRepo.findByNombre(nombreUsuario)==null) {
 			u.setNombre(nombreUsuario);
 			u.setMail(mail);
-			u.setPassword(encoder.encode(usuario.getPassword()));
+			u.setPassword(usuario.getPassword());
 			u.setRole("USER");
 			usuarioRepo.save(u);
 			System.out.println("Como el usuario no existe, se crea");
@@ -107,9 +106,10 @@ public class RestDemoController {
 			
 			
 			if(usuarioRepo.findByNombre(usuario.getNombre())!=null){
+			System.out.println("PASSWORD QUE NOS LLEGA "+usuario.getPassword());
+			System.out.println("PASSWORD NUESTRA "+usuarioRepo.findByNombre(usuario.getNombre()).getPassword());
 			
-			
-			if(BCrypt.checkpw(usuario.getPassword(),usuarioRepo.findByNombre(usuario.getNombre()).getPassword())) {
+			if(usuario.getPassword()==usuarioRepo.findByNombre(usuario.getNombre()).getPassword()) {
 				
 				service.loadUserByUsername(usuario.getNombre());
 				
