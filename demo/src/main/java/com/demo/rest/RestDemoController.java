@@ -78,7 +78,7 @@ public class RestDemoController {
 		String nombreUsuario = usuario.getNombre();
 		String mail = usuario.getMail();
 		System.out.println(mail);
-		if(usuarioRepo.findByMail(mail)==null) {
+		if(usuarioRepo.findByMail(mail)==null&&usuarioRepo.findByNombre(nombreUsuario)==null) {
 			u.setNombre(nombreUsuario);
 			u.setMail(mail);
 			u.setPassword(encoder.encode(usuario.getPassword()));
