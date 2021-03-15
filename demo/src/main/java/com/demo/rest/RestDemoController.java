@@ -127,14 +127,17 @@ public class RestDemoController {
 			}
 			else {
 				System.out.println("Contraseña incorrecta");
+				
+				return new ResponseEntity<Usuario>(HttpStatus.EXPECTATION_FAILED); //417 si contra incorrecta
 			}
 				
 		}
 		else {
 			System.out.println("Usuario incorrecto");
+			return new ResponseEntity<Usuario>(HttpStatus.BAD_REQUEST); //400 si usr incorrecto
 		}
 		
-		return null;
+		
 	}
 	
 	
