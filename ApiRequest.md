@@ -20,14 +20,24 @@
      password: <>
     }
     ```
-    - Ejemplo:
+    - Login:
+        - URL: /api/login
+        - Permisos: NADA
         - Petición:
+       
         ```
-        ej
+        {        
+        "nombre": "usr",
+        "password": "123554"       
+         }
         ```
-         - Respuesta:
+         - Respuesta: Usuario con el token de sesión
         ```
-        ej
+        "mail": null,
+        "nombre": "usr",
+        "password": "1234",
+        "token": "TOKEN",
+        "role": null
         ```
 
 
