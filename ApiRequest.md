@@ -4,6 +4,10 @@
  - listar usuarios:
     - URL: /api/all
     - Permisos: token de sesión
+    - Petición:
+    ```
+    peticion
+    ```
     - Status code:
         - Ok: correcto
         - Forbidden: no tienes permisos   
