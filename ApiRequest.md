@@ -14,7 +14,8 @@
 
     - Respuesta: lista  de todos los usuarios con formarto 
     ```
-    { "mail": <>
+    { 
+    "mail": <>
     "nombre": <>
      password: <>
     }
@@ -66,6 +67,8 @@ Contraseña incorrecta: error 417
 
 200: ok
 
-2001:
+201: creado
 
 417: contraseña incorrecta
+
+400: bad request
