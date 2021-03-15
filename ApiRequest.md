@@ -4,7 +4,7 @@
  - listar usuarios:
     - URL: /api/all
     - Permisos: token de sesión
-    - Petición:
+    - Petición: NADA
     ```
     peticion
     ```
