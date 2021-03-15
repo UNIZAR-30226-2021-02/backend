@@ -20,7 +20,7 @@ Si registro correcto:
 codigo 201 y token:"token" (Devuelve todo el usuario, entre ellos el campo token)
 
 Si registro incorrecto:
-codigo 417
+codigo 417 (El usuario o el mail ya estan en uso)
 
 
 Iniciar sesion:
