@@ -5,9 +5,6 @@
     - URL: /api/all
     - Permisos: token de sesión
     - Petición: NADA
-    ```
-    
-    ```
     - Status code:
         - Ok: correcto
         - Forbidden: no tienes permisos   
@@ -20,25 +17,30 @@
      password: <>
     }
     ```
+    - Ejemplo:
+      - Respuesta
+      
+      ````
+      Ej 
+      ````
     
-    
-    - Login:
-        - URL: /api/login
-        - Permisos: NADA
-        - Petición:
+ - Login:
+    - URL: /api/login
+    - Permisos: NADA
+    - Petición:
        
-        ```
+    ```
         {        
         "nombre": "usr",
         "password": "123554"       
-         }
-        ```
+        }
+    ```
         
-        - Status code:
-          - 200: correcto
-          - 400: usuario incorrecto
-          - 417: password incorrecto  
-         - Respuesta: Usuario con el token de sesión
+    - Status code:
+      - 200: correcto
+      - 400: usuario incorrecto
+      - 417: password incorrecto  
+     - Respuesta: Usuario con el token de sesión
         ```
         "mail": null,
         "nombre": "usr",
@@ -46,7 +48,13 @@
         "token": "TOKEN",
         "role": null
         ```
-        
+      - Ejemplo:
+        - Respuesta
+      
+        ````
+        Ej 
+        ````
+    
         
      - Registrar:
         - URL: /api/register
@@ -67,13 +75,13 @@
         
         
          - Respuesta: Usuario con el token de sesión
-        ```
-        "mail": "usr6@gmail.com",
-        "nombre": "usr6",
-        "password": "$2a$10$DqKn46IT8TQYlufXOC3nYuFVcADbcspRqSuRyMwP6lMqN0DbJwWxy",
-        "token": "TOKEN",
-        "role": "USER"
-        ```
+          ```
+          "mail": "usr6@gmail.com",
+          "nombre": "usr6",
+          "password": "$2a$10$DqKn46IT8TQYlufXOC3nYuFVcADbcspRqSuRyMwP6lMqN0DbJwWxy",
+          "token": "TOKEN",
+          "role": "USER"
+          ```
 
 
 
