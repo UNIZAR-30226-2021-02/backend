@@ -1,12 +1,30 @@
 
+# Peticiones
 
-listar usuarios:
-(/api/all) HACE FALTA TOKEN DE SESION O DEVUELVE 403
-Respuesta:
-LISTA DE:
-mail:"mail"
-nombre:"nombre"
-password:"password"
+ - listar usuarios:
+    - URL: /api/all
+    - Permisos: token de sesión
+    - Status code:
+        - Ok: correcto
+        - Forbidden: no tienes permisos   
+
+    - Respuesta: lista  de todos los usuarios con formarto 
+    ```
+    { "mail": <>
+    "nombre": <>
+     password: <>
+    }
+    ```
+    - Ejemplo:
+        - Petición:
+        ```
+        ej
+        ```
+         - Respuesta:
+        ```
+        ej
+        ```
+
 
 
 registrar usuario:
@@ -38,3 +56,10 @@ token:"token"
 Si login incorrecto:
 Usuario incorrecto: error 400 
 Contraseña incorrecta: error 417
+
+
+#Códifgos
+
+200: ok
+2001:
+417: contraseña incorrecta
