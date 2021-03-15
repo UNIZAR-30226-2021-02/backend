@@ -6,7 +6,7 @@
     - Permisos: token de sesión
     - Petición: NADA
     ```
-    peticion
+    
     ```
     - Status code:
         - Ok: correcto
