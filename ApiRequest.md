@@ -58,8 +58,10 @@ Usuario incorrecto: error 400
 Contraseña incorrecta: error 417
 
 
-#Códifgos
+# Códigos
 
 200: ok
+
 2001:
+
 417: contraseña incorrecta
