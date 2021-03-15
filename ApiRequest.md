@@ -20,6 +20,8 @@
      password: <>
     }
     ```
+    
+    
     - Login:
         - URL: /api/login
         - Permisos: NADA
@@ -31,6 +33,11 @@
         "password": "123554"       
          }
         ```
+        
+        - Status code:
+          - 200: correcto
+          - 400: usuario incorrecto
+          - 417: password incorrecto  
          - Respuesta: Usuario con el token de sesión
         ```
         "mail": null,
@@ -38,6 +45,34 @@
         "password": "1234",
         "token": "TOKEN",
         "role": null
+        ```
+        
+        
+     - Registrar:
+        - URL: /api/register
+        - Permisos: NADA
+        - Petición:
+       
+        ```
+        {
+        "mail": "mail"
+        "nombre": "usr",
+        "password": "123554"       
+         }
+        ```
+        - Status code:
+          - 201: creado
+          
+          - 417: usuario o mail existen
+        
+        
+         - Respuesta: Usuario con el token de sesión
+        ```
+        "mail": "usr6@gmail.com",
+        "nombre": "usr6",
+        "password": "$2a$10$DqKn46IT8TQYlufXOC3nYuFVcADbcspRqSuRyMwP6lMqN0DbJwWxy",
+        "token": "TOKEN",
+        "role": "USER"
         ```
 
 
