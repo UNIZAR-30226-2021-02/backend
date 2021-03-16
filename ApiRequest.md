@@ -9,10 +9,12 @@
 
   - Status code:
     - Ok: correcto
+
     - Forbidden: no tienes permisos
 
   - Respuesta: lista  de todos los usuarios con formarto
     {
+
     "mail": <mail>,
     "nombre": <nombre>,
     "password": <pswd>,
@@ -20,6 +22,33 @@
     "role": "USER"
     }
 
+    
+- Registrar: 
+  - Método: POST
+  - URL: /api/register
+  - Permisos: NADA
+  - Petición: (body: raw + JSON donde pone Text)
+    {
+    "mail": "<mail>"
+    "nombre": "<name>",
+    "password": "<pswd>"       
+    }
+  
+  - Status code:
+    - 201: creado
+    - 417: usuario o mail existen
+
+  - Respuesta: Usuario con el token de sesión
+    "mail": "<mail>",
+    "nombre": "<name>",
+    "password": "<pswd>",
+    "token": "<TOKEN>",
+    "role": "USER"
+    
+  - Si registro correcto:
+      codigo 201(CREATED) y token vale una cosa mu larga 
+  - Si registro incorrecto:
+      codigo 417 (El usuario o el mail ya estan en uso)
 
 - Login:
   - Método: POST
