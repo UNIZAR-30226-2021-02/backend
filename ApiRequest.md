@@ -1,110 +1,119 @@
-
 # Peticiones
 
-- Listar usuarios:
-  - Método: GET
-  - URL: /api/all
-  - Permisos: token (copiar la ristra SIN COMILLAS y pegar en Authorization -> Type:Bearer Token)
-  - Petición: NADA (body -> none)
+ - listar usuarios:
+    - URL: /api/all
+    - Permisos: token de sesión
+    - Petición: NADA
+    - Status code:
+        - Ok: correcto
+        - Forbidden: no tienes permisos   
 
-  - Status code:
-    - Ok: correcto
-
-    - Forbidden: no tienes permisos
-
-  - Respuesta: lista  de todos los usuarios con formarto
-    {
-
-    "mail": <mail>,
-    "nombre": <nombre>,
-    "password": <pswd>,
-    "token": null, //No vale para nade
-    "role": "USER"
+    - Respuesta: lista  de todos los usuarios con formarto 
+    ```
+    { 
+    "mail": <>
+    "nombre": <>
+     password: <>
     }
+    ```
+    - Ejemplo:
+      - Respuesta
 
-    
-- Registrar: 
-  - Método: POST
-  - URL: /api/register
-  - Permisos: NADA
-  - Petición: (body: raw + JSON donde pone Text)
-    {
-    "mail": "<mail>"
-    "nombre": "<name>",
-    "password": "<pswd>"       
-    }
-  
-  - Status code:
-    - 201: creado
-    - 417: usuario o mail existen
+      ````
+      Ej 
+      ````
 
-  - Respuesta: Usuario con el token de sesión
-    "mail": "<mail>",
-    "nombre": "<name>",
-    "password": "<pswd>",
-    "token": "<TOKEN>",
-    "role": "USER"
-    
-  - Si registro correcto:
-      codigo 201(CREATED) y token vale una cosa mu larga 
-  - Si registro incorrecto:
-      codigo 417 (El usuario o el mail ya estan en uso)
+ - Login:
+    - URL: /api/login
+    - Permisos: NADA
+    - Petición:
 
-- Login:
-  - Método: POST
-  - URL: /api/login
-  - Permisos: NADA
-  - Petición: (body: raw + JSON donde pone Text)
-    {
-    "nombre": "<user>",
-    "password": "<pswd>"
-    }
+    ```
+        {        
+        "nombre": "usr",
+        "password": "123554"       
+        }
+    ```
 
-  - Status code:
-    - 200: correcto
-    - 400: usuario incorrecto
-    - 417: password incorrecto
+    - Status code:
+      - 200: correcto
+      - 400: usuario incorrecto
+      - 417: password incorrecto  
+     - Respuesta: Usuario con el token de sesión
+        ```
+        "mail": null,
+        "nombre": "usr",
+        "password": "1234",
+        "token": "TOKEN",
+        "role": null
+        ```
+      - Ejemplo:
+        - Respuesta
 
-  - Respuesta: Usuario con el token de sesión
-    "mail": null,
-    "nombre": "<user>",
-    "password": "<pswd>",
-    "token": "<TOKEN>",
-    "role": null
-
-  - Si login correcto:
-      codigo 200 (OK) y token vale una cosa mu larga
-  - Si login incorrecto:
-      codigo 400 si nombre mal
-      codigo 417 si contraseña incorrecta
+        ````
+        Ej 
+        ````
 
 
-- Registrar:
-  - Método: POST
-  - URL: /api/register
-  - Permisos: NADA
-  - Petición: (body: raw + JSON donde pone Text)
-    {
-    "mail": "<mail>"
-    "nombre": "<name>",
-    "password": "<pswd>"
-    }
+     - Registrar:
+        - URL: /api/register
+        - Permisos: NADA
+        - Petición:
 
-  - Status code:
-    - 201: creado
-    - 417: usuario o mail existen
+        ```
+        {
+        "mail": "mail"
+        "nombre": "usr",
+        "password": "123554"       
+         }
+        ```
+        - Status code:
+          - 201: creado
 
-  - Respuesta: Usuario con el token de sesión
-    "mail": "<mail>",
-    "nombre": "<name>",
-    "password": "<pswd>",
-    "token": "<TOKEN>",
-    "role": "USER"
+          - 417: usuario o mail existen
 
-  - Si registro correcto:
-      codigo 201(CREATED) y token vale una cosa mu larga
-  - Si registro incorrecto:
-      codigo 417 (El usuario o el mail ya estan en uso)
+
+         - Respuesta: Usuario con el token de sesión
+          ```
+          "mail": "usr6@gmail.com",
+          "nombre": "usr6",
+          "password": "$2a$10$DqKn46IT8TQYlufXOC3nYuFVcADbcspRqSuRyMwP6lMqN0DbJwWxy",
+          "token": "TOKEN",
+          "role": "USER"
+          ```
+
+
+
+registrar usuario:
+(/api/register)
+Body:
+mail:"correo"
+nombre:"nombre"
+password:"password"
+
+Si registro correcto:
+codigo 201 y token:"token" (Devuelve todo el usuario, entre ellos el campo token)
+
+Si registro incorrecto:
+codigo 417 (El usuario o el mail ya estan en uso)
+
+
+Iniciar sesion:
+(/api/login)
+Body:
+nombre:"nombre"
+password:"password"
+
+Si login correcto:
+nombre:"nombre"
+password:"password"
+token:"token"
+(demas campos del usuario a null)
+
+Si login incorrecto:
+Usuario incorrecto: error 400 
+Contraseña incorrecta: error 417
+
 
 # Códigos
 
@@ -112,8 +121,6 @@
 
 201: creado
 
-417: contraseña incorrecta (login)
-     usuario o email en uso (register)
+417: contraseña incorrecta
 
 400: bad request
-
