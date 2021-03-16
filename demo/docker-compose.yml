@@ -2,7 +2,7 @@ version: '2'
 
 services:
   app:
-    image: 'proyectokalboware/app'
+    image: 'proyectokalboware/app:v1.0.0'
     build:
       context: .
     ports:
