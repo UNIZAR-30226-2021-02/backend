@@ -72,7 +72,7 @@ public class RestDemoController {
 	
 	@PostMapping(value = "/register")
 	public ResponseEntity<Usuario> register(@RequestBody Usuario usuario) {
-		
+		usuario.printUser();
 		Usuario u = new Usuario();
 		String nombreUsuario = usuario.getNombre();
 		String mail = usuario.getMail();
@@ -82,6 +82,7 @@ public class RestDemoController {
 			u.setMail(mail);
 			u.setPassword(usuario.getPassword());
 			u.setRole("USER");
+			
 			usuarioRepo.save(u);
 			System.out.println("Como el usuario no existe, se crea");
 			
@@ -106,10 +107,7 @@ public class RestDemoController {
 			
 			
 			if(usuarioRepo.findByNombre(usuario.getNombre())!=null){
-			System.out.println("PASSWORD QUE NOS LLEGA "+usuario.getPassword());
-			System.out.println("PASSWORD NUESTRA "+usuarioRepo.findByNombre(usuario.getNombre()).getPassword());
-			
-			if(usuario.getPassword()==usuarioRepo.findByNombre(usuario.getNombre()).getPassword()) {
+			if(usuario.getPassword().equals(usuarioRepo.findByNombre(usuario.getNombre()).getPassword())) {
 				
 				service.loadUserByUsername(usuario.getNombre());
 				
@@ -127,7 +125,6 @@ public class RestDemoController {
 			}
 			else {
 				System.out.println("Contraseña incorrecta");
-				
 				return new ResponseEntity<Usuario>(HttpStatus.EXPECTATION_FAILED); //417 si contra incorrecta
 			}
 				

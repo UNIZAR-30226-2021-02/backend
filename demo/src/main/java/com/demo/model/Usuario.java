@@ -57,5 +57,8 @@ public class Usuario {
 	public String getRole() {
 		return role;
 	}
-		
+	
+	public void printUser() {
+		System.out.println(this.nombre+this.password+"--"+"--"+this.token+"--"+this.mail+"--");
+	}
 }
