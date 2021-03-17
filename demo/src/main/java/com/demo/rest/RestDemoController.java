@@ -5,6 +5,8 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.PostConstruct;
+
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -29,6 +31,7 @@ import com.demo.controller.AuthController;
 import com.demo.model.Amigo;
 import com.demo.model.Usuario;
 import com.demo.repository.AmigoRepo;
+import com.demo.repository.PeticionRepo;
 import com.demo.repository.TokenRepo;
 import com.demo.repository.UsuarioRepo;
 import com.demo.service.UserService;
@@ -53,6 +56,9 @@ public class RestDemoController {
 	
 	@Autowired
 	private AmigoRepo amigoRepo;
+	
+	@Autowired
+	private PeticionRepo peticionRepo;
 	
 	
 	@Autowired
@@ -185,5 +191,26 @@ public class RestDemoController {
 		
 		return new ResponseEntity<List<String>>(listaAmigos,HttpStatus.OK);
 	}
+	
+	
+	@GetMapping(value = "/listRequest")
+	public ResponseEntity<List<String>> listRequest(@RequestHeader String identificador){
+		
+		
+		List<String> respuesta = peticionRepo.findRequestByMail(usuarioRepo.findByNombre(identificador).getMail());
+		
+		return new ResponseEntity<List<String>>(respuesta,HttpStatus.OK);
+		
+	}
+	
+	
+	
+	/*
+	public ResponseEntity<Usuario> sendFriend(@RequestHeader String identificador){
+		
+		
+		
+	}
+	*/
 	
 }
