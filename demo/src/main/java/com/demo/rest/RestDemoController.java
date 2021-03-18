@@ -28,10 +28,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 
 import com.demo.controller.AuthController;
-import com.demo.model.Amigo;
+
 import com.demo.model.Usuario;
-import com.demo.repository.AmigoRepo;
-import com.demo.repository.PeticionRepo;
+
 import com.demo.repository.TokenRepo;
 import com.demo.repository.UsuarioRepo;
 import com.demo.service.UserService;
@@ -53,13 +52,7 @@ public class RestDemoController {
 	@Autowired 
 	private UsuarioRepo usuarioRepo;
 	
-	
-	@Autowired
-	private AmigoRepo amigoRepo;
-	
-	@Autowired
-	private PeticionRepo peticionRepo;
-	
+
 	
 	@Autowired
 	private UserService service;
@@ -161,45 +154,60 @@ public class RestDemoController {
 	public ResponseEntity<Usuario> acceptFriend(@RequestBody Usuario usuario,@RequestHeader String identificador){
 		
 		String nombreUsuario = usuario.getNombre();
-		Usuario u = usuarioRepo.findByNombre(nombreUsuario);
+		Usuario amigo = usuarioRepo.findByNombre(nombreUsuario);
+		Usuario tu = usuarioRepo.findByNombre(identificador);
 		
-		String mail = u.getMail();
+		
 		System.out.println(identificador);
-		Amigo amigo1 = new Amigo();
-		amigo1.setMailAmigo(usuarioRepo.findByNombre(identificador).getMail());
-		amigo1.setMailUsuario(u.getMail());
-		
-		amigoRepo.save(amigo1);
 		
 		
-		Amigo amigo2 = new Amigo();
-		amigo2.setMailAmigo(u.getMail());
-		amigo2.setMailUsuario(usuarioRepo.findByNombre(identificador).getMail());
 		
-	
-		amigoRepo.save(amigo2);
+		amigo.setAmigo(tu);
+		tu.setAmigo(amigo);
 		
+		usuarioRepo.save(amigo);
+		usuarioRepo.save(tu);
 		return new ResponseEntity<Usuario>(HttpStatus.OK);
 	}
 	
 	
 	@GetMapping(value = "/listFriends")
-	public ResponseEntity<List<String>> listFriends(@RequestHeader String identificador){
+	public ResponseEntity<List<Usuario>> listFriends(@RequestHeader String identificador){
 		
 		
-		List<String> listaAmigos = new ArrayList<>();
+		List<String> listaAmigos = usuarioRepo.listFriends(usuarioRepo.findByNombre(identificador).getMail());
 		
-		return new ResponseEntity<List<String>>(listaAmigos,HttpStatus.OK);
+	
+		List<Usuario> respuesta = new ArrayList<>();
+		for(String a : listaAmigos) {
+			
+			Usuario u = new Usuario();
+			u.setNombre(a);
+			System.out.println(u.getNombre());
+			respuesta.add(u);
+		}
+		
+		return new ResponseEntity<List<Usuario>>(respuesta,HttpStatus.OK);
 	}
 	
 	
 	@GetMapping(value = "/listRequest")
-	public ResponseEntity<List<String>> listRequest(@RequestHeader String identificador){
+	public ResponseEntity<List<Usuario>> listRequest(@RequestHeader String identificador){
 		
 		
-		List<String> respuesta = peticionRepo.findRequestByMail(usuarioRepo.findByNombre(identificador).getMail());
+		List<String> listaAmigos = usuarioRepo.listRequest(usuarioRepo.findByNombre(identificador).getMail());
 		
-		return new ResponseEntity<List<String>>(respuesta,HttpStatus.OK);
+		
+		List<Usuario> respuesta = new ArrayList<>();
+		for(String a : listaAmigos) {
+			
+			Usuario u = new Usuario();
+			u.setNombre(a);
+			System.out.println(u.getNombre());
+			respuesta.add(u);
+		}
+		
+		return new ResponseEntity<List<Usuario>>(respuesta,HttpStatus.OK);
 		
 	}
 	

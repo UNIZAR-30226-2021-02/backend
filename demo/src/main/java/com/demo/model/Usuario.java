@@ -1,9 +1,8 @@
 package com.demo.model;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import java.util.List;
+
+import javax.persistence.*;
 
 import org.springframework.boot.context.properties.bind.DefaultValue;
 
@@ -15,9 +14,45 @@ public class Usuario {
 	private String nombre;
 	private String password;
 	private String token;
-	
 	private String role;
 	
+	
+	@ManyToMany(cascade = CascadeType.ALL)
+	@JoinTable(
+	        name = "amigos",
+	        joinColumns = @JoinColumn(name = "mailUsuario", nullable = false),
+	        inverseJoinColumns = @JoinColumn(name="mailAmigo", nullable = false)
+	    )
+	private List<Usuario> amigo;
+	
+	
+	@ManyToMany(cascade = CascadeType.ALL)
+	@JoinTable(
+	        name = "peticiones",
+	        joinColumns = @JoinColumn(name = "mailUsuario", nullable = false),
+	        inverseJoinColumns = @JoinColumn(name="mailPedido", nullable = false)
+	    )
+	private List<Usuario> peticion;
+	
+	
+	
+	
+	
+	 @ManyToMany(mappedBy="amigo")
+	 private List<Usuario> usuario;
+	 
+	 @ManyToMany(mappedBy="peticion")
+	 private List<Usuario> usuario2;
+	
+	
+	public List<Usuario> getAmigo() {
+		return amigo;
+	}
+
+	public void setAmigo(Usuario amigo) {
+		this.amigo.add(amigo);
+	}
+
 	public String getMail() {
 		return mail;
 	}
