@@ -201,7 +201,7 @@
     }
 
   - Status code:
-    - 200: amigo eliminado (ha ido bien)
+    - 200: pamigo eliminado (ha ido bien)
 
 
 
