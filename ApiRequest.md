@@ -1,118 +1,208 @@
+
 # Peticiones
 
- - listar usuarios:
-    - URL: /api/all
-    - Permisos: token de sesión
-    - Petición: NADA
-    - Status code:
-        - Ok: correcto
-        - Forbidden: no tienes permisos   
+- Listar usuarios:
+  - Método: GET
+  - URL: /api/all
+  - Permisos: token (copiar la ristra SIN COMILLAS y pegar en Authorization -> Type:Bearer Token)
+  - Petición: NADA (body -> none)
 
-    - Respuesta: lista  de todos los usuarios con formarto 
-    ```
-    { 
-    "mail": <>
-    "nombre": <>
-     password: <>
+  - Status code:
+    - Ok: correcto
+
+    - Forbidden: no tienes permisos
+
+  - Respuesta: lista  de todos los usuarios con formarto
+    {
+
+    "mail": MAIL,
+    "nombre": NOMBRE,
+    "password": PSWD,
+    "token": null, //No vale para nade
+    "role": "USER"
     }
-    ```
-    - Ejemplo:
-      - Respuesta
 
-      ````
-      Ej 
-      ````
+    
+- Registrar: 
+  - Método: POST
+  - URL: /api/register
+  - Permisos: NADA
+  - Petición: (body: raw + JSON donde pone Text)
+    {
+    "mail": "MAIL"
+    "nombre": "NAME",
+    "password": "PSWD"       
+    }
+  
+  - Status code:
+    - 201: creado
+    - 417: usuario o mail existen
 
- - Login:
-    - URL: /api/login
-    - Permisos: NADA
-    - Petición:
+  - Respuesta: Usuario con el token de sesión
+    "mail": "MAIL",
+    "nombre": "NOMBRE",
+    "password": "PSWD",
+    "token": "TOKEN",
+    "role": "USER"
+    
+  - Si registro correcto:
+      codigo 201(CREATED) y token vale una cosa mu larga 
+  - Si registro incorrecto:
+      codigo 417 (El usuario o el mail ya estan en uso)
 
-    ```
-        {        
-        "nombre": "usr",
-        "password": "123554"       
-        }
-    ```
+- Login:
+  - Método: POST
+  - URL: /api/login
+  - Permisos: NADA
+  - Petición: (body: raw + JSON donde pone Text)
+    {
+    "nombre": "NOMBRE",
+    "password": "PSWD"
+    }
 
-    - Status code:
-      - 200: correcto
-      - 400: usuario incorrecto
-      - 417: password incorrecto  
-     - Respuesta: Usuario con el token de sesión
-        ```
-        "mail": null,
-        "nombre": "usr",
-        "password": "1234",
-        "token": "TOKEN",
-        "role": null
-        ```
-      - Ejemplo:
-        - Respuesta
+  - Status code:
+    - 200: correcto
+    - 400: usuario incorrecto
+    - 417: password incorrecto
 
-        ````
-        Ej 
-        ````
+  - Respuesta: Usuario con el token de sesión
+    "mail": null,
+    "nombre": "NOMBRE",
+    "password": "PSWD",
+    "token": "TOKEN",
+    "role": null
 
-
-     - Registrar:
-        - URL: /api/register
-        - Permisos: NADA
-        - Petición:
-
-        ```
-        {
-        "mail": "mail"
-        "nombre": "usr",
-        "password": "123554"       
-         }
-        ```
-        - Status code:
-          - 201: creado
-
-          - 417: usuario o mail existen
-
-
-         - Respuesta: Usuario con el token de sesión
-          ```
-          "mail": "usr6@gmail.com",
-          "nombre": "usr6",
-          "password": "$2a$10$DqKn46IT8TQYlufXOC3nYuFVcADbcspRqSuRyMwP6lMqN0DbJwWxy",
-          "token": "TOKEN",
-          "role": "USER"
-          ```
+  - Si login correcto:
+      codigo 200 (OK) y token vale una cosa mu larga
+  - Si login incorrecto:
+      codigo 400 si nombre mal
+      codigo 417 si contraseña incorrecta
 
 
+- Registrar:
+  - Método: POST
+  - URL: /api/register
+  - Permisos: NADA
+  - Petición: (body: raw + JSON donde pone Text)
+    {
+    "mail": "MAIL"
+    "nombre": "NOMBRE",
+    "password": "PSWD"
+    }
 
-registrar usuario:
-(/api/register)
-Body:
-mail:"correo"
-nombre:"nombre"
-password:"password"
+  - Status code:
+    - 201: creado
+    - 417: usuario o mail existen
 
-Si registro correcto:
-codigo 201 y token:"token" (Devuelve todo el usuario, entre ellos el campo token)
+  - Respuesta: Usuario con el token de sesión
+    "mail": "MAIL",
+    "nombre": "NOMBRE",
+    "password": "PSWD",
+    "token": "TOKEN",
+    "role": "USER"
 
-Si registro incorrecto:
-codigo 417 (El usuario o el mail ya estan en uso)
+  - Si registro correcto:
+      codigo 201(CREATED) y token vale una cosa mu larga
+  - Si registro incorrecto:
+      codigo 417 (El usuario o el mail ya estan en uso)
 
 
-Iniciar sesion:
-(/api/login)
-Body:
-nombre:"nombre"
-password:"password"
+- Aceptar petición amistad:
+  - Método: POST
+  - URL: /api/acceptRequest
+  - Permisos: TOKEN
+  - Petición: 
+    HEADER: añadir un campo: key="identificador" y value="tu_nombre"
+    BODY: raw + JSON donde pone Text
+    {
+    "nombre": "NOMBRE" //Nombre del user cuya petición quieres aceptar
+    }
 
-Si login correcto:
-nombre:"nombre"
-password:"password"
-token:"token"
-(demas campos del usuario a null)
+  - Status code:
+    - 200: aceptado
 
-Si login incorrecto:
-Usuario incorrecto: error 400 
-Contraseña incorrecta: error 417
+
+- Rechazar petición amistad:
+  - Método: POST
+  - URL: /api/denyRequest
+  - Permisos: TOKEN
+  - Petición: 
+    HEADER: añadir un campo: key="identificador" y value="tu_nombre"
+    BODY: raw + JSON donde pone Text
+    {
+    "nombre": "NOMBRE" //Nombre del user cuya peticion quieres rechazar
+    }
+
+  - Status code:
+    - 200: peticion rechazada (ha ido bien)
+
+- Enviar petición amistad:
+  - Método: POST
+  - URL: /api/sendRequest
+  - Permisos: TOKEN
+  - Petición: 
+    HEADER: añadir un campo: key="identificador" y value="tu_nombre"
+    BODY: raw + JSON donde pone Text
+    {
+    "nombre": "NOMBRE" //Nombre del user al que le envias la peticion
+    }
+
+  - Status code:
+    - 200: peticion enviada correctamente
+    - 417: ya le habías enviado una petición o sois amigos
+
+- Listar peticiones amistad:
+  - Método: GET
+  - URL: /api/listRequest
+  - Permisos: TOKEN
+  - Petición: 
+    HEADER: añadir un campo: key="identificador" y value="tu_nombre"
+    
+  - Status code:
+    - 200: Todo bien
+
+  - Respuesta: Lista de usuarios que te han mandado petición
+    //Formato de un usuario que te manda peticion, devuelve una lista de estos
+    "mail": "null",
+    "nombre": "NOMBRE",
+    "password": "null",
+    "token": "null",
+    "role": "null"
+    
+
+- Listar amigos:
+  - Método: GET
+  - URL: /api/listFriends
+  - Permisos: TOKEN
+  - Petición: 
+    HEADER: añadir un campo: key="identificador" y value="tu_nombre"
+    
+  - Status code:
+    - 200: Todo bien
+
+  - Respuesta: Lista de usuarios que te han mandado petición
+    //Formato de un usuario que es tu amigo, devuelve una lista de estos
+    "mail": "null",
+    "nombre": "NOMBRE",
+    "password": "null",
+    "token": "null",
+    "role": "null"
+  
+
+- Eliminar amigo:
+  - Método: POST
+  - URL: /api/deleteFriend
+  - Permisos: TOKEN
+  - Petición: 
+    HEADER: añadir un campo: key="identificador" y value="tu_nombre"
+    BODY: raw + JSON donde pone Text
+    {
+    "nombre": "NOMBRE" //Nombre del user que quieres eliminar de amigo
+    }
+
+  - Status code:
+    - 200: pamigo eliminado (ha ido bien)
+
 
 
 # Códigos
@@ -121,6 +211,8 @@ Contraseña incorrecta: error 417
 
 201: creado
 
-417: contraseña incorrecta
+417: contraseña incorrecta (login)
+     usuario o email en uso (register)
 
 400: bad request
+

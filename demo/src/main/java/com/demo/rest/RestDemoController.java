@@ -5,6 +5,8 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.PostConstruct;
+
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -26,9 +28,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 
 import com.demo.controller.AuthController;
-import com.demo.model.Amigo;
+
 import com.demo.model.Usuario;
-import com.demo.repository.AmigoRepo;
+
 import com.demo.repository.TokenRepo;
 import com.demo.repository.UsuarioRepo;
 import com.demo.service.UserService;
@@ -50,10 +52,7 @@ public class RestDemoController {
 	@Autowired 
 	private UsuarioRepo usuarioRepo;
 	
-	
-	@Autowired
-	private AmigoRepo amigoRepo;
-	
+
 	
 	@Autowired
 	private UserService service;
@@ -151,39 +150,94 @@ public class RestDemoController {
 	
 	
 	
-	@PostMapping(value = "/acceptFriend")
-	public ResponseEntity<Usuario> acceptFriend(@RequestBody Usuario usuario,@RequestHeader String identificador){
+	@PostMapping(value = "/acceptRequest")
+	public ResponseEntity<Usuario> acceptRequest(@RequestBody Usuario usuario,@RequestHeader String identificador){
 		
 		String nombreUsuario = usuario.getNombre();
-		Usuario u = usuarioRepo.findByNombre(nombreUsuario);
-		
-		String mail = u.getMail();
+		Usuario amigo = usuarioRepo.findByNombre(nombreUsuario);
+		Usuario tu = usuarioRepo.findByNombre(identificador);
 		System.out.println(identificador);
-		Amigo amigo1 = new Amigo();
-		amigo1.setMailAmigo(usuarioRepo.findByNombre(identificador).getMail());
-		amigo1.setMailUsuario(u.getMail());
-		
-		amigoRepo.save(amigo1);
 		
 		
-		Amigo amigo2 = new Amigo();
-		amigo2.setMailAmigo(u.getMail());
-		amigo2.setMailUsuario(usuarioRepo.findByNombre(identificador).getMail());
 		
+		amigo.setAmigo(tu);
+		tu.setAmigo(amigo);
+		tu.deletePeticion(amigo);
+		usuarioRepo.save(amigo);
+		usuarioRepo.save(tu);
+		return new ResponseEntity<Usuario>(HttpStatus.OK);
+	}
 	
-		amigoRepo.save(amigo2);
+	@PostMapping(value = "/denyRequest")
+	public ResponseEntity<Usuario> denyRequest(@RequestBody Usuario usuario,@RequestHeader String identificador){
 		
+		String nombreUsuario = usuario.getNombre();
+		Usuario amigo = usuarioRepo.findByNombre(nombreUsuario);
+		Usuario tu = usuarioRepo.findByNombre(identificador);
+		System.out.println(identificador);
+		
+		
+		tu.deletePeticion(amigo);
+		usuarioRepo.save(tu);
 		return new ResponseEntity<Usuario>(HttpStatus.OK);
 	}
 	
 	
 	@GetMapping(value = "/listFriends")
-	public ResponseEntity<List<String>> listFriends(@RequestHeader String identificador){
-		
-		
-		List<String> listaAmigos = new ArrayList<>();
-		
-		return new ResponseEntity<List<String>>(listaAmigos,HttpStatus.OK);
+	public ResponseEntity<List<Usuario>> listFriends(@RequestHeader String identificador){
+				
+		List<Usuario> respuesta = usuarioRepo.findByNombre(identificador).getAmigo();
+		return new ResponseEntity<List<Usuario>>(respuesta,HttpStatus.OK);
 	}
+	
+	
+	@GetMapping(value = "/listRequest")
+	public ResponseEntity<List<Usuario>> listRequest(@RequestHeader String identificador){
+		
+		List<Usuario> respuesta = usuarioRepo.findByNombre(identificador).getPeticion();
+		return new ResponseEntity<List<Usuario>>(respuesta,HttpStatus.OK);
+		
+	}
+	
+	
+	
+	@PostMapping(value = "/sendRequest")
+	public ResponseEntity<Usuario> sendRequest(@RequestBody Usuario usuario,@RequestHeader String identificador){
+		
+		String nombreUsuario = usuario.getNombre();
+		Usuario destino = usuarioRepo.findByNombre(nombreUsuario);
+		Usuario tu = usuarioRepo.findByNombre(identificador);
+		System.out.println(identificador);
+		
+		
+		
+		if(destino.setPeticion(tu)) {
+			usuarioRepo.save(destino);
+			return new ResponseEntity<Usuario>(HttpStatus.OK);
+		}else {
+			return new ResponseEntity<Usuario>(HttpStatus.EXPECTATION_FAILED);
+		}
+		
+
+		
+		
+	}
+	@PostMapping(value = "/deleteFriend")
+	public ResponseEntity<Usuario> deleteFriend(@RequestBody Usuario usuario,@RequestHeader String identificador){
+		
+		String nombreUsuario = usuario.getNombre();
+		Usuario amigo = usuarioRepo.findByNombre(nombreUsuario);
+		Usuario tu = usuarioRepo.findByNombre(identificador);
+		System.out.println(identificador);
+		
+		
+		
+		amigo.deleteAmigo(tu);
+		tu.deleteAmigo(amigo);
+		usuarioRepo.save(amigo);
+		usuarioRepo.save(tu);
+		return new ResponseEntity<Usuario>(HttpStatus.OK);
+	}
+	
 	
 }
