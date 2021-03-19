@@ -150,13 +150,12 @@ public class RestDemoController {
 	
 	
 	
-	
+	/*
 	@PostMapping(value = "/acceptFriend")
 	public ResponseEntity<Usuario> acceptFriend(@RequestBody Usuario usuario,@RequestHeader String identificador){
 		
 		String nombreUsuario = usuario.getNombre();
 		Usuario u = usuarioRepo.findByNombre(nombreUsuario);
-		
 		String mail = u.getMail();
 		System.out.println(identificador);
 		Amigo amigo1 = new Amigo();
@@ -175,7 +174,7 @@ public class RestDemoController {
 		
 		return new ResponseEntity<Usuario>(HttpStatus.OK);
 	}
-	
+	*/
 	
 	@GetMapping(value = "/listFriends")
 	public ResponseEntity<List<String>> listFriends(@RequestHeader String identificador){
