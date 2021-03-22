@@ -145,9 +145,11 @@ public class RestDemoController {
 	
 	@GetMapping(value = "/returnImage", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
 	public ResponseEntity<byte[]> getImage() throws IOException{
-		InputStream in = getClass().getResourceAsStream("prueba.jpg");
+		
+		System.out.println("ENTRAMOS A DEVOLVER LA IMAGEN");
+		InputStream in = getClass().getResourceAsStream("/prueba.jpg");
 		byte[] image = IOUtils.toByteArray(in);
-		//comentarios
+		
 		return new ResponseEntity<byte[]>(image,HttpStatus.OK);
 		
 	}
