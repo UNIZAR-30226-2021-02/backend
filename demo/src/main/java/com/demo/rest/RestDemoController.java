@@ -82,12 +82,17 @@ public class RestDemoController {
 			u.setPassword(usuario.getPassword());
 			u.setRole("USER");
 			
+			if(u.correcto()) {
 			usuarioRepo.save(u);
 			System.out.println("Como el usuario no existe, se crea");
 			
 			String token = jwt.getJWTToken(nombreUsuario);
 			u.setToken(token);
 			return new ResponseEntity<Usuario>(u,HttpStatus.CREATED);
+			}
+			else {
+				return new ResponseEntity<Usuario>(HttpStatus.EXPECTATION_FAILED);
+			}
 		
 		}
 		else {

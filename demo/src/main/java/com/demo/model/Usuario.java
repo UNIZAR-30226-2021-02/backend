@@ -134,4 +134,13 @@ public class Usuario {
 	public void printUser() {
 		System.out.println(this.nombre+this.password+"--"+"--"+this.token+"--"+this.mail+"--");
 	}
+	
+	public boolean correcto() {
+		if(nombre!=null&&password!=null&&mail!=null&&mail.contains("@")&&mail.contains(".")&&mail.length()>0&&nombre.length()>0&&password.length()>0) {
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
 }
