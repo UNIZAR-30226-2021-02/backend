@@ -16,6 +16,9 @@ public class Usuario {
 	private String password;
 	private String token;
 	private String role;
+	private String fotPerf;
+	@Column(columnDefinition = "integer default 0")
+	private Integer puntos;
 	
 	
 	@ManyToMany(cascade = CascadeType.ALL)
@@ -133,5 +136,21 @@ public class Usuario {
 	
 	public void printUser() {
 		System.out.println(this.nombre+this.password+"--"+"--"+this.token+"--"+this.mail+"--");
+	}
+
+	public String getFotPerf() {
+		return fotPerf;
+	}
+
+	public void setFotPerf(String fotPerf) {
+		this.fotPerf = fotPerf;
+	}
+
+	public int getPuntos() {
+		return puntos;
+	}
+
+	public void setPuntos(int puntos) {
+		this.puntos = puntos;
 	}
 }
