@@ -81,18 +81,14 @@ public class RestDemoController {
 			u.setMail(mail);
 			u.setPassword(usuario.getPassword());
 			u.setRole("USER");
-			
-			if(u.correcto()) {
+			u.setPuntos(0);
+			u.setFotPerf("foto0.png");
 			usuarioRepo.save(u);
 			System.out.println("Como el usuario no existe, se crea");
 			
 			String token = jwt.getJWTToken(nombreUsuario);
 			u.setToken(token);
 			return new ResponseEntity<Usuario>(u,HttpStatus.CREATED);
-			}
-			else {
-				return new ResponseEntity<Usuario>(HttpStatus.EXPECTATION_FAILED);
-			}
 		
 		}
 		else {
@@ -108,23 +104,23 @@ public class RestDemoController {
 	@PostMapping(value = "/login")
 	public ResponseEntity<Usuario> login(@RequestBody Usuario usuario) {
 	
+			Usuario u = usuarioRepo.findByNombre(usuario.getNombre());
 			
-			
-			if(usuarioRepo.findByNombre(usuario.getNombre())!=null){
-			if(usuario.getPassword().equals(usuarioRepo.findByNombre(usuario.getNombre()).getPassword())) {
+			if(u !=null){
+			if(u.getPassword().equals(usuarioRepo.findByNombre(u.getNombre()).getPassword())) {
 				
-				service.loadUserByUsername(usuario.getNombre());
+				service.loadUserByUsername(u.getNombre());
 				
 				System.out.println("Logeado correctamente");
 				
-						String token = jwt.getJWTToken(usuario.getNombre());
+						String token = jwt.getJWTToken(u.getNombre());
 
-						usuario.setToken(token);
-						usuario.setNull();
-						tokenRepo.addToken(usuario.getNombre(), token);
+						u.setToken(token);
+						u.setNull();
+						tokenRepo.addToken(u.getNombre(), token);
 						tokenRepo.printTokens();
 						System.out.println("----------------");
-						return new ResponseEntity<Usuario>(usuario,HttpStatus.OK);
+						return new ResponseEntity<Usuario>(u,HttpStatus.OK);
 						
 			}
 			else {
@@ -145,11 +141,9 @@ public class RestDemoController {
 	
 	@GetMapping(value = "/returnImage", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
 	public ResponseEntity<byte[]> getImage() throws IOException{
-		
-		System.out.println("ENTRAMOS A DEVOLVER LA IMAGEN");
-		InputStream in = getClass().getResourceAsStream("/prueba.jpg");
+		InputStream in = getClass().getResourceAsStream("prueba.jpg");
 		byte[] image = IOUtils.toByteArray(in);
-		
+		//comentarios
 		return new ResponseEntity<byte[]>(image,HttpStatus.OK);
 		
 	}
@@ -244,6 +238,26 @@ public class RestDemoController {
 		usuarioRepo.save(amigo);
 		usuarioRepo.save(tu);
 		return new ResponseEntity<Usuario>(HttpStatus.OK);
+	}
+	
+	@GetMapping(value = "/viewProfile")
+	public ResponseEntity<Usuario> viewProfile(@RequestHeader String identificador){
+		
+		Usuario u = usuarioRepo.findByNombre(identificador);
+		
+		return new ResponseEntity<Usuario>(u,HttpStatus.OK);
+	}
+	
+	@GetMapping(value = "/returnImageProfile", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
+	public ResponseEntity<byte[]> getImageProfile(@RequestHeader String idFoto) throws IOException{
+		String fotoo = idFoto;
+		InputStream in = getClass().getResourceAsStream(fotoo);
+		
+		System.out.println(fotoo);
+		byte[] image = IOUtils.toByteArray(in);
+
+		return new ResponseEntity<byte[]>(image,HttpStatus.OK);
+		
 	}
 	
 	
