@@ -15,9 +15,9 @@
   - Respuesta: lista  de todos los usuarios con formarto
     {
 
-    "mail": <mail>,
-    "nombre": <nombre>,
-    "password": <pswd>,
+    "mail": MAIL,
+    "nombre": NOMBRE,
+    "password": PSWD,
     "token": null, //No vale para nade
     "role": "USER"
     }
@@ -29,9 +29,9 @@
   - Permisos: NADA
   - Petición: (body: raw + JSON donde pone Text)
     {
-    "mail": "<mail>"
-    "nombre": "<name>",
-    "password": "<pswd>"       
+    "mail": "MAIL"
+    "nombre": "NAME",
+    "password": "PSWD"       
     }
   
   - Status code:
@@ -39,10 +39,10 @@
     - 417: usuario o mail existen
 
   - Respuesta: Usuario con el token de sesión
-    "mail": "<mail>",
-    "nombre": "<name>",
-    "password": "<pswd>",
-    "token": "<TOKEN>",
+    "mail": "MAIL",
+    "nombre": "NOMBRE",
+    "password": "PSWD",
+    "token": "TOKEN",
     "role": "USER"
     
   - Si registro correcto:
@@ -56,8 +56,8 @@
   - Permisos: NADA
   - Petición: (body: raw + JSON donde pone Text)
     {
-    "nombre": "<user>",
-    "password": "<pswd>"
+    "nombre": "NOMBRE",
+    "password": "PSWD"
     }
 
   - Status code:
@@ -67,9 +67,9 @@
 
   - Respuesta: Usuario con el token de sesión
     "mail": null,
-    "nombre": "<user>",
-    "password": "<pswd>",
-    "token": "<TOKEN>",
+    "nombre": "NOMBRE",
+    "password": "PSWD",
+    "token": "TOKEN",
     "role": null
 
   - Si login correcto:
@@ -85,9 +85,9 @@
   - Permisos: NADA
   - Petición: (body: raw + JSON donde pone Text)
     {
-    "mail": "<mail>"
-    "nombre": "<name>",
-    "password": "<pswd>"
+    "mail": "MAIL"
+    "nombre": "NOMBRE",
+    "password": "PSWD"
     }
 
   - Status code:
@@ -95,16 +95,115 @@
     - 417: usuario o mail existen
 
   - Respuesta: Usuario con el token de sesión
-    "mail": "<mail>",
-    "nombre": "<name>",
-    "password": "<pswd>",
-    "token": "<TOKEN>",
+    "mail": "MAIL",
+    "nombre": "NOMBRE",
+    "password": "PSWD",
+    "token": "TOKEN",
     "role": "USER"
 
   - Si registro correcto:
       codigo 201(CREATED) y token vale una cosa mu larga
   - Si registro incorrecto:
       codigo 417 (El usuario o el mail ya estan en uso)
+
+
+- Aceptar petición amistad:
+  - Método: POST
+  - URL: /api/acceptRequest
+  - Permisos: TOKEN
+  - Petición: 
+    HEADER: añadir un campo: key="identificador" y value="tu_nombre"
+    BODY: raw + JSON donde pone Text
+    {
+    "nombre": "NOMBRE" //Nombre del user cuya petición quieres aceptar
+    }
+
+  - Status code:
+    - 200: aceptado
+
+
+- Rechazar petición amistad:
+  - Método: POST
+  - URL: /api/denyRequest
+  - Permisos: TOKEN
+  - Petición: 
+    HEADER: añadir un campo: key="identificador" y value="tu_nombre"
+    BODY: raw + JSON donde pone Text
+    {
+    "nombre": "NOMBRE" //Nombre del user cuya peticion quieres rechazar
+    }
+
+  - Status code:
+    - 200: peticion rechazada (ha ido bien)
+
+- Enviar petición amistad:
+  - Método: POST
+  - URL: /api/sendRequest
+  - Permisos: TOKEN
+  - Petición: 
+    HEADER: añadir un campo: key="identificador" y value="tu_nombre"
+    BODY: raw + JSON donde pone Text
+    {
+    "nombre": "NOMBRE" //Nombre del user al que le envias la peticion
+    }
+
+  - Status code:
+    - 200: peticion enviada correctamente
+    - 417: ya le habías enviado una petición o sois amigos
+
+- Listar peticiones amistad:
+  - Método: GET
+  - URL: /api/listRequest
+  - Permisos: TOKEN
+  - Petición: 
+    HEADER: añadir un campo: key="identificador" y value="tu_nombre"
+    
+  - Status code:
+    - 200: Todo bien
+
+  - Respuesta: Lista de usuarios que te han mandado petición
+    //Formato de un usuario que te manda peticion, devuelve una lista de estos
+    "mail": "null",
+    "nombre": "NOMBRE",
+    "password": "null",
+    "token": "null",
+    "role": "null"
+    
+
+- Listar amigos:
+  - Método: GET
+  - URL: /api/listFriends
+  - Permisos: TOKEN
+  - Petición: 
+    HEADER: añadir un campo: key="identificador" y value="tu_nombre"
+    
+  - Status code:
+    - 200: Todo bien
+
+  - Respuesta: Lista de usuarios que te han mandado petición
+    //Formato de un usuario que es tu amigo, devuelve una lista de estos
+    "mail": "null",
+    "nombre": "NOMBRE",
+    "password": "null",
+    "token": "null",
+    "role": "null"
+  
+
+- Eliminar amigo:
+  - Método: POST
+  - URL: /api/deleteFriend
+  - Permisos: TOKEN
+  - Petición: 
+    HEADER: añadir un campo: key="identificador" y value="tu_nombre"
+    BODY: raw + JSON donde pone Text
+    {
+    "nombre": "NOMBRE" //Nombre del user que quieres eliminar de amigo
+    }
+
+  - Status code:
+    - 200: pamigo eliminado (ha ido bien)
+
+
 
 # Códigos
 
