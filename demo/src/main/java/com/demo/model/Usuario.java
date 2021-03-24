@@ -16,6 +16,9 @@ public class Usuario {
 	private String password;
 	private String token;
 	private String role;
+	private String fotPerf;
+	@Column(columnDefinition = "integer default 0")
+	private Integer puntos;
 	
 	
 	@ManyToMany(cascade = CascadeType.ALL)
@@ -48,6 +51,12 @@ public class Usuario {
 				return peticiones;
 			}
 			return null;
+	}
+	
+	public void setNull() {
+		this.amigo=null;
+		this.peticion=null;
+			
 	}
 
 	public boolean setPeticion(Usuario peticion) {
@@ -134,20 +143,20 @@ public class Usuario {
 	public void printUser() {
 		System.out.println(this.nombre+this.password+"--"+"--"+this.token+"--"+this.mail+"--");
 	}
-	
-	public boolean correcto() {
-		if(nombre!=null&&password!=null&&mail!=null&&mail.contains("@")&&mail.contains(".")&&mail.length()>0&&nombre.length()>0&&password.length()>0) {
-			return true;
-		}
-		else {
-			return false;
-		}
+
+	public String getFotPerf() {
+		return fotPerf;
 	}
-	
-	public void setNull() {
-	this.amigo=null;
-	this.peticion=null;
-	
+
+	public void setFotPerf(String fotPerf) {
+		this.fotPerf = fotPerf;
 	}
-	
+
+	public int getPuntos() {
+		return puntos;
+	}
+
+	public void setPuntos(int puntos) {
+		this.puntos = puntos;
+	}
 }
