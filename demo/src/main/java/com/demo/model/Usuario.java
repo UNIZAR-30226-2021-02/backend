@@ -143,4 +143,11 @@ public class Usuario {
 			return false;
 		}
 	}
+	
+	public void setNull() {
+	this.amigo=null;
+	this.peticion=null;
+	
+	}
+	
 }

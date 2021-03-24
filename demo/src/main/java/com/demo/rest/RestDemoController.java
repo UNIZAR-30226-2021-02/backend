@@ -120,7 +120,7 @@ public class RestDemoController {
 						String token = jwt.getJWTToken(usuario.getNombre());
 
 						usuario.setToken(token);
-						
+						usuario.setNull();
 						tokenRepo.addToken(usuario.getNombre(), token);
 						tokenRepo.printTokens();
 						System.out.println("----------------");
