@@ -46,6 +46,7 @@ public class Usuario {
 				for(Usuario a : peticion) {
 					Usuario u = new Usuario();
 					u.setNombre(a.getNombre());
+					u.setPuntos(a.getPuntos());
 					peticiones.add(u);
 				}
 				return peticiones;
@@ -85,6 +86,7 @@ public class Usuario {
 			for(Usuario a : amigo) {
 				Usuario u = new Usuario();
 				u.setNombre(a.getNombre());
+				u.setPuntos(a.getPuntos());
 				amigos.add(u);
 			}
 			return amigos;

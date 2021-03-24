@@ -248,17 +248,36 @@ public class RestDemoController {
 		return new ResponseEntity<Usuario>(u,HttpStatus.OK);
 	}
 	
-	@GetMapping(value = "/returnImageProfile", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
+	@GetMapping(value = "/returnImageProfile", produces = MediaType.IMAGE_PNG_VALUE)
 	public ResponseEntity<byte[]> getImageProfile(@RequestHeader String idFoto) throws IOException{
-		String fotoo = idFoto;
+		String fotoo = "/profilePictures/"+idFoto;
 		InputStream in = getClass().getResourceAsStream(fotoo);
-		
+		if(in!=null) {
 		System.out.println(fotoo);
 		byte[] image = IOUtils.toByteArray(in);
 
 		return new ResponseEntity<byte[]>(image,HttpStatus.OK);
+		}
+		else {
+			return new ResponseEntity<byte[]>(HttpStatus.EXPECTATION_FAILED);
+		}
+	}
+	
+	
+	@GetMapping(value = "/changeImageProfile")
+	public ResponseEntity<Integer> changeImageProfile(@RequestHeader String identificador,@RequestHeader String idFoto) throws IOException{
+		
+		
+		
+		Usuario u = usuarioRepo.findByNombre(identificador);
+		System.out.println(identificador+"--"+idFoto);
+		u.setFotPerf(idFoto);
+		usuarioRepo.save(u);
+
+		return new ResponseEntity<Integer>(HttpStatus.OK);
 		
 	}
+	
 	
 	
 }
