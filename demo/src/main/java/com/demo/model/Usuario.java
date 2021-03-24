@@ -78,7 +78,24 @@ public class Usuario {
 	 @ManyToMany(mappedBy="peticion")
 	 private List<Usuario> usuario2;
 	
-	
+	//NO SE SI ESTA BIEN
+	private void ordenarAmigos(List<Usuario> lista) {
+		 for(int i = 0; i<lista.size();i++ ) {
+			 for(int j = 0; i<lista.size();j++ ) {
+				 
+				 if(lista.get(i).getPuntos()<lista.get(i+1).getPuntos()) {
+					 Usuario u = lista.get(i);
+					 lista.add(i, lista.get(i+1));
+					 lista.add(i+1,u);
+				 }
+				 
+				 
+				 
+			 }
+		 }
+	}
+	 
+	 
 	public List<Usuario> getAmigo() {
 		
 		List<Usuario> amigos = new ArrayList<>();
@@ -89,6 +106,9 @@ public class Usuario {
 				u.setPuntos(a.getPuntos());
 				amigos.add(u);
 			}
+			
+			ordenarAmigos(amigos);
+			
 			return amigos;
 		}
 		return null;

@@ -244,12 +244,12 @@ public class RestDemoController {
 	public ResponseEntity<Usuario> viewProfile(@RequestHeader String identificador){
 		
 		Usuario u = usuarioRepo.findByNombre(identificador);
-		
+		u.setNull();
 		return new ResponseEntity<Usuario>(u,HttpStatus.OK);
 	}
 	
-	@GetMapping(value = "/returnImageProfile", produces = MediaType.IMAGE_PNG_VALUE)
-	public ResponseEntity<byte[]> getImageProfile(@RequestHeader String idFoto) throws IOException{
+	@GetMapping(value = "/returnImageProfile/{idFoto}", produces = MediaType.IMAGE_PNG_VALUE)
+	public ResponseEntity<byte[]> getImageProfile(@PathVariable String idFoto) throws IOException{
 		String fotoo = "/profilePictures/"+idFoto;
 		InputStream in = getClass().getResourceAsStream(fotoo);
 		if(in!=null) {
