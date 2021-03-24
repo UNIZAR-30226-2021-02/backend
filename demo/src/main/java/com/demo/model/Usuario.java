@@ -104,6 +104,7 @@ public class Usuario {
 				Usuario u = new Usuario();
 				u.setNombre(a.getNombre());
 				u.setPuntos(a.getPuntos());
+				u.setFotPerf(a.getFotPerf());
 				amigos.add(u);
 			}
 			
