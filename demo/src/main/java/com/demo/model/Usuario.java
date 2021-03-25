@@ -1,6 +1,8 @@
 package com.demo.model;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import javax.persistence.*;
@@ -18,9 +20,70 @@ public class Usuario {
 	private String role;
 	private String fotPerf;
 	@Column(columnDefinition = "integer default 0")
-	private Integer puntos;
+	private Integer estrellas;
+	private Integer monedas;
+	private Integer pDibujo;
+	private Integer pListo;
+	private Integer pGracioso;
+	private Integer nAmigos;
+	
+	public Integer getEstrellas() {
+		return estrellas;
+	}
+
+	public void setEstrellas(Integer estrellas) {
+		this.estrellas = estrellas;
+	}
+
+	
+	public int compareTo(Usuario u) {
+	    if (getEstrellas() == null || u.getEstrellas() == null) {
+	      return 0;
+	    }
+	    return getEstrellas().compareTo(u.getEstrellas());
+	  }
 	
 	
+	public Integer getMonedas() {
+		return monedas;
+	}
+
+	public void setMonedas(Integer monedas) {
+		this.monedas = monedas;
+	}
+
+	public Integer getpDibujo() {
+		return pDibujo;
+	}
+
+	public void setpDibujo(Integer pDibujo) {
+		this.pDibujo = pDibujo;
+	}
+
+	public Integer getpListo() {
+		return pListo;
+	}
+
+	public void setpListo(Integer pListo) {
+		this.pListo = pListo;
+	}
+
+	public Integer getpGracioso() {
+		return pGracioso;
+	}
+
+	public void setpGracioso(Integer pGracioso) {
+		this.pGracioso = pGracioso;
+	}
+
+	public Integer getnAmigos() {
+		return nAmigos;
+	}
+
+	public void setnAmigos(Integer nAmigos) {
+		this.nAmigos = nAmigos;
+	}
+
 	@ManyToMany(cascade = CascadeType.ALL)
 	@JoinTable(
 	        name = "amigos",
@@ -46,7 +109,7 @@ public class Usuario {
 				for(Usuario a : peticion) {
 					Usuario u = new Usuario();
 					u.setNombre(a.getNombre());
-					u.setPuntos(a.getPuntos());
+					u.setPuntos(a.getpGracioso(),a.getpListo(),a.getpDibujo(),a.getEstrellas(),a.getMonedas());
 					peticiones.add(u);
 				}
 				return peticiones;
@@ -78,22 +141,7 @@ public class Usuario {
 	 @ManyToMany(mappedBy="peticion")
 	 private List<Usuario> usuario2;
 	
-	//NO SE SI ESTA BIEN
-	private void ordenarAmigos(List<Usuario> lista) {
-		 for(int i = 0; i<lista.size();i++ ) {
-			 for(int j = 0; i<lista.size();j++ ) {
-				 
-				 if(lista.get(i).getPuntos()<lista.get(i+1).getPuntos()) {
-					 Usuario u = lista.get(i);
-					 lista.add(i, lista.get(i+1));
-					 lista.add(i+1,u);
-				 }
-				 
-				 
-				 
-			 }
-		 }
-	}
+	
 	 
 	 
 	public List<Usuario> getAmigo() {
@@ -103,16 +151,29 @@ public class Usuario {
 			for(Usuario a : amigo) {
 				Usuario u = new Usuario();
 				u.setNombre(a.getNombre());
-				u.setPuntos(a.getPuntos());
+				u.setPuntos(a.getpGracioso(),a.getpListo(),a.getpDibujo(),a.getEstrellas(),a.getMonedas());
+				
 				u.setFotPerf(a.getFotPerf());
 				amigos.add(u);
 			}
 			
-			ordenarAmigos(amigos);
+			//ordenarAmigos(amigos);
+			amigos.sort(Comparator.comparing(Usuario::getEstrellas).reversed());
 			
 			return amigos;
 		}
 		return null;
+	}
+	
+	public void setPuntos(Integer pGracioso, Integer pListo, Integer pDibujar, Integer estrellas, Integer monedas) {
+		this.pGracioso = pGracioso;
+		this.pListo = pListo;
+		this.pDibujo = pDibujar;
+		this.estrellas = estrellas;
+		this.monedas = monedas;
+		
+		
+		
 	}
 
 	public void setAmigo(Usuario amigo) {
@@ -175,11 +236,5 @@ public class Usuario {
 		this.fotPerf = fotPerf;
 	}
 
-	public int getPuntos() {
-		return puntos;
-	}
-
-	public void setPuntos(int puntos) {
-		this.puntos = puntos;
-	}
+	
 }

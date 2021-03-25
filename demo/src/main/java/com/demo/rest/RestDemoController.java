@@ -81,7 +81,8 @@ public class RestDemoController {
 			u.setMail(mail);
 			u.setPassword(usuario.getPassword());
 			u.setRole("USER");
-			u.setPuntos(0);
+			u.setnAmigos(0);
+			u.setPuntos(new Integer(0),new Integer(0),new Integer(0),new Integer(0),new Integer(0));
 			u.setFotPerf("foto0.png");
 			usuarioRepo.save(u);
 			System.out.println("Como el usuario no existe, se crea");
@@ -164,6 +165,8 @@ public class RestDemoController {
 		amigo.setAmigo(tu);
 		tu.setAmigo(amigo);
 		tu.deletePeticion(amigo);
+		amigo.setnAmigos(amigo.getAmigo().size());
+		tu.setnAmigos(tu.getAmigo().size());
 		usuarioRepo.save(amigo);
 		usuarioRepo.save(tu);
 		return new ResponseEntity<Usuario>(HttpStatus.OK);
@@ -235,6 +238,8 @@ public class RestDemoController {
 		
 		amigo.deleteAmigo(tu);
 		tu.deleteAmigo(amigo);
+		amigo.setnAmigos(amigo.getAmigo().size());
+		tu.setnAmigos(tu.getAmigo().size());
 		usuarioRepo.save(amigo);
 		usuarioRepo.save(tu);
 		return new ResponseEntity<Usuario>(HttpStatus.OK);
