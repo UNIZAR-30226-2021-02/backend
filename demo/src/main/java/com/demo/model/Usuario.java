@@ -107,6 +107,7 @@ public class Usuario {
 		 List<Usuario> peticiones = new ArrayList<>();
 			if(this.peticion != null) {
 				for(Usuario a : peticion) {
+					a.printUser();
 					Usuario u = new Usuario();
 					u.setNombre(a.getNombre());
 					u.setPuntos(a.getpGracioso(),a.getpListo(),a.getpDibujo(),a.getEstrellas(),a.getMonedas());
@@ -117,6 +118,18 @@ public class Usuario {
 			return null;
 	}
 	
+	public boolean contiene(Usuario usuario) {
+		String nombre = usuario.getNombre();
+		if(this.peticion != null) {
+			for(Usuario a : peticion) {
+				if(a.getNombre() == nombre) {
+					return true;
+				}
+			}
+		}
+		return false;	
+	}
+	 
 	public void setNull() {
 		this.amigo=null;
 		this.peticion=null;
@@ -225,7 +238,7 @@ public class Usuario {
 	}
 	
 	public void printUser() {
-		System.out.println(this.nombre+this.password+"--"+"--"+this.token+"--"+this.mail+"--");
+		System.out.println(this.nombre+"--"+this.password+"--"+"--"+this.token+"--"+this.mail+"--");
 	}
 
 	public String getFotPerf() {

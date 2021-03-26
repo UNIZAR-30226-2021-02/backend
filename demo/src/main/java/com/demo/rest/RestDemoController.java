@@ -150,6 +150,25 @@ public class RestDemoController {
 	}
 	
 	
+	@PostMapping(value = "/sendRequest")
+	public ResponseEntity<Usuario> sendRequest(@RequestBody Usuario usuario,@RequestHeader String identificador){
+		
+		String nombreUsuario = usuario.getNombre();
+		Usuario destino = usuarioRepo.findByNombre(nombreUsuario);
+		Usuario tu = usuarioRepo.findByNombre(identificador);
+		
+		if(!tu.contiene(destino)){   //Si no tienes una peticion de ese usuario
+			if(destino.setPeticion(tu)) {
+				usuarioRepo.save(destino);
+				return new ResponseEntity<Usuario>(HttpStatus.OK);
+			}else {
+				return new ResponseEntity<Usuario>(HttpStatus.EXPECTATION_FAILED);
+			}
+		}else {
+				//El usuario al que vas a enviar la petición ya te había mandado una petición, revisa tu lista de peticiones
+				return new ResponseEntity<Usuario>(HttpStatus.ALREADY_REPORTED);	//218
+		}
+	}
 	
 	
 	@PostMapping(value = "/acceptRequest")
@@ -204,28 +223,7 @@ public class RestDemoController {
 	}
 	
 	
-	
-	@PostMapping(value = "/sendRequest")
-	public ResponseEntity<Usuario> sendRequest(@RequestBody Usuario usuario,@RequestHeader String identificador){
-		
-		String nombreUsuario = usuario.getNombre();
-		Usuario destino = usuarioRepo.findByNombre(nombreUsuario);
-		Usuario tu = usuarioRepo.findByNombre(identificador);
-		System.out.println(identificador);
-		
-		
-		
-		if(destino.setPeticion(tu)) {
-			usuarioRepo.save(destino);
-			return new ResponseEntity<Usuario>(HttpStatus.OK);
-		}else {
-			return new ResponseEntity<Usuario>(HttpStatus.EXPECTATION_FAILED);
-		}
-		
 
-		
-		
-	}
 	@PostMapping(value = "/deleteFriend")
 	public ResponseEntity<Usuario> deleteFriend(@RequestBody Usuario usuario,@RequestHeader String identificador){
 		
