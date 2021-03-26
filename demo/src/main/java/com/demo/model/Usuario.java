@@ -52,6 +52,12 @@ public class Usuario {
 			}
 			return null;
 	}
+	
+	public void setNull() {
+			this.amigo=null;
+			this.peticion=null;
+			
+			}
 
 	public boolean setPeticion(Usuario peticion) {
 		if(!this.peticion.contains(peticion) && !this.amigo.contains(peticion)) {
