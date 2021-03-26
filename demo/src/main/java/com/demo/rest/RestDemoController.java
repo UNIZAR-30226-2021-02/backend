@@ -81,18 +81,15 @@ public class RestDemoController {
 			u.setMail(mail);
 			u.setPassword(usuario.getPassword());
 			u.setRole("USER");
-			
-			if(u.correcto()) {
+			u.setnAmigos(0);
+			u.setPuntos(new Integer(0),new Integer(0),new Integer(0),new Integer(0),new Integer(0));
+			u.setFotPerf("foto0.png");
 			usuarioRepo.save(u);
 			System.out.println("Como el usuario no existe, se crea");
 			
 			String token = jwt.getJWTToken(nombreUsuario);
 			u.setToken(token);
 			return new ResponseEntity<Usuario>(u,HttpStatus.CREATED);
-			}
-			else {
-				return new ResponseEntity<Usuario>(HttpStatus.EXPECTATION_FAILED);
-			}
 		
 		}
 		else {
@@ -108,23 +105,23 @@ public class RestDemoController {
 	@PostMapping(value = "/login")
 	public ResponseEntity<Usuario> login(@RequestBody Usuario usuario) {
 	
+			Usuario u = usuarioRepo.findByNombre(usuario.getNombre());
 			
-			
-			if(usuarioRepo.findByNombre(usuario.getNombre())!=null){
-			if(usuario.getPassword().equals(usuarioRepo.findByNombre(usuario.getNombre()).getPassword())) {
+			if(u !=null){
+			if(u.getPassword().equals(usuarioRepo.findByNombre(u.getNombre()).getPassword())) {
 				
-				service.loadUserByUsername(usuario.getNombre());
+				service.loadUserByUsername(u.getNombre());
 				
 				System.out.println("Logeado correctamente");
 				
-						String token = jwt.getJWTToken(usuario.getNombre());
+						String token = jwt.getJWTToken(u.getNombre());
 
-						usuario.setToken(token);
-						
-						tokenRepo.addToken(usuario.getNombre(), token);
+						u.setToken(token);
+						u.setNull();
+						tokenRepo.addToken(u.getNombre(), token);
 						tokenRepo.printTokens();
 						System.out.println("----------------");
-						return new ResponseEntity<Usuario>(usuario,HttpStatus.OK);
+						return new ResponseEntity<Usuario>(u,HttpStatus.OK);
 						
 			}
 			else {
@@ -153,6 +150,25 @@ public class RestDemoController {
 	}
 	
 	
+	@PostMapping(value = "/sendRequest")
+	public ResponseEntity<Usuario> sendRequest(@RequestBody Usuario usuario,@RequestHeader String identificador){
+		
+		String nombreUsuario = usuario.getNombre();
+		Usuario destino = usuarioRepo.findByNombre(nombreUsuario);
+		Usuario tu = usuarioRepo.findByNombre(identificador);
+		
+		if(!tu.contiene(destino)){   //Si no tienes una peticion de ese usuario
+			if(destino.setPeticion(tu)) {
+				usuarioRepo.save(destino);
+				return new ResponseEntity<Usuario>(HttpStatus.OK);
+			}else {
+				return new ResponseEntity<Usuario>(HttpStatus.EXPECTATION_FAILED);
+			}
+		}else {
+				//El usuario al que vas a enviar la petición ya te había mandado una petición, revisa tu lista de peticiones
+				return new ResponseEntity<Usuario>(HttpStatus.ALREADY_REPORTED);	//218
+		}
+	}
 	
 	
 	@PostMapping(value = "/acceptRequest")
@@ -168,6 +184,8 @@ public class RestDemoController {
 		amigo.setAmigo(tu);
 		tu.setAmigo(amigo);
 		tu.deletePeticion(amigo);
+		amigo.setnAmigos(amigo.getAmigo().size());
+		tu.setnAmigos(tu.getAmigo().size());
 		usuarioRepo.save(amigo);
 		usuarioRepo.save(tu);
 		return new ResponseEntity<Usuario>(HttpStatus.OK);
@@ -205,28 +223,7 @@ public class RestDemoController {
 	}
 	
 	
-	
-	@PostMapping(value = "/sendRequest")
-	public ResponseEntity<Usuario> sendRequest(@RequestBody Usuario usuario,@RequestHeader String identificador){
-		
-		String nombreUsuario = usuario.getNombre();
-		Usuario destino = usuarioRepo.findByNombre(nombreUsuario);
-		Usuario tu = usuarioRepo.findByNombre(identificador);
-		System.out.println(identificador);
-		
-		
-		
-		if(destino.setPeticion(tu)) {
-			usuarioRepo.save(destino);
-			return new ResponseEntity<Usuario>(HttpStatus.OK);
-		}else {
-			return new ResponseEntity<Usuario>(HttpStatus.EXPECTATION_FAILED);
-		}
-		
 
-		
-		
-	}
 	@PostMapping(value = "/deleteFriend")
 	public ResponseEntity<Usuario> deleteFriend(@RequestBody Usuario usuario,@RequestHeader String identificador){
 		
@@ -239,10 +236,51 @@ public class RestDemoController {
 		
 		amigo.deleteAmigo(tu);
 		tu.deleteAmigo(amigo);
+		amigo.setnAmigos(amigo.getAmigo().size());
+		tu.setnAmigos(tu.getAmigo().size());
 		usuarioRepo.save(amigo);
 		usuarioRepo.save(tu);
 		return new ResponseEntity<Usuario>(HttpStatus.OK);
 	}
+	
+	@GetMapping(value = "/viewProfile")
+	public ResponseEntity<Usuario> viewProfile(@RequestHeader String identificador){
+		
+		Usuario u = usuarioRepo.findByNombre(identificador);
+		u.setNull();
+		return new ResponseEntity<Usuario>(u,HttpStatus.OK);
+	}
+	
+	@GetMapping(value = "/returnImageProfile/{idFoto}", produces = MediaType.IMAGE_PNG_VALUE)
+	public ResponseEntity<byte[]> getImageProfile(@PathVariable String idFoto) throws IOException{
+		String fotoo = "/profilePictures/"+idFoto;
+		InputStream in = getClass().getResourceAsStream(fotoo);
+		if(in!=null) {
+		System.out.println(fotoo);
+		byte[] image = IOUtils.toByteArray(in);
+
+		return new ResponseEntity<byte[]>(image,HttpStatus.OK);
+		}
+		else {
+			return new ResponseEntity<byte[]>(HttpStatus.EXPECTATION_FAILED);
+		}
+	}
+	
+	
+	@GetMapping(value = "/changeImageProfile")
+	public ResponseEntity<Integer> changeImageProfile(@RequestHeader String identificador,@RequestHeader String idFoto) throws IOException{
+		
+		
+		
+		Usuario u = usuarioRepo.findByNombre(identificador);
+		System.out.println(identificador+"--"+idFoto);
+		u.setFotPerf(idFoto);
+		usuarioRepo.save(u);
+
+		return new ResponseEntity<Integer>(HttpStatus.OK);
+		
+	}
+	
 	
 	
 }
