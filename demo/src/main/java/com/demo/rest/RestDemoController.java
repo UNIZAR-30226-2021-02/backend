@@ -81,7 +81,8 @@ public class RestDemoController {
 			u.setMail(mail);
 			u.setPassword(usuario.getPassword());
 			u.setRole("USER");
-			u.setPuntos(0);
+			u.setnAmigos(0);
+			u.setPuntos(new Integer(0),new Integer(0),new Integer(0),new Integer(0),new Integer(0));
 			u.setFotPerf("foto0.png");
 			usuarioRepo.save(u);
 			System.out.println("Como el usuario no existe, se crea");
@@ -116,7 +117,7 @@ public class RestDemoController {
 						String token = jwt.getJWTToken(u.getNombre());
 
 						u.setToken(token);
-						
+						u.setNull();
 						tokenRepo.addToken(u.getNombre(), token);
 						tokenRepo.printTokens();
 						System.out.println("----------------");
@@ -164,6 +165,8 @@ public class RestDemoController {
 		amigo.setAmigo(tu);
 		tu.setAmigo(amigo);
 		tu.deletePeticion(amigo);
+		amigo.setnAmigos(amigo.getAmigo().size());
+		tu.setnAmigos(tu.getAmigo().size());
 		usuarioRepo.save(amigo);
 		usuarioRepo.save(tu);
 		return new ResponseEntity<Usuario>(HttpStatus.OK);
@@ -235,6 +238,8 @@ public class RestDemoController {
 		
 		amigo.deleteAmigo(tu);
 		tu.deleteAmigo(amigo);
+		amigo.setnAmigos(amigo.getAmigo().size());
+		tu.setnAmigos(tu.getAmigo().size());
 		usuarioRepo.save(amigo);
 		usuarioRepo.save(tu);
 		return new ResponseEntity<Usuario>(HttpStatus.OK);
@@ -244,21 +249,40 @@ public class RestDemoController {
 	public ResponseEntity<Usuario> viewProfile(@RequestHeader String identificador){
 		
 		Usuario u = usuarioRepo.findByNombre(identificador);
-		
+		u.setNull();
 		return new ResponseEntity<Usuario>(u,HttpStatus.OK);
 	}
 	
-	@GetMapping(value = "/returnImageProfile", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
-	public ResponseEntity<byte[]> getImageProfile(@RequestHeader String idFoto) throws IOException{
-		String fotoo = idFoto;
+	@GetMapping(value = "/returnImageProfile/{idFoto}", produces = MediaType.IMAGE_PNG_VALUE)
+	public ResponseEntity<byte[]> getImageProfile(@PathVariable String idFoto) throws IOException{
+		String fotoo = "/profilePictures/"+idFoto;
 		InputStream in = getClass().getResourceAsStream(fotoo);
-		
+		if(in!=null) {
 		System.out.println(fotoo);
 		byte[] image = IOUtils.toByteArray(in);
 
 		return new ResponseEntity<byte[]>(image,HttpStatus.OK);
+		}
+		else {
+			return new ResponseEntity<byte[]>(HttpStatus.EXPECTATION_FAILED);
+		}
+	}
+	
+	
+	@GetMapping(value = "/changeImageProfile")
+	public ResponseEntity<Integer> changeImageProfile(@RequestHeader String identificador,@RequestHeader String idFoto) throws IOException{
+		
+		
+		
+		Usuario u = usuarioRepo.findByNombre(identificador);
+		System.out.println(identificador+"--"+idFoto);
+		u.setFotPerf(idFoto);
+		usuarioRepo.save(u);
+
+		return new ResponseEntity<Integer>(HttpStatus.OK);
 		
 	}
+	
 	
 	
 }

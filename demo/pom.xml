@@ -102,6 +102,17 @@
 			<artifactId>reactor-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+		
+		
+		<dependency>
+ 
+			<groupId>com.google.firebase</groupId>
+			 
+			<artifactId>firebase-admin</artifactId>
+			 
+			<version>6.15.0</version>
+			 
+		</dependency>
 
 		
 	</dependencies>
