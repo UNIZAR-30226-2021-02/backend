@@ -14,7 +14,6 @@
 
   - Respuesta: lista  de todos los usuarios con formarto
     {
-
     "mail": MAIL,
     "nombre": NOMBRE,
     "password": PSWD,
@@ -149,6 +148,7 @@
 
   - Status code:
     - 200: peticion enviada correctamente
+    - 208: El usuario al que quieres enviar una metición ya te ha mandado una
     - 417: ya le habías enviado una petición o sois amigos
 
 - Listar peticiones amistad:
@@ -203,13 +203,62 @@
   - Status code:
     - 200: pamigo eliminado (ha ido bien)
 
+- Ver perfil:
+  - Método: GET
+  - URL: /api/viewProfile
+  - Permisos: TOKEN
+  - Petición: 
+    HEADER: añadir un campo: key="identificador" y value="usuario"
 
+  - Status code:
+    - 200: Todo bien
+  
+  - Respuesta: Ejemplo con usuario ya creado
+    {
+    "mail": "1@.",
+    "nombre": "1",
+    "password": "123",
+    "token": null,
+    "role": "USER",
+    "fotPerf": "foto1.png",
+    "estrellas": 0,
+    "monedas": 0,
+    "pDibujo": 0,
+    "pListo": 0,
+    "pGracioso": 0,
+    "nAmigos": 0,
+    "amigo": null,
+    "peticion": null
+    }
+
+-Visualizar/Devolver avatar:
+  - Método: GET
+  - URL: /api/returnImageProfile/{foto}
+    Comentario: {foto} debe ser uno de los avatares de la BBDD devueltos como campo fotoPerf en /viewProfile (petición anterior)
+                -foto0.png, foto1.png, ..., foto4.png
+  - Permisos: TOKEN
+  - Petición: Sin HEADER
+  - Respuesta: foto de perfil especificada
+  - Status code: 200 OK
+
+-Cambiar avatar:
+  - Método: GET
+  - URL: /api/changeImageProfile
+  - Permisos: TOKEN
+  - Petición:
+    HEADER: 2 campos
+      key="identificador" y value="usuario"
+      key="idFoto" y value="foto" (foto0.png, foto1.png, ..., foto4.png)
+
+  - Status code: 200 OK, el avatar ha sido cambiado
 
 # Códigos
 
 200: ok
 
 201: creado
+
+208: El usuario al que quieres enviar una metición ya te ha mandado una
 
 417: contraseña incorrecta (login)
      usuario o email en uso (register)
