@@ -36,7 +36,7 @@ import com.demo.repository.UsuarioRepo;
 import com.demo.service.UserService;
 
 
-
+@CrossOrigin(origins = "http://localhost:8081")
 @RestController
 @RequestMapping(value = "/api")
 public class RestDemoController {
@@ -67,7 +67,7 @@ public class RestDemoController {
 	
 	
 
-	@CrossOrigin(origins = "http://localhost:8081")
+	
 	@PostMapping(value = "/register")
 	public ResponseEntity<Usuario> register(@RequestBody Usuario usuario) {
 		usuario.printUser();
@@ -100,7 +100,7 @@ public class RestDemoController {
 	}
 	
 
-	@CrossOrigin(origins = "http://localhost:8081")
+	
 	@PostMapping(value = "/login")
 	public ResponseEntity<Usuario> login(@RequestBody Usuario usuario) {
 	
@@ -138,7 +138,7 @@ public class RestDemoController {
 	}
 	
 	
-	@CrossOrigin(origins = "http://localhost:8081")
+	
 	@GetMapping(value = "/returnImage", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
 	public ResponseEntity<byte[]> getImage() throws IOException{
 		InputStream in = getClass().getResourceAsStream("prueba.jpg");
@@ -151,7 +151,6 @@ public class RestDemoController {
 	
 	
 	
-	@CrossOrigin(origins = "http://localhost:8081")
 	@PostMapping(value = "/acceptRequest")
 	public ResponseEntity<Usuario> acceptRequest(@RequestBody Usuario usuario,@RequestHeader String identificador){
 		
@@ -171,7 +170,7 @@ public class RestDemoController {
 		usuarioRepo.save(tu);
 		return new ResponseEntity<Usuario>(HttpStatus.OK);
 	}
-	@CrossOrigin(origins = "http://localhost:8081")
+	
 	@PostMapping(value = "/denyRequest")
 	public ResponseEntity<Usuario> denyRequest(@RequestBody Usuario usuario,@RequestHeader String identificador){
 		
@@ -187,7 +186,7 @@ public class RestDemoController {
 	}
 	
 	
-	@CrossOrigin(origins = "http://localhost:8081")
+	
 	@GetMapping(value = "/listFriends")
 	public ResponseEntity<List<Usuario>> listFriends(@RequestHeader String identificador){
 				
@@ -206,7 +205,7 @@ public class RestDemoController {
 	
 	
 
-	@CrossOrigin(origins = "http://localhost:8081")
+	
 	@PostMapping(value = "/sendRequest")
 	public ResponseEntity<Usuario> sendRequest(@RequestBody Usuario usuario,@RequestHeader String identificador){
 		
@@ -229,7 +228,7 @@ public class RestDemoController {
 		
 	}
 	
-	@CrossOrigin(origins = "http://localhost:8081")
+	
 
 	@PostMapping(value = "/deleteFriend")
 	public ResponseEntity<Usuario> deleteFriend(@RequestBody Usuario usuario,@RequestHeader String identificador){
@@ -251,7 +250,7 @@ public class RestDemoController {
 	}
 	
 	
-	@CrossOrigin(origins = "http://localhost:8081")
+	
 	@GetMapping(value = "/viewProfile")
 	public ResponseEntity<Usuario> viewProfile(@RequestHeader String identificador){
 		
@@ -260,7 +259,7 @@ public class RestDemoController {
 		return new ResponseEntity<Usuario>(u,HttpStatus.OK);
 	}
 	
-	@CrossOrigin(origins = "http://localhost:8081")
+	
 	@GetMapping(value = "/returnImageProfile/{idFoto}", produces = MediaType.IMAGE_PNG_VALUE)
 	public ResponseEntity<byte[]> getImageProfile(@PathVariable String idFoto) throws IOException{
 		String fotoo = "/profilePictures/"+idFoto;
@@ -276,7 +275,7 @@ public class RestDemoController {
 		}
 	}
 	
-	@CrossOrigin(origins = "http://localhost:8081")
+	
 	@GetMapping(value = "/changeImageProfile")
 	public ResponseEntity<Integer> changeImageProfile(@RequestHeader String identificador,@RequestHeader String idFoto) throws IOException{
 		
