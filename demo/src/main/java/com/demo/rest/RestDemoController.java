@@ -223,7 +223,7 @@ public class RestDemoController {
 	}
 	
 	
-<<<<<<< HEAD
+
 	@CrossOrigin(origins = "http://localhost:8081")
 	@PostMapping(value = "/sendRequest")
 	public ResponseEntity<Usuario> sendRequest(@RequestBody Usuario usuario,@RequestHeader String identificador){
@@ -242,17 +242,13 @@ public class RestDemoController {
 			return new ResponseEntity<Usuario>(HttpStatus.EXPECTATION_FAILED);
 		}
 		
-=======
->>>>>>> refs/remotes/origin/devFuncional
 
-<<<<<<< HEAD
 		
 		
 	}
 	
 	@CrossOrigin(origins = "http://localhost:8081")
-=======
->>>>>>> refs/remotes/origin/devFuncional
+
 	@PostMapping(value = "/deleteFriend")
 	public ResponseEntity<Usuario> deleteFriend(@RequestBody Usuario usuario,@RequestHeader String identificador){
 		
