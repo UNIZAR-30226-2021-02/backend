@@ -36,7 +36,7 @@ import com.demo.repository.UsuarioRepo;
 import com.demo.service.UserService;
 
 
-@CrossOrigin(origins = "http://localhost:8081",methods={RequestMethod.POST,RequestMethod.GET})
+@CrossOrigin(origins = "*",methods={RequestMethod.POST,RequestMethod.GET})
 @RestController
 @RequestMapping(value = "/api")
 public class RestDemoController {
