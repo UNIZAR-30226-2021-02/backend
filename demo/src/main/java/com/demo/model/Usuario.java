@@ -111,6 +111,7 @@ public class Usuario {
 					Usuario u = new Usuario();
 					u.setNombre(a.getNombre());
 					u.setPuntos(a.getpGracioso(),a.getpListo(),a.getpDibujo(),a.getEstrellas(),a.getMonedas());
+					u.setFotPerf(a.getFotPerf());
 					peticiones.add(u);
 				}
 				return peticiones;

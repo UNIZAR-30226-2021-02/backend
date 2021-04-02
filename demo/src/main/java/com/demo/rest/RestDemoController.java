@@ -33,6 +33,7 @@ import com.demo.model.Usuario;
 
 import com.demo.repository.TokenRepo;
 import com.demo.repository.UsuarioRepo;
+import com.demo.service.GameService;
 import com.demo.service.UserService;
 
 
@@ -56,7 +57,9 @@ public class RestDemoController {
 	
 	@Autowired
 	private UserService service;
-
+	
+	@Autowired
+	private GameService game;
 
 	
 	@GetMapping(value = "/all")
@@ -291,6 +294,13 @@ public class RestDemoController {
 
 		return new ResponseEntity<Integer>(HttpStatus.OK);
 		
+	}
+	
+	@GetMapping(value = "/newGame")
+	public ResponseEntity<String> newGame(@RequestHeader String identificador){
+				
+		game.crearPartida(usuarioRepo.findByNombre(identificador));
+		return new ResponseEntity<String>(HttpStatus.OK);
 	}
 	
 	
