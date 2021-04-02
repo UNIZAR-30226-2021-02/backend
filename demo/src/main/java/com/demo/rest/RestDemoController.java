@@ -296,6 +296,21 @@ public class RestDemoController {
 		
 	}
 	
+	@PostMapping(value = "/changeNameProfile")
+	public ResponseEntity<Usuario> changeName(@RequestBody Usuario usuario,@RequestHeader String identificador){
+		
+		
+		Usuario u = usuarioRepo.findByNombre(identificador);
+		String nuevoNombre = usuario.getNombre();
+		if(usuarioRepo.findByNombre(nuevoNombre)==null) {
+			u.setNombre(usuario.getNombre());
+			usuarioRepo.save(u);
+			return new ResponseEntity<Usuario>(HttpStatus.OK);
+		}
+		return new ResponseEntity<Usuario>(HttpStatus.EXPECTATION_FAILED);
+		
+	}
+	
 	@GetMapping(value = "/newGame")
 	public ResponseEntity<String> newGame(@RequestHeader String identificador){
 				
