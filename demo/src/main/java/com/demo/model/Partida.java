@@ -12,8 +12,9 @@ import org.springframework.data.annotation.Id;
 public class Partida {
 	
 	//Identificador??
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	
+
+
 	int id_;
 	private int nJugadores_;
 	private List<Usuario> jugadores_;
@@ -69,17 +70,18 @@ public class Partida {
 		return null;
 	}
 		
-	public Partida (Usuario host) {
+	public Partida (Usuario host,int id) {
 		this.host_ = host;
 		this.estado_ = "esperando";
 		this.nJugadores_ = 1;
+		this.id_ = id;
 		this.hilos_ = new ArrayList<Hilo>();
 		this.hilos_.add(new Hilo(host));
 		this.jugadores_ = new ArrayList<Usuario>();
 		this.jugadores_.add(this.host_);
 	}
 	
-	void addJugador(Usuario jugador) {
+	public void addJugador(Usuario jugador) {
 		this.jugadores_.add(jugador);
 		nJugadores_++;
 		this.hilos_.add(new Hilo(jugador));
@@ -89,5 +91,8 @@ public class Partida {
 		return this.id_;
 	}
 	
+	public int getNumJugadores() {
+		return this.nJugadores_;
+	}
 
 }

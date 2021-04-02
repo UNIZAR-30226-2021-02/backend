@@ -28,7 +28,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.demo.controller.AuthController;
-
+import com.demo.model.Partida;
 import com.demo.model.Usuario;
 
 import com.demo.repository.TokenRepo;
@@ -303,6 +303,17 @@ public class RestDemoController {
 		return new ResponseEntity<String>(HttpStatus.OK);
 	}
 	
+	@GetMapping(value = "/enterGame")
+	public ResponseEntity<Partida> enterGame(@RequestHeader String identificador,@RequestHeader int idPartida){
+		
+		if(game.addJugador(usuarioRepo.findByNombre(identificador),idPartida)) {
 	
+			Partida p = game.getPartida(idPartida);
+			return new ResponseEntity<Partida>(p,HttpStatus.OK); 
+			
+		}
+		return new ResponseEntity<Partida>(HttpStatus.EXPECTATION_FAILED);
+		
+	}
 	
 }
