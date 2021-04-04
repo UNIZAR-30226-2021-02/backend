@@ -11,9 +11,9 @@ import com.demo.model.Usuario;
 
 public interface PartidaRepo extends JpaRepository<Partida,Integer>{
 
-	Usuario findByNombre(String nombre);
+	//Usuario findByNombre(String nombre);
 
-	Usuario findByMail(String mail);
+	//Usuario findByMail(String mail);
 	
 	/*
 	@Query(value = "SELECT Usuario.nombre FROM Amigos INNER JOIN Usuario ON Amigos.mail_amigo = mail  WHERE Amigos.mail_usuario = :mailUsuario" , nativeQuery = true)
