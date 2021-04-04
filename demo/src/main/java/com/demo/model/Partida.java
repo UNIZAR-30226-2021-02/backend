@@ -38,9 +38,9 @@ public class Partida {
 
 	private List<Usuario> jugadores_;
 	
-	@ManyToOne( fetch = FetchType.LAZY,
-            cascade = CascadeType.ALL)
-	@JoinColumn(name = "partidasHost", nullable = false)
+
+	@ManyToOne(fetch = FetchType.LAZY, optional = false)
+
 	private Usuario host_;
 	
 	private String estado_;  //esperando/puntuando/jugando

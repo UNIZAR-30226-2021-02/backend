@@ -149,7 +149,7 @@ public class Usuario {
 		this.peticion.remove(peticion);
 	}
 
-	@ManyToMany(mappedBy="jugadores_")	
+	 @ManyToMany(mappedBy="jugadores_")	
 	 private List<Partida> partidas;
 	 
 	 @ManyToMany(mappedBy="peticion")
@@ -159,8 +159,9 @@ public class Usuario {
 	 @ManyToMany(mappedBy="amigo")	
 	 private List<Usuario> usuario;
 	 
-	 @OneToMany(mappedBy = "host_",fetch = FetchType.LAZY)
-	 
+
+	 @OneToMany(mappedBy = "host_", fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+
 	 private List<Partida> partidasHost;
 	 
 	 @OneToMany(mappedBy = "autor_",fetch = FetchType.LAZY)
