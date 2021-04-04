@@ -32,7 +32,7 @@ public class Partida {
 	@ManyToMany(cascade = CascadeType.ALL)
 	@JoinTable(
 	        name = "jugadores",
-	        joinColumns = @JoinColumn(name = "mailUsuario", nullable = false),
+	        joinColumns = @JoinColumn(name = "partida", nullable = false),
 	        inverseJoinColumns = @JoinColumn(name="mailJugador", nullable = false)
 	    )
 

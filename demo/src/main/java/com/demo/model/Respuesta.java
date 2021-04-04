@@ -38,7 +38,7 @@ public class Respuesta {
 
 	
 	@Lob
-	@Column(name="contenido",columnDefinition="BLOB")
+	@Column(name="contenido",columnDefinition="bytea")
 	private Object contenido_;
 	
 
