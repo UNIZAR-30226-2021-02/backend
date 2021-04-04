@@ -1,7 +1,18 @@
 package com.demo.model;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+
+
+
+@Entity
 public class Respuesta {
     
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	private Integer id_;
 	private Usuario autor_;
 	private Object contenido_;
 	private boolean esDibujo_;

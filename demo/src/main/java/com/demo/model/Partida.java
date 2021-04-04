@@ -3,24 +3,49 @@ package com.demo.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 
-import org.springframework.data.annotation.Id;
 
 
+@Entity
 public class Partida {
 	
 	//Identificador??
 	
 
-
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	int id_;
 	private int nJugadores_;
+	
+	
+	@ManyToMany(cascade = CascadeType.ALL)
+	@JoinTable(
+	        name = "jugadores",
+	        joinColumns = @JoinColumn(name = "mailUsuario", nullable = false),
+	        inverseJoinColumns = @JoinColumn(name="mailJugador", nullable = false)
+	    )
+
 	private List<Usuario> jugadores_;
+	
+	@OneToMany(mappedBy = "partidasHost", fetch = FetchType.LAZY,
+            cascade = CascadeType.ALL)
 	private Usuario host_;
+	
 	private String estado_;  //esperando/puntuando/jugando
-	private List<Hilo> hilos_; //mismo tamaño que jugadores
+	
+	
+	
+	//private List<Hilo> hilos_; //mismo tamaño que jugadores
 	
 	
 	public List<Usuario> getJugadores_() {
@@ -41,7 +66,7 @@ public class Partida {
 	public void setEstado_(String estado_) {
 		this.estado_ = estado_;
 	}
-	
+	/*
 	public void addRespuesta(Usuario inicial, Respuesta respuesta) {
 		for (Hilo h : hilos_) {
 			if(h.getjugadorInicial().equals(inicial)) {
@@ -86,13 +111,22 @@ public class Partida {
 		nJugadores_++;
 		this.hilos_.add(new Hilo(jugador));
 	}
-	
+	*/
 	public int getId() {
 		return this.id_;
 	}
 	
 	public int getNumJugadores() {
 		return this.nJugadores_;
+	}
+	
+	public boolean isUser(Usuario usuario) {
+		for (Usuario u : jugadores_) {
+			if(u.getNombre().equals(usuario.getNombre())) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 }

@@ -149,14 +149,19 @@ public class Usuario {
 		this.peticion.remove(peticion);
 	}
 
-	@ManyToMany(mappedBy="amigo")	
-	 private List<Usuario> usuario;
+	@ManyToMany(mappedBy="jugadores_")	
+	 private List<Partida> partidas;
 	 
 	 @ManyToMany(mappedBy="peticion")
 	 private List<Usuario> usuario2;
 	
 	
+	 @ManyToMany(mappedBy="amigo")	
+	 private List<Usuario> usuario;
 	 
+	 @ManyToOne(fetch = FetchType.LAZY, optional = false)
+	 @JoinColumn(name = "partidasHost", nullable = false)
+	 private List<Partida> partidasHost;
 	 
 	public List<Usuario> getAmigo() {
 		

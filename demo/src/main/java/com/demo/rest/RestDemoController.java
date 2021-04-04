@@ -311,7 +311,7 @@ public class RestDemoController {
 		
 	}
 	
-	@GetMapping(value = "/newGame")
+	/*@GetMapping(value = "/newGame")
 	public ResponseEntity<String> newGame(@RequestHeader String identificador){
 				
 		game.crearPartida(usuarioRepo.findByNombre(identificador));
@@ -330,5 +330,11 @@ public class RestDemoController {
 		return new ResponseEntity<Partida>(HttpStatus.EXPECTATION_FAILED);
 		
 	}
+	/*
+	@GetMapping(value = "/listGames")
+	public ResponseEntity<List<Partida>> listGames (@RequestHeader String identificador){
+		List<Partida> respuesta = game.getPartidasJugador(usuarioRepo.findByNombre(identificador));
+		return new ResponseEntity<List<Partida>>(respuesta,HttpStatus.OK);
+	}*/
 	
 }

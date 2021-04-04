@@ -17,7 +17,7 @@ public class GameService {
 	
 	
 
-	
+	/*
 	private List<Partida> partidas_ = new ArrayList<Partida>();
 	private int proxId = 0;
 	//Buscar partida por host
@@ -55,5 +55,13 @@ public class GameService {
 		return null;
 	}
 
-	
+	public List<Partida> getPartidasJugador(Usuario usuario){
+		List<Partida> respuesta = new ArrayList<Partida>();
+		for (Partida p : partidas_) {
+			if(p.isUser(usuario)) {
+				respuesta.add(p);
+			}
+		}
+		return respuesta;
+	}*/
 }
