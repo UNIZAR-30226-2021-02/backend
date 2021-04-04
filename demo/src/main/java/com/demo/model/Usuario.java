@@ -159,9 +159,13 @@ public class Usuario {
 	 @ManyToMany(mappedBy="amigo")	
 	 private List<Usuario> usuario;
 	 
-	 @ManyToOne(fetch = FetchType.LAZY, optional = false)
-	 @JoinColumn(name = "partidasHost", nullable = false)
+	 @OneToMany(mappedBy = "host_",fetch = FetchType.LAZY)
+	 
 	 private List<Partida> partidasHost;
+	 
+	 @OneToMany(mappedBy = "autor_",fetch = FetchType.LAZY)
+	 
+	 private List<Respuesta> respuestas;
 	 
 	public List<Usuario> getAmigo() {
 		

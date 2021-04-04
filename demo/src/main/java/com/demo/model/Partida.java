@@ -12,6 +12,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
 
@@ -37,8 +38,9 @@ public class Partida {
 
 	private List<Usuario> jugadores_;
 	
-	@OneToMany(mappedBy = "partidasHost", fetch = FetchType.LAZY,
+	@ManyToOne( fetch = FetchType.LAZY,
             cascade = CascadeType.ALL)
+	@JoinColumn(name = "partidasHost", nullable = false)
 	private Usuario host_;
 	
 	private String estado_;  //esperando/puntuando/jugando
