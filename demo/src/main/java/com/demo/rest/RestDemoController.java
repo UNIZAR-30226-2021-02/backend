@@ -313,30 +313,33 @@ public class RestDemoController {
 		
 	}
 	
-	/*@GetMapping(value = "/newGame")
+	@GetMapping(value = "/newGame")
 	public ResponseEntity<String> newGame(@RequestHeader String identificador){
 				
-		game.crearPartida(usuarioRepo.findByNombre(identificador));
+		game.crearPartida(identificador);
 		return new ResponseEntity<String>(HttpStatus.OK);
 	}
 	
 	@GetMapping(value = "/enterGame")
 	public ResponseEntity<Partida> enterGame(@RequestHeader String identificador,@RequestHeader int idPartida){
 		
-		if(game.addJugador(usuarioRepo.findByNombre(identificador),idPartida)) {
-	
+		if(game.addJugador(identificador,idPartida)) {
+			
 			Partida p = game.getPartida(idPartida);
+			p.setNull();
 			return new ResponseEntity<Partida>(p,HttpStatus.OK); 
+			
+			
 			
 		}
 		return new ResponseEntity<Partida>(HttpStatus.EXPECTATION_FAILED);
 		
 	}
-	/*
+	
 	@GetMapping(value = "/listGames")
 	public ResponseEntity<List<Partida>> listGames (@RequestHeader String identificador){
-		List<Partida> respuesta = game.getPartidasJugador(usuarioRepo.findByNombre(identificador));
+		List<Partida> respuesta = game.getPartidasJugador(identificador);
 		return new ResponseEntity<List<Partida>>(respuesta,HttpStatus.OK);
-	}*/
+	}
 	
 }

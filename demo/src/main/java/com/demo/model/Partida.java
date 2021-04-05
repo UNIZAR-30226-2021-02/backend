@@ -39,7 +39,7 @@ public class Partida {
 	private List<Usuario> jugadores_;
 	
 
-	@ManyToOne(fetch = FetchType.LAZY, optional = false)
+	@ManyToOne(fetch = FetchType.EAGER, optional = false)
 
 	private Usuario host_;
 	
@@ -47,7 +47,8 @@ public class Partida {
 	
 	
 	
-	//private List<Hilo> hilos_; //mismo tamaño que jugadores
+	@OneToMany(mappedBy = "partida_", fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+	private List<Hilo> hilos_; //mismo tamaño que jugadores
 	
 	
 	public List<Usuario> getJugadores_() {
@@ -68,7 +69,7 @@ public class Partida {
 	public void setEstado_(String estado_) {
 		this.estado_ = estado_;
 	}
-	/*
+	
 	public void addRespuesta(Usuario inicial, Respuesta respuesta) {
 		for (Hilo h : hilos_) {
 			if(h.getjugadorInicial().equals(inicial)) {
@@ -97,23 +98,33 @@ public class Partida {
 		return null;
 	}
 		
-	public Partida (Usuario host,int id) {
+	public Partida (Usuario host) {
 		this.host_ = host;
 		this.estado_ = "esperando";
 		this.nJugadores_ = 1;
-		this.id_ = id;
 		this.hilos_ = new ArrayList<Hilo>();
-		this.hilos_.add(new Hilo(host));
 		this.jugadores_ = new ArrayList<Usuario>();
-		this.jugadores_.add(this.host_);
+		this.jugadores_.add(host);
+	}
+	
+	public Partida () {
+		
+	}
+	public void setNull() {
+		this.host_.setPassword(null);
+		this.host_.setNull();
+		this.hilos_ = null;
+		this.jugadores_ = null;
+	}
+	public void addHilo(Hilo hilo) {
+		this.hilos_.add(hilo);
 	}
 	
 	public void addJugador(Usuario jugador) {
 		this.jugadores_.add(jugador);
 		nJugadores_++;
-		this.hilos_.add(new Hilo(jugador));
 	}
-	*/
+	
 	public int getId() {
 		return this.id_;
 	}
@@ -122,13 +133,22 @@ public class Partida {
 		return this.nJugadores_;
 	}
 	
-	public boolean isUser(Usuario usuario) {
+	public boolean isUser(String usuario) {
 		for (Usuario u : jugadores_) {
-			if(u.getNombre().equals(usuario.getNombre())) {
+			if(u.getNombre().equals(usuario)) {
 				return true;
 			}
 		}
 		return false;
+	}
+	public int getnJugadores_() {
+		return nJugadores_;
+	}
+	public void setnJugadores_(int nJugadores_) {
+		this.nJugadores_ = nJugadores_;
+	}
+	public List<Hilo> getHilos_() {
+		return hilos_;
 	}
 
 }
