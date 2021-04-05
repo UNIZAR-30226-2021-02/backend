@@ -262,6 +262,21 @@
 
   - Status code: 200 OK, el avatar ha sido cambiado
 
+-Cambiar nombre:
+  - Método: POST
+  - URL: /api/changeNameProfile
+  - Permisos: TOKEN
+  - Petición:
+    HEADER: 2 campos
+      key="identificador" y value="usuario"
+    BODY: raw + JSON donde pone Text
+    {
+    "nombre": "NOMBRE" //Nombre nuevo
+    }  
+
+  - Status code: 200 OK, el nombre ha sido cambiado
+  - Version: 1.2.3
+
 # Códigos
 
 200: ok
