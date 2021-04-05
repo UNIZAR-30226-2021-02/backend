@@ -110,14 +110,16 @@ public class RestDemoController {
 	@PostMapping(value = "/login")
 	public ResponseEntity<Usuario> login(@RequestBody Usuario usuario) {
 	
-			Usuario u = usuarioRepo.findByNombre(usuario.getNombre());
-			
-			if(u !=null){
-			if(u.getPassword().equals(usuarioRepo.findByNombre(u.getNombre()).getPassword())) {
-				
+		Usuario u = usuarioRepo.findByNombre(usuario.getNombre());
+		
+		if(u !=null){
+			if(u.getPassword().equals(usuario.getPassword())) {
 				service.loadUserByUsername(u.getNombre());
 				
 				System.out.println("Logeado correctamente");
+				System.out.println(u.getPassword());
+				System.out.println(usuario.getPassword());
+				System.out.println("---");
 				
 						String token = jwt.getJWTToken(u.getNombre());
 
