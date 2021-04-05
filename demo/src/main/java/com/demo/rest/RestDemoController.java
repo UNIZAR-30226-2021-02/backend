@@ -28,11 +28,12 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.demo.controller.AuthController;
-
+import com.demo.model.Partida;
 import com.demo.model.Usuario;
 
 import com.demo.repository.TokenRepo;
 import com.demo.repository.UsuarioRepo;
+import com.demo.service.GameService;
 import com.demo.service.UserService;
 
 
@@ -56,7 +57,9 @@ public class RestDemoController {
 	
 	@Autowired
 	private UserService service;
-
+	
+	@Autowired
+	private GameService game;
 
 	
 	@GetMapping(value = "/all")
@@ -107,14 +110,16 @@ public class RestDemoController {
 	@PostMapping(value = "/login")
 	public ResponseEntity<Usuario> login(@RequestBody Usuario usuario) {
 	
-			Usuario u = usuarioRepo.findByNombre(usuario.getNombre());
-			
-			if(u !=null){
-			if(u.getPassword().equals(usuarioRepo.findByNombre(u.getNombre()).getPassword())) {
-				
+		Usuario u = usuarioRepo.findByNombre(usuario.getNombre());
+		
+		if(u !=null){
+			if(u.getPassword().equals(usuario.getPassword())) {
 				service.loadUserByUsername(u.getNombre());
 				
 				System.out.println("Logeado correctamente");
+				System.out.println(u.getPassword());
+				System.out.println(usuario.getPassword());
+				System.out.println("---");
 				
 						String token = jwt.getJWTToken(u.getNombre());
 
@@ -293,6 +298,45 @@ public class RestDemoController {
 		
 	}
 	
+	@PostMapping(value = "/changeNameProfile")
+	public ResponseEntity<Usuario> changeName(@RequestBody Usuario usuario,@RequestHeader String identificador){
+		
+		
+		Usuario u = usuarioRepo.findByNombre(identificador);
+		String nuevoNombre = usuario.getNombre();
+		if(usuarioRepo.findByNombre(nuevoNombre)==null) {
+			u.setNombre(usuario.getNombre());
+			usuarioRepo.save(u);
+			return new ResponseEntity<Usuario>(HttpStatus.OK);
+		}
+		return new ResponseEntity<Usuario>(HttpStatus.EXPECTATION_FAILED);
+		
+	}
 	
+	/*@GetMapping(value = "/newGame")
+	public ResponseEntity<String> newGame(@RequestHeader String identificador){
+				
+		game.crearPartida(usuarioRepo.findByNombre(identificador));
+		return new ResponseEntity<String>(HttpStatus.OK);
+	}
+	
+	@GetMapping(value = "/enterGame")
+	public ResponseEntity<Partida> enterGame(@RequestHeader String identificador,@RequestHeader int idPartida){
+		
+		if(game.addJugador(usuarioRepo.findByNombre(identificador),idPartida)) {
+	
+			Partida p = game.getPartida(idPartida);
+			return new ResponseEntity<Partida>(p,HttpStatus.OK); 
+			
+		}
+		return new ResponseEntity<Partida>(HttpStatus.EXPECTATION_FAILED);
+		
+	}
+	/*
+	@GetMapping(value = "/listGames")
+	public ResponseEntity<List<Partida>> listGames (@RequestHeader String identificador){
+		List<Partida> respuesta = game.getPartidasJugador(usuarioRepo.findByNombre(identificador));
+		return new ResponseEntity<List<Partida>>(respuesta,HttpStatus.OK);
+	}*/
 	
 }

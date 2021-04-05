@@ -111,6 +111,7 @@ public class Usuario {
 					Usuario u = new Usuario();
 					u.setNombre(a.getNombre());
 					u.setPuntos(a.getpGracioso(),a.getpListo(),a.getpDibujo(),a.getEstrellas(),a.getMonedas());
+					u.setFotPerf(a.getFotPerf());
 					peticiones.add(u);
 				}
 				return peticiones;
@@ -148,14 +149,24 @@ public class Usuario {
 		this.peticion.remove(peticion);
 	}
 
-	@ManyToMany(mappedBy="amigo")	
-	 private List<Usuario> usuario;
+	 @ManyToMany(mappedBy="jugadores_")	
+	 private List<Partida> partidas;
 	 
 	 @ManyToMany(mappedBy="peticion")
 	 private List<Usuario> usuario2;
 	
 	
+	 @ManyToMany(mappedBy="amigo")	
+	 private List<Usuario> usuario;
 	 
+
+	 @OneToMany(mappedBy = "host_", fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+
+	 private List<Partida> partidasHost;
+	 
+	 @OneToMany(mappedBy = "autor_",fetch = FetchType.LAZY)
+	 
+	 private List<Respuesta> respuestas;
 	 
 	public List<Usuario> getAmigo() {
 		
