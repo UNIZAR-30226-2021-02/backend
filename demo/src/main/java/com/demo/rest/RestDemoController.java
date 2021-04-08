@@ -358,9 +358,9 @@ public class RestDemoController {
 	
 	
 	@GetMapping(value = "/inviteGame")
-	public ResponseEntity<String> inviteGame(@RequestHeader int idPartida,@RequestHeader String identificador){
+	public ResponseEntity<String> inviteGame(@RequestHeader int idPartida,@RequestHeader String identificador,@RequestHeader String idInvitado){
 				
-		if(game.inviteGame(identificador, idPartida)) {
+		if(game.inviteGame(idInvitado,identificador, idPartida)) {
 			return new ResponseEntity<String>(HttpStatus.OK);
 		}
 		else {

@@ -125,10 +125,18 @@ public class Usuario {
 		        name = "invitaciones",
 		        joinColumns = @JoinColumn(name = "mailUsuario", nullable = false),
 		        inverseJoinColumns = @JoinColumn(name="idPartida", nullable = false)
+		       
+		        
 			 )
 	 
 	 private List<Partida> invitaciones;
 	 
+	 
+	 
+	 
+	 
+	 @ManyToMany(mappedBy="invitadores_")
+	 private List<Partida> invitadas;
 	 
 	 
 	public List<Partida> getInvitaciones() {

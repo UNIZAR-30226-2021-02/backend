@@ -92,18 +92,25 @@ public class GameService {
 	}
 	
 	
-	public boolean inviteGame(String identificador, int idPartida) {
+	public boolean inviteGame(String idInvitado,String identificador, int idPartida) {
 		
-		Usuario u = usuarioRepo.findByNombre(identificador);
+		Usuario u = usuarioRepo.findByNombre(idInvitado);
+		Usuario invitador = usuarioRepo.findByNombre(identificador);
 		Partida p = partidaRepo.findById(idPartida);
 		
 		if(p!=null&&u!=null) {
-			if(p.isUser(identificador)||p.isInvited(identificador)) {
+			if(p.isUser(idInvitado)||p.isInvited(idInvitado)) {
 				return false;
 			}
-			else {				
-				u.addInvitaciones(p);
-				usuarioRepo.save(u);
+			else {
+				System.out.println(invitador.getMail());
+				p.addInvitacion(invitador,u);
+			
+				//partidaRepo.save(p);
+				//Partida p2 = partidaRepo.findById(p.getId());
+				//u.addInvitaciones(p);
+				
+				partidaRepo.save(p);
 				return true;		
 			}			
 		}

@@ -44,7 +44,40 @@ public class Partida {
 	
 	@ManyToMany(mappedBy="invitaciones")
 	private List <Usuario> invitados_;
+	
+	
+	public void addInvitacion(Usuario invitador,Usuario invitado) {
+		invitados_.add(invitado);
+		invitadores_.add(invitador);
+	}
+	
+	
+	@ManyToMany(cascade = CascadeType.ALL)
+	 @JoinTable(
+		        name = "invitaciones",
+		        joinColumns = @JoinColumn(name = "idPartida", nullable = false),
+		        inverseJoinColumns = @JoinColumn(name="mailInvitador", nullable = false)
+		       
+		        
+			 )
+	
+	private List<Usuario> invitadores_;
+	
+	
+	
+	
+	
 
+	public List<Usuario> getInvitadores_() {
+		return invitadores_;
+	}
+	public void setInvitadores_(List<Usuario> invitadores_) {
+		this.invitadores_ = invitadores_;
+	}
+	
+	public void addInvitadores_(Usuario invitador) {
+		this.invitadores_.add(invitador);
+	}
 	@ManyToOne(fetch = FetchType.EAGER, optional = false)
 
 	private Usuario host_;
