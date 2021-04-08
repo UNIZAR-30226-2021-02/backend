@@ -97,7 +97,7 @@ public class GameService {
 		Usuario u = usuarioRepo.findByNombre(identificador);
 		Partida p = partidaRepo.findById(idPartida);
 		
-		if(p!=null) {
+		if(p!=null&&u!=null) {
 			if(p.isUser(identificador)||p.isInvited(identificador)) {
 				return false;
 			}
