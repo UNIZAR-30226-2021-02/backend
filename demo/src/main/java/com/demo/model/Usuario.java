@@ -96,8 +96,8 @@ public class Usuario {
 	@ManyToMany(cascade = CascadeType.ALL)
 	@JoinTable(
 	        name = "peticiones",
-	        joinColumns = @JoinColumn(name = "mailUsuario", nullable = false),
-	        inverseJoinColumns = @JoinColumn(name="mailPedido", nullable = false)
+	        joinColumns = @JoinColumn(name = "mail_recibe", nullable = false),
+	        inverseJoinColumns = @JoinColumn(name="mail_envia", nullable = false)
 	    )
 	private List<Usuario> peticion;
 	
@@ -126,12 +126,22 @@ public class Usuario {
 		        joinColumns = @JoinColumn(name = "mailUsuario", nullable = false),
 		        inverseJoinColumns = @JoinColumn(name="idPartida", nullable = false)
 			 )
+	 
 	 private List<Partida> invitaciones;
 	 
 	 
 	 
 	public List<Partida> getInvitaciones() {
-		return invitaciones;
+		List<Partida> invitaciones = new ArrayList<>();
+		if(this.invitaciones != null) {
+			for(Partida a : this.invitaciones) {
+				System.out.println(a);
+				a.setNull();
+				invitaciones.add(a);
+			}
+			return invitaciones;
+		}
+		return null;
 	}
 
 	public void setInvitaciones(List<Partida> invitaciones) {

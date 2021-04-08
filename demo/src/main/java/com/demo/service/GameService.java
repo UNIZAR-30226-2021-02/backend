@@ -29,7 +29,7 @@ public class GameService {
 	
 
 	
-	public void crearPartida(String identificador,Partida partidaPar) {
+	public Partida crearPartida(String identificador,Partida partidaPar) {
 		Usuario host = usuarioRepo.findByNombre(identificador);
 		Hilo hiloAux = new Hilo(host);
 		Partida partida = new Partida(host,partidaPar.getNombre());
@@ -38,8 +38,9 @@ public class GameService {
 		hiloRepo.save(hiloAux);
 		
 		partida.addHilo(hiloAux);
-		System.out.println(partida.getHost_());
+		//System.out.println(partida.getHost_());
 		partidaRepo.save(partida);
+		return partidaRepo.findById(partida.getId());
 	}
 	
 	public boolean addJugador(String identificador, int id) {

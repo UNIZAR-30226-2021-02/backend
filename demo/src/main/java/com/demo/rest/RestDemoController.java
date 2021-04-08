@@ -222,15 +222,24 @@ public class RestDemoController {
 		Usuario tu = usuarioRepo.findByNombre(identificador);
 		System.out.println(identificador);
 		
-		
-		
-		if(destino.setPeticion(tu)) {
-			usuarioRepo.save(destino);
-			return new ResponseEntity<Usuario>(HttpStatus.OK);
+		if(destino != null) {
+			if(tu.contiene(destino)) {
+				tu.setAmigo(destino);
+				destino.setAmigo(tu);
+				tu.deletePeticion(destino);
+				usuarioRepo.save(tu);
+				usuarioRepo.save(destino);
+				return new ResponseEntity<Usuario>(HttpStatus.ALREADY_REPORTED);
+			}
+			if(destino.setPeticion(tu)) {
+				usuarioRepo.save(destino);
+				return new ResponseEntity<Usuario>(HttpStatus.OK);
+			}else {
+				return new ResponseEntity<Usuario>(HttpStatus.EXPECTATION_FAILED);
+			}
 		}else {
-			return new ResponseEntity<Usuario>(HttpStatus.EXPECTATION_FAILED);
+			return new ResponseEntity<Usuario>(HttpStatus.NO_CONTENT);
 		}
-		
 
 		
 		
@@ -314,10 +323,11 @@ public class RestDemoController {
 	}
 	
 	@PostMapping(value = "/newGame")
-	public ResponseEntity<String> newGame(@RequestBody Partida partida,@RequestHeader String identificador){
+	public ResponseEntity<Partida> newGame(@RequestBody Partida partida,@RequestHeader String identificador){
 				
-		game.crearPartida(identificador,partida);
-		return new ResponseEntity<String>(HttpStatus.OK);
+		Partida p = game.crearPartida(identificador,partida);
+		p.setNull();
+		return new ResponseEntity<Partida>(p,HttpStatus.OK);
 	}
 	
 	@GetMapping(value = "/enterGame")

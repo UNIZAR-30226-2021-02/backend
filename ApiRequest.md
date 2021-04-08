@@ -148,8 +148,9 @@
 
   - Status code:
     - 200: peticion enviada correctamente
-    - 208: El usuario al que quieres enviar una metición ya te ha mandado una
+    - 208: tenías una petición de el usuario al que quieres enviar la peticion, no envías la petición y se añade directamente como amigo 
     - 417: ya le habías enviado una petición o sois amigos
+    - 204: no existe el usuario al que quieres enviar la petición
 
 - Listar peticiones amistad:
   - Método: GET
@@ -251,6 +252,195 @@
       key="idFoto" y value="foto" (foto0.png, foto1.png, ..., foto4.png)
 
   - Status code: 200 OK, el avatar ha sido cambiado
+
+-Cambiar avatar:
+  - Método: GET
+  - URL: /api/changeNameProfile
+  - Permisos: TOKEN
+  - Petición:
+    HEADER:
+      key="identificador" y value="usuario" //Usuario = nombre viejo
+    BODY:
+      {
+      "usuario": "Nombre" //Nombre nuevo
+      }
+
+  - Status code: 200 OK, el nombre ha sido cambiado
+                 417 Expectation Failed, el nombre ya está en uso
+
+------------------------
+     VERSION 1.3.0
+------------------------
+
+-Crear Partida:
+  -Método: POST
+  - URL: /api/newGame
+  - Permisos: TOKEN
+  - Petición:
+    HEADER:
+      key="identificador" y value="usuario" 
+
+  - Status code: 200 OK, la partida ha sido creada
+  - Respuesta: Ejemplo
+    {
+    "nJugadores_": 1,
+    "jugadores_": null,
+    "host_": {
+        "mail": "1@.",
+        "nombre": "1",
+        "password": null,
+        "token": null,
+        "role": "USER",
+        "fotPerf": "foto1.png",
+        "estrellas": 0,
+        "monedas": 0,
+        "pDibujo": 0,
+        "pListo": 0,
+        "pGracioso": 0,
+        "nAmigos": 0,
+        "amigo": null,
+        "peticion": null,
+        "invitaciones": null,
+        "partidas": null,
+        "partidasHost": null,
+        "respuestas": null
+    },
+    "estado_": "esperando",
+    "hilos_": null,
+    "id": 46,
+    "nombre": "Prueba"
+    }
+  
+-Unirse a Partida:
+  -Método: GET
+  - URL: /api/enterGame
+  - Permisos: TOKEN
+  - Petición:
+    HEADER:
+      key="identificador" y value="usuario" 
+      key="idPartida" y value="id"
+
+  - Status code: 
+      200 OK, te has unido a la partida
+      417 Expectation Failed (3 opciones, sale en terminal)
+          -La partida no existe o ya ha empezado
+          -Ya estabas en la partida
+          -No cabes en la partida (se ha alcanzado el max. de jugadores)
+  - Respuesta: Ejemplo
+    {
+    "nJugadores_": 2,
+    "jugadores_": null,
+    "host_": {
+        "mail": "1@.",
+        "nombre": "1",
+        "password": null,
+        "token": null,
+        "role": "USER",
+        "fotPerf": "foto0.png",
+        "estrellas": 0,
+        "monedas": 0,
+        "pDibujo": 0,
+        "pListo": 0,
+        "pGracioso": 0,
+        "nAmigos": 1,
+        "amigo": null,
+        "peticion": null,
+        "invitaciones": null,
+        "partidas": null,
+        "partidasHost": null,
+        "respuestas": null
+    },
+    "estado_": "esperando",
+    "hilos_": null,
+    "id": 46,
+    "nombre": "Prueba6"
+    }
+
+-Listar Partidas
+-Método: GET
+  - URL: /api/listGames
+  - Permisos: TOKEN
+  - Petición:
+    HEADER:
+      key="identificador" y value="usuario" 
+
+  - Status code: 
+      200 OK, muestra la lista
+
+  - Respuesta: Ejemplo(lista de 1 sola partida por no poner una ristra en la documentacion)
+    [
+    {
+        "nJugadores_": 2,
+        "jugadores_": null,
+        "host_": {
+            "mail": "1@.",
+            "nombre": "1",
+            "password": null,
+            "token": null,
+            "role": "USER",
+            "fotPerf": "foto0.png",
+            "estrellas": 0,
+            "monedas": 0,
+            "pDibujo": 0,
+            "pListo": 0,
+            "pGracioso": 0,
+            "nAmigos": 1,
+            "amigo": null,
+            "peticion": null,
+            "invitaciones": null,
+            "partidas": null,
+            "partidasHost": null,
+            "respuestas": null
+        },
+        "estado_": "esperando",
+        "hilos_": null,
+        "id": 25,
+        "nombre": Prueba2
+    }
+    ]
+
+-Listar invitaciones a partida
+  - Método: GET
+  - URL: /api/listInvite
+  - Permisos: TOKEN
+  - Petición: 
+    HEADER: key="identificador" y value="tu_nombre"
+    
+  - Status code:
+    - 200: Todo bien
+
+  - Respuesta: Ejemplo con 1 invitacion 
+    [
+    {
+        "nJugadores_": 1,
+        "jugadores_": null,
+        "host_": {
+            "mail": "1@.",
+            "nombre": "1",
+            "password": null,
+            "token": null,
+            "role": "USER",
+            "fotPerf": "foto0.png",
+            "estrellas": 0,
+            "monedas": 0,
+            "pDibujo": 0,
+            "pListo": 0,
+            "pGracioso": 0,
+            "nAmigos": 1,
+            "amigo": null,
+            "peticion": null,
+            "invitaciones": null,
+            "partidas": null,
+            "partidasHost": null,
+            "respuestas": null
+        },
+        "estado_": "esperando",
+        "hilos_": null,
+        "id": 42,
+        "nombre": "Prueba4"
+    }
+]
+
 
 # Códigos
 
