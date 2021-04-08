@@ -139,6 +139,14 @@ public class Usuario {
 	 private List<Partida> invitadas;
 	 
 	 
+	public List<Partida> getInvitadas() {
+		return invitadas;
+	}
+
+	public void setInvitadas(List<Partida> invitadas) {
+		this.invitadas = invitadas;
+	}
+
 	public List<Partida> getInvitaciones() {
 		List<Partida> invitaciones = new ArrayList<>();
 		if(this.invitaciones != null) {
