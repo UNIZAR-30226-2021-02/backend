@@ -38,7 +38,6 @@ public class GameService {
 		hiloRepo.save(hiloAux);
 		
 		partida.addHilo(hiloAux);
-		//partida.addJugador(host);
 		System.out.println(partida.getHost_());
 		partidaRepo.save(partida);
 	}

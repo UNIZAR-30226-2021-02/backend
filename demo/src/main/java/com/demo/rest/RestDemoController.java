@@ -328,9 +328,6 @@ public class RestDemoController {
 			Partida p = game.getPartida(idPartida);
 			p.setNull();
 			return new ResponseEntity<Partida>(p,HttpStatus.OK); 
-			
-			
-			
 		}
 		return new ResponseEntity<Partida>(HttpStatus.EXPECTATION_FAILED);
 		
