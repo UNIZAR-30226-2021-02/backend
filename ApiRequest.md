@@ -475,16 +475,3 @@
     - 200: se ha rechazado la invitación correctamente
 
 
-# Códigos
-
-200: ok
-
-201: creado
-
-208: El usuario al que quieres enviar una metición ya te ha mandado una
-
-417: contraseña incorrecta (login)
-     usuario o email en uso (register)
-
-400: bad request
-
