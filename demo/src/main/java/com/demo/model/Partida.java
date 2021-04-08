@@ -25,7 +25,8 @@ public class Partida {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	int id_;
+	private int id_;
+	private String nombre_;
 	private int nJugadores_;
 	
 	
@@ -38,6 +39,11 @@ public class Partida {
 
 	private List<Usuario> jugadores_;
 	
+	
+	
+	
+	@ManyToMany(mappedBy="invitaciones")
+	private List <Usuario> invitados_;
 
 	@ManyToOne(fetch = FetchType.EAGER, optional = false)
 
@@ -98,7 +104,8 @@ public class Partida {
 		return null;
 	}
 		
-	public Partida (Usuario host) {
+	public Partida (Usuario host,String nombrePartida) {
+		this.nombre_ = nombrePartida; 
 		this.host_ = host;
 		this.estado_ = "esperando";
 		this.nJugadores_ = 1;
@@ -129,9 +136,7 @@ public class Partida {
 		return this.id_;
 	}
 	
-	public int getNumJugadores() {
-		return this.nJugadores_;
-	}
+	
 	
 	public boolean isUser(String usuario) {
 		for (Usuario u : jugadores_) {
@@ -141,6 +146,16 @@ public class Partida {
 		}
 		return false;
 	}
+	
+	public boolean isInvited(String usuario) {
+		for (Usuario u : invitados_) {
+			if(u.getNombre().equals(usuario)) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
 	public int getnJugadores_() {
 		return nJugadores_;
 	}
@@ -149,6 +164,12 @@ public class Partida {
 	}
 	public List<Hilo> getHilos_() {
 		return hilos_;
+	}
+	public String getNombre() {
+		return nombre_;
+	}
+	public void setNombre(String nombre) {
+		this.nombre_ = nombre;
 	}
 
 }
