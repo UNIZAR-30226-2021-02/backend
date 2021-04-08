@@ -119,6 +119,34 @@ public class Usuario {
 			return null;
 	}
 	
+	 
+	 @ManyToMany(cascade = CascadeType.ALL)
+	 @JoinTable(
+		        name = "invitaciones",
+		        joinColumns = @JoinColumn(name = "mailUsuario", nullable = false),
+		        inverseJoinColumns = @JoinColumn(name="idPartida", nullable = false)
+			 )
+	 private List<Partida> invitaciones;
+	 
+	 
+	 
+	public List<Partida> getInvitaciones() {
+		return invitaciones;
+	}
+
+	public void setInvitaciones(List<Partida> invitaciones) {
+		this.invitaciones = invitaciones;
+	}
+
+	
+	public void addInvitaciones(Partida partida) {
+		invitaciones.add(partida);
+	}
+	
+	public void deleteInvite(Partida partida) {
+		invitaciones.remove(partida);
+	}
+	
 	public boolean contiene(Usuario usuario) {
 		String nombre = usuario.getNombre();
 		if(this.peticion != null) {
@@ -137,6 +165,8 @@ public class Usuario {
 		this.partidas=null;
 		this.partidasHost=null;
 		this.respuestas=null;
+		this.invitaciones=null;
+		
 			
 	}
 
