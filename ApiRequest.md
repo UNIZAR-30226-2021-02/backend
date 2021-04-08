@@ -268,6 +268,12 @@
   - Status code: 200 OK, el nombre ha sido cambiado
                  417 Expectation Failed, el nombre ya está en uso
 
+
+
+
+
+
+
 ------------------------
      VERSION 1.3.0
 ------------------------
@@ -440,6 +446,33 @@
         "nombre": "Prueba4"
     }
 ]
+
+
+
+
+- Enviar invitación a partida:
+  - Método: GET
+  - URL: /api/inviteGame
+  - Permisos: TOKEN
+  - Petición: 
+    HEADER: añadir un campo: key="identificador" y value="a quien quieres invitar" y campo: key="idPartida" y value="id"
+    
+
+  - Status code:
+    - 200: peticion enviada correctamente
+    - 417: no se ha podido enviar la petición porque el usuario está invitado o ya está en la partida
+
+
+- Rechazar invitación a partida:
+  - Método: GET
+  - URL: /api/denyInvite
+  - Permisos: TOKEN
+  - Petición: 
+    HEADER: añadir un campo: key="identificador" y value="quien eres" y campo: key="idPartida" y value="id"
+    
+
+  - Status code:
+    - 200: se ha rechazado la invitación correctamente
 
 
 # Códigos
