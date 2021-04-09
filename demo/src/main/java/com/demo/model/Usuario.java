@@ -139,6 +139,7 @@ public class Usuario {
 	 private List<Partida> invitadas;
 	 
 	 
+	 
 	public List<Partida> getInvitadas() {
 		return invitadas;
 	}
@@ -192,7 +193,7 @@ public class Usuario {
 		this.partidasHost=null;
 		this.respuestas=null;
 		this.invitaciones=null;
-		
+		this.invitadas=null;
 			
 	}
 

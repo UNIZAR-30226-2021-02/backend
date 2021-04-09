@@ -97,7 +97,7 @@ public class GameService {
 		Usuario u = usuarioRepo.findByNombre(idInvitado);
 		Usuario invitador = usuarioRepo.findByNombre(identificador);
 		Partida p = partidaRepo.findById(idPartida);
-		
+		/*
 		if(p!=null&&u!=null) {
 			if(p.isUser(idInvitado)||p.isInvited(idInvitado)) {
 				return false;
@@ -114,7 +114,10 @@ public class GameService {
 				return true;		
 			}			
 		}
-		return false;
+		return false;*/
+		
+		partidaRepo.inviteGame(u.getMail(),invitador.getMail(),idPartida);
+		return true;
 	}
 	
 	
@@ -127,8 +130,13 @@ public class GameService {
 	
 	public List<Partida> getInvitacionesJugador (String identificador){
 		Usuario u = usuarioRepo.findByNombre(identificador);
-		return u.getInvitaciones();
-	
+		
+		List<Partida>respuesta = new ArrayList<>() ;
+		for (Partida p : u.getInvitaciones()) {
+			p.setNull();
+			respuesta.add(p);
+		}
+		return respuesta;
 	}
 	
 	
