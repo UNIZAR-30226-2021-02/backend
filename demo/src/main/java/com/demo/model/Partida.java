@@ -155,6 +155,8 @@ public class Partida {
 		this.host_.setNull();
 		this.hilos_ = null;
 		this.jugadores_ = null;
+		this.invitados_=null;
+		this.invitadores_=null;
 	}
 	public void addHilo(Hilo hilo) {
 		this.hilos_.add(hilo);
