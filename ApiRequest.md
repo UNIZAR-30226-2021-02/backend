@@ -4,6 +4,7 @@
 - Listar usuarios:
   - Método: GET
   - URL: /api/all
+  - version: 1.0.0
   - Permisos: token (copiar la ristra SIN COMILLAS y pegar en Authorization -> Type:Bearer Token)
   - Petición: NADA (body -> none)
 
@@ -25,6 +26,7 @@
 - Registrar: 
   - Método: POST
   - URL: /api/register
+  - version: 1.0.0
   - Permisos: NADA
   - Petición: (body: raw + JSON donde pone Text)
     {
@@ -52,6 +54,7 @@
 - Login:
   - Método: POST
   - URL: /api/login
+  - version: 1.0.0
   - Permisos: NADA
   - Petición: (body: raw + JSON donde pone Text)
     {
@@ -81,6 +84,7 @@
 - Registrar:
   - Método: POST
   - URL: /api/register
+  - version: 1.0.0
   - Permisos: NADA
   - Petición: (body: raw + JSON donde pone Text)
     {
@@ -109,6 +113,7 @@
 - Aceptar petición amistad:
   - Método: POST
   - URL: /api/acceptRequest
+  - version: -
   - Permisos: TOKEN
   - Petición: 
     HEADER: añadir un campo: key="identificador" y value="tu_nombre"
@@ -124,6 +129,7 @@
 - Rechazar petición amistad:
   - Método: POST
   - URL: /api/denyRequest
+  - version: -
   - Permisos: TOKEN
   - Petición: 
     HEADER: añadir un campo: key="identificador" y value="tu_nombre"
@@ -138,6 +144,7 @@
 - Enviar petición amistad:
   - Método: POST
   - URL: /api/sendRequest
+  - version: -
   - Permisos: TOKEN
   - Petición: 
     HEADER: añadir un campo: key="identificador" y value="tu_nombre"
@@ -155,6 +162,7 @@
 - Listar peticiones amistad:
   - Método: GET
   - URL: /api/listRequest
+  - version: -
   - Permisos: TOKEN
   - Petición: 
     HEADER: añadir un campo: key="identificador" y value="tu_nombre"
@@ -174,6 +182,7 @@
 - Listar amigos:
   - Método: GET
   - URL: /api/listFriends
+  - version: -
   - Permisos: TOKEN
   - Petición: 
     HEADER: añadir un campo: key="identificador" y value="tu_nombre"
@@ -193,6 +202,7 @@
 - Eliminar amigo:
   - Método: POST
   - URL: /api/deleteFriend
+  - version: -
   - Permisos: TOKEN
   - Petición: 
     HEADER: añadir un campo: key="identificador" y value="tu_nombre"
@@ -253,6 +263,7 @@
 
   - Status code: 200 OK, el avatar ha sido cambiado
 
+
 -Cambiar avatar:
   - Método: GET
   - URL: /api/changeNameProfile
@@ -275,7 +286,7 @@
 
 
 ------------------------
-     VERSION 1.3.0
+     VERSION 1.2.8
 ------------------------
 
 -Crear Partida:
@@ -361,6 +372,7 @@
     "id": 46,
     "nombre": "Prueba6"
     }
+
 
 -Listar Partidas
 -Método: GET
