@@ -96,8 +96,8 @@ public class Usuario {
 	@ManyToMany(cascade = CascadeType.ALL)
 	@JoinTable(
 	        name = "peticiones",
-	        joinColumns = @JoinColumn(name = "mailUsuario", nullable = false),
-	        inverseJoinColumns = @JoinColumn(name="mailPedido", nullable = false)
+	        joinColumns = @JoinColumn(name = "mail_recibe", nullable = false),
+	        inverseJoinColumns = @JoinColumn(name="mail_envia", nullable = false)
 	    )
 	private List<Usuario> peticion;
 	
@@ -119,6 +119,44 @@ public class Usuario {
 			return null;
 	}
 	
+	 
+	 @ManyToMany(cascade = CascadeType.ALL)
+	 @JoinTable(
+		        name = "invitaciones",
+		        joinColumns = @JoinColumn(name = "mailUsuario", nullable = false),
+		        inverseJoinColumns = @JoinColumn(name="idPartida", nullable = false)
+			 )
+	 
+	 private List<Partida> invitaciones;
+	 
+	 
+	 
+	public List<Partida> getInvitaciones() {
+		List<Partida> invitaciones = new ArrayList<>();
+		if(this.invitaciones != null) {
+			for(Partida a : this.invitaciones) {
+				System.out.println(a);
+				a.setNull();
+				invitaciones.add(a);
+			}
+			return invitaciones;
+		}
+		return null;
+	}
+
+	public void setInvitaciones(List<Partida> invitaciones) {
+		this.invitaciones = invitaciones;
+	}
+
+	
+	public void addInvitaciones(Partida partida) {
+		invitaciones.add(partida);
+	}
+	
+	public void deleteInvite(Partida partida) {
+		invitaciones.remove(partida);
+	}
+	
 	public boolean contiene(Usuario usuario) {
 		String nombre = usuario.getNombre();
 		if(this.peticion != null) {
@@ -134,6 +172,11 @@ public class Usuario {
 	public void setNull() {
 		this.amigo=null;
 		this.peticion=null;
+		this.partidas=null;
+		this.partidasHost=null;
+		this.respuestas=null;
+		this.invitaciones=null;
+		
 			
 	}
 
@@ -164,7 +207,36 @@ public class Usuario {
 
 	 private List<Partida> partidasHost;
 	 
-	 @OneToMany(mappedBy = "autor_",fetch = FetchType.LAZY)
+	 public List<Partida> getPartidas() {
+		return partidas;
+	}
+
+	public void setPartidas(List<Partida> partidas) {
+		this.partidas = partidas;
+	}
+
+
+
+
+	public List<Partida> getPartidasHost() {
+		return partidasHost;
+	}
+
+	public void setPartidasHost(List<Partida> partidasHost) {
+		this.partidasHost = partidasHost;
+	}
+
+	public List<Respuesta> getRespuestas() {
+		return respuestas;
+	}
+
+	public void setRespuestas(List<Respuesta> respuestas) {
+		this.respuestas = respuestas;
+	}
+
+	
+
+	@OneToMany(mappedBy = "autor_",fetch = FetchType.LAZY)
 	 
 	 private List<Respuesta> respuestas;
 	 
@@ -195,7 +267,6 @@ public class Usuario {
 		this.pDibujo = pDibujar;
 		this.estrellas = estrellas;
 		this.monedas = monedas;
-		
 		
 		
 	}
@@ -260,5 +331,7 @@ public class Usuario {
 		this.fotPerf = fotPerf;
 	}
 
-	
+	public Usuario() {
+		
+	}
 }

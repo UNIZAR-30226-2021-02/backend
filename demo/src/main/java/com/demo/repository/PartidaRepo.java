@@ -15,6 +15,8 @@ public interface PartidaRepo extends JpaRepository<Partida,Integer>{
 
 	//Usuario findByMail(String mail);
 	
+	Partida findById(int id);
+	
 	/*
 	@Query(value = "SELECT Usuario.nombre FROM Amigos INNER JOIN Usuario ON Amigos.mail_amigo = mail  WHERE Amigos.mail_usuario = :mailUsuario" , nativeQuery = true)
 	

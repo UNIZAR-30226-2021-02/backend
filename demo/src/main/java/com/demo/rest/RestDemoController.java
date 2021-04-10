@@ -222,15 +222,24 @@ public class RestDemoController {
 		Usuario tu = usuarioRepo.findByNombre(identificador);
 		System.out.println(identificador);
 		
-		
-		
-		if(destino.setPeticion(tu)) {
-			usuarioRepo.save(destino);
-			return new ResponseEntity<Usuario>(HttpStatus.OK);
+		if(destino != null) {
+			if(tu.contiene(destino)) {
+				tu.setAmigo(destino);
+				destino.setAmigo(tu);
+				tu.deletePeticion(destino);
+				usuarioRepo.save(tu);
+				usuarioRepo.save(destino);
+				return new ResponseEntity<Usuario>(HttpStatus.ALREADY_REPORTED);
+			}
+			if(destino.setPeticion(tu)) {
+				usuarioRepo.save(destino);
+				return new ResponseEntity<Usuario>(HttpStatus.OK);
+			}else {
+				return new ResponseEntity<Usuario>(HttpStatus.EXPECTATION_FAILED);
+			}
 		}else {
-			return new ResponseEntity<Usuario>(HttpStatus.EXPECTATION_FAILED);
+			return new ResponseEntity<Usuario>(HttpStatus.NO_CONTENT);
 		}
-		
 
 		
 		
@@ -313,30 +322,57 @@ public class RestDemoController {
 		
 	}
 	
-	/*@GetMapping(value = "/newGame")
-	public ResponseEntity<String> newGame(@RequestHeader String identificador){
+	@PostMapping(value = "/newGame")
+	public ResponseEntity<Partida> newGame(@RequestBody Partida partida,@RequestHeader String identificador){
 				
-		game.crearPartida(usuarioRepo.findByNombre(identificador));
-		return new ResponseEntity<String>(HttpStatus.OK);
+		Partida p = game.crearPartida(identificador,partida);
+		p.setNull();
+		return new ResponseEntity<Partida>(p,HttpStatus.OK);
 	}
 	
 	@GetMapping(value = "/enterGame")
 	public ResponseEntity<Partida> enterGame(@RequestHeader String identificador,@RequestHeader int idPartida){
 		
-		if(game.addJugador(usuarioRepo.findByNombre(identificador),idPartida)) {
-	
-			Partida p = game.getPartida(idPartida);
-			return new ResponseEntity<Partida>(p,HttpStatus.OK); 
+		if(game.addJugador(identificador,idPartida)) {
 			
+			Partida p = game.getPartida(idPartida);
+			p.setNull();
+			return new ResponseEntity<Partida>(p,HttpStatus.OK); 
 		}
 		return new ResponseEntity<Partida>(HttpStatus.EXPECTATION_FAILED);
 		
 	}
-	/*
+	
 	@GetMapping(value = "/listGames")
 	public ResponseEntity<List<Partida>> listGames (@RequestHeader String identificador){
-		List<Partida> respuesta = game.getPartidasJugador(usuarioRepo.findByNombre(identificador));
+		List<Partida> respuesta = game.getPartidasJugador(identificador);
 		return new ResponseEntity<List<Partida>>(respuesta,HttpStatus.OK);
-	}*/
+	}
+	
+	
+	@GetMapping(value = "/listInvite")
+	public ResponseEntity<List<Partida>> listInvite (@RequestHeader String identificador){
+		List<Partida> respuesta = game.getInvitacionesJugador(identificador);
+		return new ResponseEntity<List<Partida>>(respuesta,HttpStatus.OK);
+	}
+	
+	
+	@GetMapping(value = "/inviteGame")
+	public ResponseEntity<String> inviteGame(@RequestHeader int idPartida,@RequestHeader String identificador){
+				
+		if(game.inviteGame(identificador, idPartida)) {
+			return new ResponseEntity<String>(HttpStatus.OK);
+		}
+		else {
+			return new ResponseEntity<String>(HttpStatus.EXPECTATION_FAILED);
+		}
+	}
+	
+	@GetMapping(value = "/denyInvite")
+	public ResponseEntity<Usuario> denyInvite(@RequestHeader int idPartida ,@RequestHeader String identificador){
+		
+		game.denyInvite(identificador, idPartida);
+		return new ResponseEntity<Usuario>(HttpStatus.OK);
+	}
 	
 }
