@@ -222,6 +222,11 @@ public class RestDemoController {
 		Usuario tu = usuarioRepo.findByNombre(identificador);
 		System.out.println(identificador);
 		
+		
+		if(nombreUsuario.equals(identificador)) {
+			return new ResponseEntity<Usuario>(HttpStatus.CONFLICT); //409
+		}
+		
 		if(destino != null) {
 			if(tu.contiene(destino)) {
 				tu.setAmigo(destino);
