@@ -2,7 +2,10 @@ package com.demo.repository;
 
 import java.util.List;
 
+import javax.transaction.Transactional;
+
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -16,6 +19,21 @@ public interface PartidaRepo extends JpaRepository<Partida,Integer>{
 	//Usuario findByMail(String mail);
 	
 	Partida findById(int id);
+	
+	@Transactional
+	@Modifying
+	@Query(value = "INSERT INTO Invitaciones VALUES (:mailUsuario,:idPartida,:mailInvitador)" , nativeQuery = true)
+	public int inviteGame(@Param("mailUsuario") String nombreUsuario,@Param("mailInvitador") String nombreInvitador,@Param("idPartida") int idPartida);
+	
+	
+	@Transactional
+	@Modifying
+	@Query(value = "DELETE FROM Invitaciones WHERE mail_usuario = :mailUsuario AND id_partida = :idPartida" , nativeQuery = true)
+	public int deleteInvite(@Param("mailUsuario") String nombreUsuario,@Param("idPartida") int idPartida);
+	
+	
+	
+	
 	
 	/*
 	@Query(value = "SELECT Usuario.nombre FROM Amigos INNER JOIN Usuario ON Amigos.mail_amigo = mail  WHERE Amigos.mail_usuario = :mailUsuario" , nativeQuery = true)
