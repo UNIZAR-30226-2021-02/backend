@@ -28,6 +28,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.demo.controller.AuthController;
+import com.demo.model.Invitaciones;
 import com.demo.model.Partida;
 import com.demo.model.Usuario;
 
@@ -356,9 +357,9 @@ public class RestDemoController {
 	
 	
 	@GetMapping(value = "/listInvite")
-	public ResponseEntity<List<Partida>> listInvite (@RequestHeader String identificador){
-		List<Partida> respuesta = game.getInvitacionesJugador(identificador);
-		return new ResponseEntity<List<Partida>>(respuesta,HttpStatus.OK);
+	public ResponseEntity<List<Invitaciones>> listInvite (@RequestHeader String identificador){
+		List<Invitaciones> respuesta = game.getInvitacionesJugador(identificador);
+		return new ResponseEntity<List<Invitaciones>>(respuesta,HttpStatus.OK);
 	}
 	
 	

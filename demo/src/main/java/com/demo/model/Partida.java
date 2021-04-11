@@ -42,42 +42,25 @@ public class Partida {
 	
 	
 	
-	@ManyToMany(mappedBy="invitaciones")
-	private List <Usuario> invitados_;
 	
 	
-	public void addInvitacion(Usuario invitador,Usuario invitado) {
-		invitados_.add(invitado);
-		invitadores_.add(invitador);
-	}
 	
 	
-	@ManyToMany(cascade = CascadeType.ALL)
-	 @JoinTable(
-		        name = "invitaciones",
-		        joinColumns = @JoinColumn(name = "idPartida", nullable = false),
-		        inverseJoinColumns = @JoinColumn(name="mailInvitador", nullable = false)
-		       
-		        
-			 )
 	
-	private List<Usuario> invitadores_;
+	
+	
+	
+	
+	
+	@OneToMany(mappedBy="partida")
+	private List<Invitaciones> invitaciones;
 	
 	
 	
 	
 	
 
-	public List<Usuario> getInvitadores_() {
-		return invitadores_;
-	}
-	public void setInvitadores_(List<Usuario> invitadores_) {
-		this.invitadores_ = invitadores_;
-	}
 	
-	public void addInvitadores_(Usuario invitador) {
-		this.invitadores_.add(invitador);
-	}
 	@ManyToOne(fetch = FetchType.EAGER, optional = false)
 
 	private Usuario host_;
@@ -155,8 +138,14 @@ public class Partida {
 		this.host_.setNull();
 		this.hilos_ = null;
 		this.jugadores_ = null;
-		this.invitados_=null;
-		this.invitadores_=null;
+		
+	}
+	public void setNullConInvitadores() {
+		this.host_.setPassword(null);
+		this.host_.setNull();
+		this.hilos_ = null;
+		this.jugadores_ = null;
+		
 	}
 	public void addHilo(Hilo hilo) {
 		this.hilos_.add(hilo);
@@ -183,11 +172,11 @@ public class Partida {
 	}
 	
 	public boolean isInvited(String usuario) {
-		for (Usuario u : invitados_) {
+		/*for (Usuario u : invitados_) {
 			if(u.getNombre().equals(usuario)) {
 				return true;
 			}
-		}
+		}*/
 		return false;
 	}
 	

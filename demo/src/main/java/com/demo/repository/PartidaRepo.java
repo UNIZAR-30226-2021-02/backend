@@ -32,6 +32,9 @@ public interface PartidaRepo extends JpaRepository<Partida,Integer>{
 	public int deleteInvite(@Param("mailUsuario") String nombreUsuario,@Param("idPartida") int idPartida);
 	
 	
+	
+	
+	
 	/*
 	@Query(value = "SELECT Usuario.nombre FROM Amigos INNER JOIN Usuario ON Amigos.mail_amigo = mail  WHERE Amigos.mail_usuario = :mailUsuario" , nativeQuery = true)
 	
