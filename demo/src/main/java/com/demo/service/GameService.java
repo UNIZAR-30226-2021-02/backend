@@ -105,7 +105,8 @@ public class GameService {
 		Partida p = partidaRepo.findById(idPartida);
 		
 		if(p!=null&&u!=null&&invitador!=null) {
-			if(p.isUser(idInvitado)||p.isInvited(idInvitado)) {
+			if(p.isUser(idInvitado)|| null!=invitacionesRepo.findByPartidaAndInvitado(p, u) || !u.esAmigoDe(invitador)) {
+				//Ya estaba en la partida o estaba invitado
 				return false;
 			}
 			else {

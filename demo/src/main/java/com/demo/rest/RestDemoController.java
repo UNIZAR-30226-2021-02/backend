@@ -336,7 +336,8 @@ public class RestDemoController {
 		return new ResponseEntity<Partida>(p,HttpStatus.OK);
 	}
 	
-	@GetMapping(value = "/enterGame")
+	//UTIL??
+	@GetMapping(value = "/acceptInvite")
 	public ResponseEntity<Partida> enterGame(@RequestHeader String identificador,@RequestHeader int idPartida){
 		
 		if(game.addJugador(identificador,idPartida)) {

@@ -320,6 +320,15 @@ public class Usuario {
 	public void setFotPerf(String fotPerf) {
 		this.fotPerf = fotPerf;
 	}
+	
+	public boolean esAmigoDe(Usuario u) {
+		for(Usuario a : amigo) {
+			if (a.getNombre().equalsIgnoreCase(u.getNombre())){
+				return true;
+			}
+		}
+		return false;
+	}
 
 	public Usuario() {
 		

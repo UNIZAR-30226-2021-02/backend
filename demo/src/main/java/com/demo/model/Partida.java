@@ -171,14 +171,7 @@ public class Partida {
 		return false;
 	}
 	
-	public boolean isInvited(String usuario) {
-		/*for (Usuario u : invitados_) {
-			if(u.getNombre().equals(usuario)) {
-				return true;
-			}
-		}*/
-		return false;
-	}
+	
 	
 	public int getnJugadores_() {
 		return nJugadores_;
