@@ -296,6 +296,10 @@
   - Petición:
     HEADER:
       key="identificador" y value="usuario" 
+    BODY:
+      {
+      "nombre": "nombredelapartida"
+      }
 
   - Status code: 200 OK, la partida ha sido creada
   - Respuesta: Ejemplo
