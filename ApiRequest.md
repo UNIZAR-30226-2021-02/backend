@@ -286,7 +286,7 @@
 
 
 ------------------------
-     VERSION 1.2.8
+     VERSION 1.3.0
 ------------------------
 
 -Crear Partida:
@@ -328,51 +328,6 @@
     "nombre": "Prueba"
     }
   
--Unirse a Partida:
-  -Método: GET
-  - URL: /api/enterGame
-  - Permisos: TOKEN
-  - Petición:
-    HEADER:
-      key="identificador" y value="usuario" 
-      key="idPartida" y value="id"
-
-  - Status code: 
-      200 OK, te has unido a la partida
-      417 Expectation Failed (3 opciones, sale en terminal)
-          -La partida no existe o ya ha empezado
-          -Ya estabas en la partida
-          -No cabes en la partida (se ha alcanzado el max. de jugadores)
-  - Respuesta: Ejemplo
-    {
-    "nJugadores_": 2,
-    "jugadores_": null,
-    "host_": {
-        "mail": "1@.",
-        "nombre": "1",
-        "password": null,
-        "token": null,
-        "role": "USER",
-        "fotPerf": "foto0.png",
-        "estrellas": 0,
-        "monedas": 0,
-        "pDibujo": 0,
-        "pListo": 0,
-        "pGracioso": 0,
-        "nAmigos": 1,
-        "amigo": null,
-        "peticion": null,
-        "invitaciones": null,
-        "partidas": null,
-        "partidasHost": null,
-        "respuestas": null
-    },
-    "estado_": "esperando",
-    "hilos_": null,
-    "id": 46,
-    "nombre": "Prueba6"
-    }
-
 
 -Listar Partidas
 -Método: GET
@@ -386,13 +341,13 @@
       200 OK, muestra la lista
 
   - Respuesta: Ejemplo(lista de 1 sola partida por no poner una ristra en la documentacion)
-    [
+  [
     {
         "nJugadores_": 2,
         "jugadores_": null,
         "host_": {
-            "mail": "1@.",
-            "nombre": "1",
+            "mail": "A@.",
+            "nombre": "A",
             "password": null,
             "token": null,
             "role": "USER",
@@ -405,17 +360,30 @@
             "nAmigos": 1,
             "amigo": null,
             "peticion": null,
-            "invitaciones": null,
             "partidas": null,
             "partidasHost": null,
             "respuestas": null
         },
         "estado_": "esperando",
         "hilos_": null,
-        "id": 25,
-        "nombre": Prueba2
+        "id": 49,
+        "nombre": "Partida1"
     }
-    ]
+  ]
+      
+- Enviar invitación a partida:
+  - Método: GET
+  - URL: /api/inviteGame
+  - Permisos: TOKEN
+  - Petición: 
+    HEADER: 
+      key="idPartida" y value="id"
+      key="identificador" y value="yo" (persona que invita)  
+      key="idInvitado" y value="a quien quieres invitar"
+
+  - Status code:
+    - 200: peticion enviada correctamente
+    - 417: no se ha podido enviar la petición porque el usuario está invitado / ya está en la partida / no es tu amigo
 
 -Listar invitaciones a partida
   - Método: GET
@@ -428,13 +396,13 @@
     - 200: Todo bien
 
   - Respuesta: Ejemplo con 1 invitacion 
+    //Basicamente es quien te ha invitado y la partida pero con solo los campos que interesan
     [
     {
-        "nJugadores_": 1,
-        "jugadores_": null,
-        "host_": {
-            "mail": "1@.",
-            "nombre": "1",
+        "id": 54,
+        "invitador": {
+            "mail": "A@.",
+            "nombre": "A",
             "password": null,
             "token": null,
             "role": "USER",
@@ -447,32 +415,84 @@
             "nAmigos": 1,
             "amigo": null,
             "peticion": null,
-            "invitaciones": null,
             "partidas": null,
             "partidasHost": null,
             "respuestas": null
         },
-        "estado_": "esperando",
-        "hilos_": null,
-        "id": 42,
-        "nombre": "Prueba4"
+        "invitado": null, 
+        "partida": {
+            "nJugadores_": 1,
+            "jugadores_": null,
+            "host_": {
+                "mail": "A@.",
+                "nombre": "A",
+                "password": null,
+                "token": null,
+                "role": "USER",
+                "fotPerf": "foto0.png",
+                "estrellas": 0,
+                "monedas": 0,
+                "pDibujo": 0,
+                "pListo": 0,
+                "pGracioso": 0,
+                "nAmigos": 1,
+                "amigo": null,
+                "peticion": null,
+                "partidas": null,
+                "partidasHost": null,
+                "respuestas": null
+            },
+            "estado_": "esperando",
+            "hilos_": null,
+            "id": 49,
+            "nombre": "Partida1"
+        }
     }
-]
+    ]
 
-
-
-
-- Enviar invitación a partida:
-  - Método: GET
-  - URL: /api/inviteGame
+-Unirse a Partida/Aceptar invitacion:
+  -Método: GET
+  - URL: /api/acceptInvite
   - Permisos: TOKEN
-  - Petición: 
-    HEADER: añadir un campo: key="identificador" y value="a quien quieres invitar" y campo: key="idPartida" y value="id"
-    
+  - Petición:
+    HEADER:
+      key="identificador" y value="usuario" 
+      key="idPartida" y value="id"
 
-  - Status code:
-    - 200: peticion enviada correctamente
-    - 417: no se ha podido enviar la petición porque el usuario está invitado o ya está en la partida
+  - Status code: 
+      200 OK, te has unido a la partida
+      417 Expectation Failed (3 opciones, sale en terminal)
+          -La partida no existe o ya ha empezado
+          -Ya estabas en la partida
+          -No cabes en la partida (se ha alcanzado el max. de jugadores)
+  - Respuesta: te devuelve la partida con el nuevo jugador
+    {
+    "nJugadores_": 2,
+    "jugadores_": null,
+    "host_": {
+        "mail": "A@.",
+        "nombre": "A",
+        "password": null,
+        "token": null,
+        "role": "USER",
+        "fotPerf": "foto0.png",
+        "estrellas": 0,
+        "monedas": 0,
+        "pDibujo": 0,
+        "pListo": 0,
+        "pGracioso": 0,
+        "nAmigos": 1,
+        "amigo": null,
+        "peticion": null,
+        "partidas": null,
+        "partidasHost": null,
+        "respuestas": null
+    },
+    "estado_": "esperando",
+    "hilos_": null,
+    "id": 49,
+    "nombre": "Partida1"
+    }
 
 
 - Rechazar invitación a partida:
