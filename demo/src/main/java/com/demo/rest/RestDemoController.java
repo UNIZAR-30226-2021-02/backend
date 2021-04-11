@@ -28,6 +28,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.demo.controller.AuthController;
+import com.demo.model.Invitaciones;
 import com.demo.model.Partida;
 import com.demo.model.Usuario;
 
@@ -222,6 +223,11 @@ public class RestDemoController {
 		Usuario tu = usuarioRepo.findByNombre(identificador);
 		System.out.println(identificador);
 		
+		
+		if(nombreUsuario.equals(identificador)) {
+			return new ResponseEntity<Usuario>(HttpStatus.CONFLICT); //409
+		}
+		
 		if(destino != null) {
 			if(tu.contiene(destino)) {
 				tu.setAmigo(destino);
@@ -330,7 +336,8 @@ public class RestDemoController {
 		return new ResponseEntity<Partida>(p,HttpStatus.OK);
 	}
 	
-	@GetMapping(value = "/enterGame")
+	//UTIL??
+	@GetMapping(value = "/acceptInvite")
 	public ResponseEntity<Partida> enterGame(@RequestHeader String identificador,@RequestHeader int idPartida){
 		
 		if(game.addJugador(identificador,idPartida)) {
@@ -351,16 +358,16 @@ public class RestDemoController {
 	
 	
 	@GetMapping(value = "/listInvite")
-	public ResponseEntity<List<Partida>> listInvite (@RequestHeader String identificador){
-		List<Partida> respuesta = game.getInvitacionesJugador(identificador);
-		return new ResponseEntity<List<Partida>>(respuesta,HttpStatus.OK);
+	public ResponseEntity<List<Invitaciones>> listInvite (@RequestHeader String identificador){
+		List<Invitaciones> respuesta = game.getInvitacionesJugador(identificador);
+		return new ResponseEntity<List<Invitaciones>>(respuesta,HttpStatus.OK);
 	}
 	
 	
 	@GetMapping(value = "/inviteGame")
-	public ResponseEntity<String> inviteGame(@RequestHeader int idPartida,@RequestHeader String identificador){
+	public ResponseEntity<String> inviteGame(@RequestHeader int idPartida,@RequestHeader String identificador,@RequestHeader String idInvitado){
 				
-		if(game.inviteGame(identificador, idPartida)) {
+		if(game.inviteGame(idInvitado,identificador, idPartida)) {
 			return new ResponseEntity<String>(HttpStatus.OK);
 		}
 		else {

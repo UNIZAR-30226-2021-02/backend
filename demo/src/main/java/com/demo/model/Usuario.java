@@ -120,42 +120,32 @@ public class Usuario {
 	}
 	
 	 
-	 @ManyToMany(cascade = CascadeType.ALL)
-	 @JoinTable(
-		        name = "invitaciones",
-		        joinColumns = @JoinColumn(name = "mailUsuario", nullable = false),
-		        inverseJoinColumns = @JoinColumn(name="idPartida", nullable = false)
-			 )
+	
 	 
-	 private List<Partida> invitaciones;
+	 
+	 @ManyToMany(mappedBy="invitado")
+	 private List<Invitaciones> invitaciones;
 	 
 	 
 	 
-	public List<Partida> getInvitaciones() {
-		List<Partida> invitaciones = new ArrayList<>();
+	 
+	 
+	 @ManyToMany(mappedBy="invitador")
+	 private List<Invitaciones> invitador;
+	 
+	 
+	 
+	
+	/*
+	public void deleteInvite(Invitaciones i) {
 		if(this.invitaciones != null) {
-			for(Partida a : this.invitaciones) {
-				System.out.println(a);
-				a.setNull();
-				invitaciones.add(a);
+			for(Invitaciones a : invitaciones) {
+				if(a.getInvitado().getNombre() == nombre) {
+					System.out.println(invitaciones.remove(a));
+				}
 			}
-			return invitaciones;
 		}
-		return null;
-	}
-
-	public void setInvitaciones(List<Partida> invitaciones) {
-		this.invitaciones = invitaciones;
-	}
-
-	
-	public void addInvitaciones(Partida partida) {
-		invitaciones.add(partida);
-	}
-	
-	public void deleteInvite(Partida partida) {
-		invitaciones.remove(partida);
-	}
+	}*/
 	
 	public boolean contiene(Usuario usuario) {
 		String nombre = usuario.getNombre();
@@ -329,6 +319,15 @@ public class Usuario {
 
 	public void setFotPerf(String fotPerf) {
 		this.fotPerf = fotPerf;
+	}
+	
+	public boolean esAmigoDe(Usuario u) {
+		for(Usuario a : amigo) {
+			if (a.getNombre().equalsIgnoreCase(u.getNombre())){
+				return true;
+			}
+		}
+		return false;
 	}
 
 	public Usuario() {

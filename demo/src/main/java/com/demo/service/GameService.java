@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.demo.model.Hilo;
+import com.demo.model.Invitaciones;
 import com.demo.model.Partida;
 import com.demo.model.Usuario;
 import com.demo.repository.*;
@@ -26,6 +27,8 @@ public class GameService {
 	private PartidaRepo partidaRepo;
 	@Autowired
 	private RespuestaRepo respuestaRepo;
+	@Autowired
+	private InvitacionesRepo invitacionesRepo;
 	
 
 	
@@ -55,8 +58,11 @@ public class GameService {
 						partida.addJugador(usuarioRepo.findByNombre(identificador));
 						
 						Usuario u = usuarioRepo.findByNombre(identificador);
-						u.deleteInvite(partida);
-						usuarioRepo.save(u);
+						
+						Invitaciones i = invitacionesRepo.findByPartidaAndInvitado(partida,u);
+						System.out.println(i);
+						
+						invitacionesRepo.delete(i);
 						partidaRepo.save(partida);
 						System.out.println("Añadido correctamente");
 						return true;
@@ -92,36 +98,61 @@ public class GameService {
 	}
 	
 	
-	public boolean inviteGame(String identificador, int idPartida) {
+	public boolean inviteGame(String idInvitado,String identificador, int idPartida) {
 		
-		Usuario u = usuarioRepo.findByNombre(identificador);
+		Usuario u = usuarioRepo.findByNombre(idInvitado);
+		Usuario invitador = usuarioRepo.findByNombre(identificador);
 		Partida p = partidaRepo.findById(idPartida);
 		
-		if(p!=null&&u!=null) {
-			if(p.isUser(identificador)||p.isInvited(identificador)) {
+		if(p!=null&&u!=null&&invitador!=null) {
+			if(p.isUser(idInvitado)|| null!=invitacionesRepo.findByPartidaAndInvitado(p, u) || !u.esAmigoDe(invitador)) {
+				//Ya estaba en la partida o estaba invitado
 				return false;
 			}
-			else {				
-				u.addInvitaciones(p);
-				usuarioRepo.save(u);
+			else {
+				Invitaciones i = new Invitaciones();
+				i.setInvitado(u);
+				i.setInvitador(invitador);
+				i.setPartida(p);		
+				invitacionesRepo.save(i);
+				
 				return true;		
 			}			
 		}
 		return false;
+		
+		
+		
 	}
 	
 	
 	public void denyInvite(String identificador,int idPartida) {
+		
 		Usuario u = usuarioRepo.findByNombre(identificador);
+		
 		Partida p = partidaRepo.findById(idPartida);
-		u.deleteInvite(p);
-		usuarioRepo.save(u);
+		
+		Invitaciones i = invitacionesRepo.findByPartidaAndInvitado(p,u);
+		invitacionesRepo.delete(i);
+	
 	}
 	
-	public List<Partida> getInvitacionesJugador (String identificador){
+	public List<Invitaciones> getInvitacionesJugador (String identificador){
 		Usuario u = usuarioRepo.findByNombre(identificador);
-		return u.getInvitaciones();
-	
+		List<Invitaciones> lista = invitacionesRepo.findByInvitado(u);
+		List<Invitaciones> respuesta = new ArrayList<>();
+		if(lista==null) {
+			return null;
+		}
+		for(Invitaciones i:lista) {
+			i.setInvitadorNull();
+			i.setPartidaNull();
+			
+			i.setInvitado(null);
+			respuesta.add(i);
+			
+		}
+		return respuesta;
 	}
 	
 	
