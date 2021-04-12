@@ -511,3 +511,50 @@
     - 200: se ha rechazado la invitación correctamente
 
 
+------------------------
+     VERSION 1.3.1
+------------------------
+
+- Listar Jugadores:
+  - Método: GET
+  - URL: /api/listPlayers
+  - Permisos: TOKEN
+  - Petición: 
+    HEADER: añadir un campo: key="identificador" y value="usuario", campo: key="idPartida" y value="id"
+
+  - Status code:
+    - 200: Todo bien
+  
+  - Respuesta: Lista de usuarios
+    {
+    "mail": "1@.",
+    "nombre": "1",
+    "password": "123",
+    "token": null,
+    "role": "USER",
+    "fotPerf": "foto1.png",
+    "estrellas": 0,
+    "monedas": 0,
+    "pDibujo": 0,
+    "pListo": 0,
+    "pGracioso": 0,
+    "nAmigos": 0,
+    "amigo": null,
+    "peticion": null
+    },
+     {
+    "mail": "2@.",
+    "nombre": "2",
+    "password": "123",
+    "token": null,
+    "role": "USER",
+    "fotPerf": "foto1.png",
+    "estrellas": 0,
+    "monedas": 0,
+    "pDibujo": 0,
+    "pListo": 0,
+    "pGracioso": 0,
+    "nAmigos": 0,
+    "amigo": null,
+    "peticion": null
+    }
