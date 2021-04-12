@@ -338,7 +338,7 @@ public class RestDemoController {
 	
 	//UTIL??
 	@GetMapping(value = "/acceptInvite")
-	public ResponseEntity<Partida> enterGame(@RequestHeader String identificador,@RequestHeader int idPartida){
+	public ResponseEntity<Partida> acceptInvite(@RequestHeader String identificador,@RequestHeader int idPartida){
 		
 		if(game.addJugador(identificador,idPartida)) {
 			
@@ -363,6 +363,12 @@ public class RestDemoController {
 		return new ResponseEntity<List<Invitaciones>>(respuesta,HttpStatus.OK);
 	}
 	
+	@GetMapping(value = "/listPlayers")
+	public ResponseEntity<List<Usuario>> listPlayers(@RequestHeader String identificador,@RequestHeader int idPartida){
+		
+		List<Usuario> respuesta = game.listPlayers(identificador,idPartida);
+		return new ResponseEntity<List<Usuario>>(respuesta,HttpStatus.OK);
+	}
 	
 	@GetMapping(value = "/inviteGame")
 	public ResponseEntity<String> inviteGame(@RequestHeader int idPartida,@RequestHeader String identificador,@RequestHeader String idInvitado){
