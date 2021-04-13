@@ -133,6 +133,9 @@ public class GameService {
 		Partida p = partidaRepo.findById(idPartida);
 		
 		Invitaciones i = invitacionesRepo.findByPartidaAndInvitado(p,u);
+		if(i == null) {
+			System.out.println("Sejodio");
+		}
 		invitacionesRepo.delete(i);
 	
 	}
