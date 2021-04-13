@@ -7,10 +7,18 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 
 
+
+ 
+
+
+
 @SpringBootApplication
 public class DemoApplication {
 
-	
+	public static final int  MAX_JUGADORES = 5;
+	public static String ESPERANDO = "esperando";
+	public static String JUGANDO = "jugando";
+	public static String PUNTUANDO = "puntuando";
 	
 	public static void main(String[] args){
 		

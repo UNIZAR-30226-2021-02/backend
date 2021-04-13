@@ -6,14 +6,15 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import com.demo.model.Respuesta;
 import com.demo.model.Usuario;
 
-public interface UsuarioRepo extends JpaRepository<Usuario,String>{
-
+public interface RespuestaRepo extends JpaRepository<Respuesta,Integer>{
+	/*
 	Usuario findByNombre(String nombre);
 
 	Usuario findByMail(String mail);
-	
+	*/
 	/*
 	@Query(value = "SELECT Usuario.nombre FROM Amigos INNER JOIN Usuario ON Amigos.mail_amigo = mail  WHERE Amigos.mail_usuario = :mailUsuario" , nativeQuery = true)
 	

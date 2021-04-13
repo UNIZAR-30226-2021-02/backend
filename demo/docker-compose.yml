@@ -1,10 +1,8 @@
-version: '2'
+version: '3'
 
 services:
   app:
-    image: 'docker-spring-boot-postgres:latest'
-    build:
-      context: .
+    image: 'proyectokalboware/app:v1.3.0'
     ports:
       - "8080:8080"
     container_name: app
@@ -17,7 +15,7 @@ services:
       - SPRING_JPA_HIBERNATE_DDL_AUTO=update
           
   db:
-    image: 'postgres:13.2'
+    image: 'proyectokalboware/db:v1.0.0'
     ports:
       - "5432:5432"
     container_name: db

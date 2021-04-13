@@ -6,14 +6,23 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import com.demo.model.Hilo;
+import com.demo.model.Invitaciones;
+import com.demo.model.Partida;
 import com.demo.model.Usuario;
 
-public interface UsuarioRepo extends JpaRepository<Usuario,String>{
-
+public interface InvitacionesRepo extends JpaRepository<Invitaciones,Integer>{
+	/*
 	Usuario findByNombre(String nombre);
 
 	Usuario findByMail(String mail);
+	*/
 	
+	Invitaciones findById(int id);
+	
+	Invitaciones findByPartidaAndInvitado(Partida idPartida,Usuario invitadoMail);
+	
+	List<Invitaciones> findByInvitado(Usuario invitadoMail);
 	/*
 	@Query(value = "SELECT Usuario.nombre FROM Amigos INNER JOIN Usuario ON Amigos.mail_amigo = mail  WHERE Amigos.mail_usuario = :mailUsuario" , nativeQuery = true)
 	

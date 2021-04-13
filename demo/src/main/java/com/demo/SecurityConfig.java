@@ -23,28 +23,21 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	
 	@Autowired
 	private UserService userDetailsService;
-	
-	
-
-	
-
-	
 
 	    @Override
 	public void configure(HttpSecurity http) throws Exception {
-	       http.csrf().disable()
+	       http.cors().and().csrf().disable()
 	       .addFilterAfter(new JWTAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class)
 	        .authorizeRequests()
 	        .antMatchers("/").permitAll()
 	        .antMatchers("v2/api-docs").permitAll()
 	        .antMatchers("swagger-ui.html").permitAll()
+		   .antMatchers(HttpMethod.POST, "/api/prueba").permitAll()
 	       .antMatchers(HttpMethod.POST, "/api/login").permitAll()
 	       .antMatchers(HttpMethod.POST, "/api/register").permitAll()
-	       
+	       .antMatchers(HttpMethod.GET, "/api/returnImageProfile/*").permitAll()
 			.anyRequest().authenticated();
-				
-				
-				;
+	       
 	        
 	        
 	}
