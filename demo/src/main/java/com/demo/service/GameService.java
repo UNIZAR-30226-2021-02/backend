@@ -158,5 +158,17 @@ public class GameService {
 		return respuesta;
 	}
 	
-	
+	public List<Usuario> listPlayers(String identificador,int idPartida){
+		
+		
+		Partida p = partidaRepo.findById(idPartida);
+		List<Usuario> respuesta = p.getJugadores_();
+		
+		for(Usuario u : respuesta ) {
+			System.out.println("USUARIO = "+u);
+			u.setPassword(null);
+			u.setNull();
+		}
+		return respuesta;
+	}
 }
