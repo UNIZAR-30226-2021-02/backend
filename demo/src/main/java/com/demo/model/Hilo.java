@@ -21,7 +21,7 @@ public class Hilo {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Integer id_;
 	
-	@OneToMany(mappedBy = "hilo_", fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "hilo_", fetch = FetchType.EAGER,cascade = CascadeType.ALL)
 	private List<Respuesta> respuestas_;
 	
 	
@@ -34,8 +34,12 @@ public class Hilo {
 	private Partida partida_;
 	
 	public Hilo (Usuario inicial){
+		this.partida_=inicial.getPartidas().get(0); //BASURA, PERMITIR PARTIDA_ = NULL (NO LA VOY A USAR)
 		this.jugadorInicial_ = inicial;
 		this.respuestas_ = new ArrayList<Respuesta>(); 
+	}
+	public Hilo() {
+		
 	}
 	
 	public Partida getPartida_() {

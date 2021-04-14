@@ -336,7 +336,7 @@ public class RestDemoController {
 		return new ResponseEntity<Partida>(p,HttpStatus.OK);
 	}
 	
-	//UTIL??
+	
 	@GetMapping(value = "/acceptInvite")
 	public ResponseEntity<Partida> acceptInvite(@RequestHeader String identificador,@RequestHeader int idPartida){
 		
@@ -387,5 +387,28 @@ public class RestDemoController {
 		game.denyInvite(identificador, idPartida);
 		return new ResponseEntity<Usuario>(HttpStatus.OK);
 	}
+	
+	@GetMapping(value = "/startGame")
+	public ResponseEntity<String> startGame(@RequestHeader int idPartida,@RequestHeader String identificador){
+				
+		if(game.startGame(identificador, idPartida)) {
+			return new ResponseEntity<String>(HttpStatus.OK);
+		}
+		else {
+			return new ResponseEntity<String>(HttpStatus.EXPECTATION_FAILED);
+		}
+	}
+	
+	@PostMapping(value = "/addRespuesta")
+	public ResponseEntity<String> addRespuesta(@RequestHeader int idPartida,@RequestHeader String autor,@RequestBody byte contenido[]){
+				
+		if(game.addRespuesta(idPartida, autor, contenido)) {
+			return new ResponseEntity<String>(HttpStatus.OK);
+		}else {
+			return new ResponseEntity<String>(HttpStatus.EXPECTATION_FAILED);
+		}
+		
+	}
+	
 	
 }
