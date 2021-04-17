@@ -390,11 +390,13 @@ public class RestDemoController {
 	
 	@GetMapping(value = "/startGame")
 	public ResponseEntity<String> startGame(@RequestHeader int idPartida,@RequestHeader String identificador){
-				
-		if(game.startGame(identificador, idPartida)) {
+		int aux = game.startGame(identificador, idPartida);	
+		if(0==aux) { //Correcto
 			return new ResponseEntity<String>(HttpStatus.OK);
 		}
-		else {
+		else if(1==aux){ //Partida empezada
+			return new ResponseEntity<String>(HttpStatus.SERVICE_UNAVAILABLE);
+		}else { //No eres el host
 			return new ResponseEntity<String>(HttpStatus.EXPECTATION_FAILED);
 		}
 	}

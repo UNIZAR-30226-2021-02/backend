@@ -85,6 +85,10 @@ public class Partida {
 	public Hilo addRespuesta(Usuario inicial, Respuesta respuesta) {
 		String idUser= inicial.getNombre();
 		int i = getHiloJugador(idUser);
+		if(i==-1) {
+			//El jugador no pertenece a la partida (no tiene hilo)
+			return null;
+		}
 		int j = (i+turno_)%nJugadores_;
 		System.out.println("------");
 		System.out.println("HiloJug:"+i+"  HiloTurno:"+j+"  Turno:"+turno_);

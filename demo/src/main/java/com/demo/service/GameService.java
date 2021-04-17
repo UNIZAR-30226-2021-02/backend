@@ -166,21 +166,27 @@ public class GameService {
 		return respuesta;
 	}
 
-	public boolean startGame(String identificador, int idPartida) {
+	public int startGame(String identificador, int idPartida) {
 		// TODO Auto-generated method stub
 		Partida p = partidaRepo.findById(idPartida);
-		if(p.getHost_().getNombre().equals(identificador) && p.getEstado_().equals(DemoApplication.ESPERANDO)) {
+		if(p.getHost_().getNombre().equals(identificador)) {
 			//Eres el host
-			p.empezarPartida();
-			System.out.println("ANTES");
-			partidaRepo.save(p);
-			System.out.println("DESPUES");
-			invitacionesRepo.deleteAll(invitacionesRepo.findByPartida(p)); //Eliminamos invitaciones pendientes
-			//Notificar a todos de que ha empezado 
-			return true;
-			
+			if(p.getEstado_().equals(DemoApplication.ESPERANDO)) {
+				//Esta sin empezar
+				p.empezarPartida();
+				partidaRepo.save(p);
+				invitacionesRepo.deleteAll(invitacionesRepo.findByPartida(p)); //Eliminamos invitaciones pendientes
+				//Notificar a todos de que ha empezado 
+				return 0;
+			}
+			else {
+				//Ya está empezada
+				return 1;
+			}
+		}else {
+			//No eres el host
+			return 2;
 		}
-		return false;
 	}
 	
 	public boolean addRespuesta(int idPartida, String autor,byte[] contenido){
