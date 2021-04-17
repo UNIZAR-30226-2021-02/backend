@@ -168,4 +168,21 @@ public class GameService {
 		}
 		return respuesta;
 	}
+	
+	public List<Usuario> listPlayersGame(int idPartida, String identificador){
+		
+		Partida p = partidaRepo.findById(idPartida);
+		Usuario u = usuarioRepo.findByNombre(identificador);
+		List<Usuario> amigos = u.getAmigo();
+		List<Usuario> jugadores = p.getJugadores_();
+		List<Usuario> respuesta = new ArrayList<>();
+		for(Usuario a: amigos) {
+			if(!p.isUser(a.getNombre())) {
+				a.setNull();
+				respuesta.add(a);
+			}
+		
+		}
+		return respuesta;
+	}
 }

@@ -388,4 +388,10 @@ public class RestDemoController {
 		return new ResponseEntity<Usuario>(HttpStatus.OK);
 	}
 	
+	@GetMapping(value = "/listFriendsGame")
+	public ResponseEntity<List<Usuario>> listFriendsGame(@RequestHeader int idPartida, @RequestHeader String identificador){
+		List<Usuario> respuesta = game.listPlayersGame(idPartida,identificador);
+		return new ResponseEntity<List<Usuario>>(respuesta,HttpStatus.OK);
+	}
+	
 }
