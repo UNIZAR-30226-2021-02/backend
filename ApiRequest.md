@@ -517,7 +517,7 @@
 -----------------
   -EN ESTA VERSIÓN SE AÑADE LA POSIBILIDAD DE INICIAR UNA PARTIDA Y ENVIAR RESPUESTAS A LA MISMA
   
-  - Rechazar invitación a partida (debes ser el host):
+  - Empezar partida(debes ser el host):
     - Método: GET
     - URL: /api/startGame
     - Permisos: TOKEN
@@ -547,11 +547,44 @@
       - 417: el jugador no pertenece a la partida o ya ha jugado en ese turno (debe esperar a a que los demas jueguen)
       
       
-
-
+-----------------
+  VERSION 1.4.0
+-----------------
+ EN ESTA VERSIÓN SE AÑADE LA LÓGICA DE LOS TURNOS Y FINALIZAR LAS PARTIDAS CUANDO SE PASAN TODOS LOS TURNOS. 
  
 
-
+- Listar amigos que no estén en tu partida (dibujo o frase):
+    - Método: GET
+    - URL: /api/listFriendsGame
+    - Permisos: TOKEN
+    - Petición: 
+      HEADER:
+        key="idPartida" y value="id"
+        key="identificador" y value="tu_nombre"
+      
+      
+      
+     - Respuesta: te devuelve la partida lista de amigos que no están en partida
+   [ {
+    "mail": "1@.",
+    "nombre": "1",
+    "password": "123",
+    "token": null,
+    "role": "USER",
+    "fotPerf": "foto1.png",
+    "estrellas": 0,
+    "monedas": 0,
+    "pDibujo": 0,
+    "pListo": 0,
+    "pGracioso": 0,
+    "nAmigos": 0,
+    "amigo": null,
+    "peticion": null
+    }]
+    -Status code:
+      - 200: se lista correctamente
+      
+      
 
 
 
