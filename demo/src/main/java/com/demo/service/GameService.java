@@ -6,10 +6,13 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 
 import com.demo.model.Hilo;
 import com.demo.model.Invitaciones;
 import com.demo.model.Partida;
+import com.demo.model.Respuesta;
 import com.demo.model.Usuario;
 import com.demo.repository.*;
 
@@ -34,13 +37,8 @@ public class GameService {
 	
 	public Partida crearPartida(String identificador,Partida partidaPar) {
 		Usuario host = usuarioRepo.findByNombre(identificador);
-		Hilo hiloAux = new Hilo(host);
 		Partida partida = new Partida(host,partidaPar.getNombre());
 		partidaRepo.save(partida);
-		hiloAux.setPartida_(partida);
-		hiloRepo.save(hiloAux);
-		
-		partida.addHilo(hiloAux);
 		//System.out.println(partida.getHost_());
 		partidaRepo.save(partida);
 		return partidaRepo.findById(partida.getId());
@@ -51,10 +49,6 @@ public class GameService {
 			if(partida != null && partida.getEstado_().equals(DemoApplication.ESPERANDO)) {
 				if(partida.getnJugadores_()<DemoApplication.MAX_JUGADORES) {
 					if(! partida.isUser(identificador)) {
-						Hilo hiloAux = new Hilo(usuarioRepo.findByNombre(identificador));
-						hiloAux.setPartida_(partida);
-						hiloRepo.save(hiloAux);
-						partida.addHilo(hiloAux);
 						partida.addJugador(usuarioRepo.findByNombre(identificador));
 						
 						Usuario u = usuarioRepo.findByNombre(identificador);
@@ -133,6 +127,9 @@ public class GameService {
 		Partida p = partidaRepo.findById(idPartida);
 		
 		Invitaciones i = invitacionesRepo.findByPartidaAndInvitado(p,u);
+		if(i == null) {
+			System.out.println("Sejodio");
+		}
 		invitacionesRepo.delete(i);
 	
 	}
@@ -168,4 +165,64 @@ public class GameService {
 		}
 		return respuesta;
 	}
+
+	
+	public List<Usuario> listPlayersGame(int idPartida, String identificador){
+		
+		Partida p = partidaRepo.findById(idPartida);
+		Usuario u = usuarioRepo.findByNombre(identificador);
+		List<Usuario> amigos = u.getAmigo();
+		List<Usuario> jugadores = p.getJugadores_();
+		List<Usuario> respuesta = new ArrayList<>();
+		for(Usuario a: amigos) {
+			if(!p.isUser(a.getNombre())) {
+				a.setNull();
+				respuesta.add(a);
+			}
+		
+		}
+		return respuesta;
+	}
+
+
+	public int startGame(String identificador, int idPartida) {
+		// TODO Auto-generated method stub
+		Partida p = partidaRepo.findById(idPartida);
+		if(p.getHost_().getNombre().equals(identificador)) {
+			//Eres el host
+			if(p.getEstado_().equals(DemoApplication.ESPERANDO)) {
+				//Esta sin empezar
+				p.empezarPartida();
+				partidaRepo.save(p);
+				invitacionesRepo.deleteAll(invitacionesRepo.findByPartida(p)); //Eliminamos invitaciones pendientes
+				//Notificar a todos de que ha empezado 
+				return 0;
+			}
+			else {
+				//Ya está empezada
+				return 1;
+			}
+		}else {
+			//No eres el host
+			return 2;
+		}
+	}
+	
+	public boolean addRespuesta(int idPartida, String autor,byte[] contenido){
+		Partida p=partidaRepo.findById(idPartida);
+		Usuario u = usuarioRepo.findByNombre(autor);
+		Respuesta r = new Respuesta(u,contenido);
+		Hilo h = p.addRespuesta(u, r);
+		if(h==null) {
+			return false;
+		}else {
+			r.setHilo(h);
+			respuestaRepo.save(r);
+			hiloRepo.save(h);
+			partidaRepo.save(p);
+			return true;
+		}
+	}
+	
+
 }

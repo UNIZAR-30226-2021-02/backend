@@ -19,6 +19,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Lob;
 import javax.persistence.OneToOne;
 
+import org.hibernate.annotations.Type;
+
 
 
 
@@ -34,10 +36,6 @@ public class Respuesta {
 		return id_;
 	}
 
-	public void setId_(Integer id_) {
-		this.id_ = id_;
-	}
-
 	public Usuario getAutor_() {
 		return autor_;
 	}
@@ -46,54 +44,38 @@ public class Respuesta {
 		this.autor_ = autor_;
 	}
 
-	public Hilo getHilo_() {
-		return hilo_;
-	}
 
-	public void setHilo_(Hilo hilo_) {
-		this.hilo_ = hilo_;
-	}
-
-	public Object getContenido_() {
+	public byte[] getContenido_() {
 		return contenido_;
 	}
 
-	public void setContenido_(Object contenido_) {
+	public void setContenido_(byte[] contenido_) {
 		this.contenido_ = contenido_;
 	}
 
-	public boolean isEsDibujo_() {
-		return esDibujo_;
+	public void setHilo(Hilo h) {
+		this.hilo_= h;
 	}
-
-	public void setEsDibujo_(boolean esDibujo_) {
-		this.esDibujo_ = esDibujo_;
-	}
-
 	@OneToOne
 
 	private Usuario autor_;
 
-	@ManyToOne(fetch = FetchType.LAZY, optional = false)
+	@ManyToOne(fetch = FetchType.EAGER, optional = false)
 	private Hilo hilo_;
 
 	
 	@Lob
-	@Column(name="contenido",columnDefinition="bytea")
-	private Object contenido_;
+	@Type(type="org.hibernate.type.BinaryType")
+	@Column(name="contenido")
+	private byte[] contenido_;
 	
-
-	private boolean esDibujo_;
 	
-	public Respuesta (Usuario autor, byte[] contenido, boolean tipo, Hilo hilo){
+	public Respuesta (Usuario autor, byte[] contenido){
 		this.autor_ = autor;
 		this.contenido_ = contenido;
-		this.esDibujo_ = tipo;
-		this.hilo_ = hilo;
 	}
-	
-	
-	
-	
+	public Respuesta (){
+	}
+
 	
 }
