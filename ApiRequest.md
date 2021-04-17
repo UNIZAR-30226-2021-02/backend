@@ -296,6 +296,10 @@
   - Petición:
     HEADER:
       key="identificador" y value="usuario" 
+    BODY:
+      {
+      "nombre": "nombredelapartida"
+      }
 
   - Status code: 200 OK, la partida ha sido creada
   - Respuesta: Ejemplo
@@ -507,6 +511,7 @@
     - 200: se ha rechazado la invitación correctamente
 
 
+
 -----------------
   VERSION 1.3.1
 -----------------
@@ -545,6 +550,8 @@
 
 
  
+
+
 
 
 
