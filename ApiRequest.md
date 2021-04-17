@@ -507,3 +507,46 @@
     - 200: se ha rechazado la invitación correctamente
 
 
+-----------------
+  VERSION 1.3.1
+-----------------
+  -EN ESTA VERSIÓN SE AÑADE LA POSIBILIDAD DE INICIAR UNA PARTIDA Y ENVIAR RESPUESTAS A LA MISMA
+  
+  - Rechazar invitación a partida (debes ser el host):
+    - Método: GET
+    - URL: /api/startGame
+    - Permisos: TOKEN
+    - Petición: 
+      HEADER:
+        key="identificador" y value="quien eres" 
+        key="idPartida" y value="id"
+    - Status code:
+      - 200: se ha iniciado la partida 
+      - 503: la partida ya está empezada
+      - 417: no eres el host y por tanto no tienes permiso para iniciarla
+
+  - Enviar respuesta (dibujo o frase):
+    - Método: POST
+    - URL: /api/addRespuesta
+    - Permisos: TOKEN
+    - Petición: 
+      HEADER:
+        key="idPartida" y value="id"
+        key="autor" y value="tu_nombre"
+      BODY: raw + JSON donde pone Text
+        {
+        "contenido": [0,1,0,...] //Sea frase o dibujo es un array of bytes
+        }
+    -Status code:
+      - 200: se ha registrado la respuesta correctamente
+      - 417: el jugador no pertenece a la partida o ya ha jugado en ese turno (debe esperar a a que los demas jueguen)
+      
+      
+
+
+ 
+
+
+
+
+
