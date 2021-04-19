@@ -1,5 +1,6 @@
 package com.demo.service;
 
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 
 import java.util.List;
@@ -13,6 +14,7 @@ import com.demo.model.Hilo;
 import com.demo.model.Invitaciones;
 import com.demo.model.Partida;
 import com.demo.model.Respuesta;
+import com.demo.model.RespuestaFront;
 import com.demo.model.Usuario;
 import com.demo.repository.*;
 
@@ -208,10 +210,12 @@ public class GameService {
 		}
 	}
 	
-	public boolean addRespuesta(int idPartida, String autor,byte[] contenido){
+	public boolean addRespuesta(int idPartida, String autor,byte[] contenido,boolean dibujo){
+		
+		System.out.println(contenido);
 		Partida p=partidaRepo.findById(idPartida);
 		Usuario u = usuarioRepo.findByNombre(autor);
-		Respuesta r = new Respuesta(u,contenido);
+		Respuesta r = new Respuesta(u,contenido,dibujo);
 		Hilo h = p.addRespuesta(u, r);
 		if(h==null) {
 			return false;
@@ -224,5 +228,29 @@ public class GameService {
 		}
 	}
 	
-
+	public byte[] getImageResponse(int idFoto) {
+		return respuestaRepo.findById(idFoto).getContenido_();
+	}
+	
+	
+	public RespuestaFront getResponse(String identificador, int idPartida) {
+		RespuestaFront respuesta;
+		Partida p = partidaRepo.findById(idPartida);
+		Usuario u = usuarioRepo.findByNombre(identificador);
+		int turno = p.getTurno();
+		Hilo h = p.getHiloRespuesta(u);
+		List <Respuesta> listaR = h.getRespuestas_();
+		Respuesta r = listaR.get(listaR.size()-1); 
+		boolean esDibujo = r.isEsDibujo();
+		System.out.println(r.getId_()+"---"+r.getContenido_()+"---"+r.isEsDibujo());
+		 if(esDibujo) {
+			 respuesta= new RespuestaFront(r.getId_(),true,null);
+		 }
+		 else {
+			 String contenido = new String(r.getContenido_(),StandardCharsets.UTF_8);
+			 respuesta= new RespuestaFront(r.getId_(),false,contenido);
+		 }
+		 
+		return respuesta;
+	}
 }

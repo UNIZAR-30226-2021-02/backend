@@ -69,10 +69,20 @@ public class Respuesta {
 	@Column(name="contenido")
 	private byte[] contenido_;
 	
+	private boolean esDibujo;
 	
-	public Respuesta (Usuario autor, byte[] contenido){
+	public boolean isEsDibujo() {
+		return esDibujo;
+	}
+
+	public void setEsDibujo(boolean esDibujo) {
+		this.esDibujo = esDibujo;
+	}
+
+	public Respuesta (Usuario autor, byte[] contenido,boolean dibujo){
 		this.autor_ = autor;
 		this.contenido_ = contenido;
+		this.esDibujo = dibujo;
 	}
 	public Respuesta (){
 	}

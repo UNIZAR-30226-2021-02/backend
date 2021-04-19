@@ -103,15 +103,40 @@ public class Partida {
 	}
 	
 	
+	public Hilo getHiloRespuesta(Usuario inicial) {
+		String idUser= inicial.getNombre();
+		int i = getHiloJugador(idUser);
+		if(i==-1) {
+			//El jugador no pertenece a la partida (no tiene hilo)
+			return null;
+		}
+		int j = (i+turno_)%nJugadores_;
+		System.out.println("------");
+		System.out.println("HiloJug:"+i+"  HiloTurno:"+j+"  Turno:"+turno_);
+		System.out.println("------");
+		if(hilos_[j].getSize()>turno_) {
+			System.out.println("SE FUNA EL HILO XD");
+			return null;
+		}else {
+			
+			return hilos_[j];
+		}
+	}
+	
+	
 	public int getHiloJugador(String jugador) {
 		for(int i=0;i<nJugadores_;i++) {
 			if(hilos_[i].getJugadorInicial_().getNombre().equals(jugador)) {
+				System.out.println("Hilo inicial:"+i);
 				return i;
+				
 			}
 		}
 		return -1; //Error, no se encontró el hilo
 	}
-		
+	
+	
+	
 	public Partida (Usuario host,String nombrePartida) {
 		this.nombre_ = nombrePartida; 
 		this.host_ = host;

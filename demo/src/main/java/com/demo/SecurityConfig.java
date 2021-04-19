@@ -36,6 +36,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	       .antMatchers(HttpMethod.POST, "/api/login").permitAll()
 	       .antMatchers(HttpMethod.POST, "/api/register").permitAll()
 	       .antMatchers(HttpMethod.GET, "/api/returnImageProfile/*").permitAll()
+	       .antMatchers(HttpMethod.POST, "/api/addImage").permitAll()
 			.anyRequest().authenticated();
 	       
 	        

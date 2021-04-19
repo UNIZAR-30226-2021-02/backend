@@ -25,11 +25,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.demo.controller.AuthController;
 import com.demo.model.Invitaciones;
 import com.demo.model.Partida;
+import com.demo.model.Respuesta;
+import com.demo.model.RespuestaFront;
 import com.demo.model.Usuario;
 
 import com.demo.repository.TokenRepo;
@@ -408,10 +411,21 @@ public class RestDemoController {
 		}
 	}
 	
-	@PostMapping(value = "/addRespuesta")
-	public ResponseEntity<String> addRespuesta(@RequestHeader int idPartida,@RequestHeader String autor,@RequestBody byte contenido[]){
+	@PostMapping(value = "/addText")
+	public ResponseEntity<String> addRespuesta(@RequestHeader int idPartida,@RequestHeader String autor,@RequestBody String contenido){
 				
-		if(game.addRespuesta(idPartida, autor, contenido)) {
+		if(game.addRespuesta(idPartida, autor, contenido.getBytes(),false)) {
+			return new ResponseEntity<String>(HttpStatus.OK);
+		}else {
+			return new ResponseEntity<String>(HttpStatus.EXPECTATION_FAILED);
+		}
+		
+	}
+	
+	@PostMapping(value = "/addImage")
+	public ResponseEntity<String> addRespuesta(@RequestHeader int idPartida,@RequestHeader String autor,@RequestBody MultipartFile contenido) throws IOException{
+		System.out.println("LLEGAMOS A AÑADIR RESPUESTA:"+ contenido.toString());		
+		if(game.addRespuesta(idPartida, autor, contenido.getBytes(),true)) {
 			return new ResponseEntity<String>(HttpStatus.OK);
 		}else {
 			return new ResponseEntity<String>(HttpStatus.EXPECTATION_FAILED);
@@ -420,5 +434,28 @@ public class RestDemoController {
 	}
 	
 
+	
+	@GetMapping(value = "/returnImageResponse/{idFoto}", produces = MediaType.IMAGE_PNG_VALUE)
+	public ResponseEntity<byte[]> getImageResponse(@PathVariable int idFoto){
+		
+		byte[]image = game.getImageResponse(idFoto);
+		
+
+		return new ResponseEntity<byte[]>(image,HttpStatus.OK);
+		
+		
+	}
+	
+	@GetMapping(value = "/returnResponse")
+	public ResponseEntity<RespuestaFront> getResponse(@RequestHeader String identificador, @RequestHeader int idPartida){
+		
+		RespuestaFront response = game.getResponse(identificador,idPartida);
+		System.out.println(response.getId()+"---"+response.getContenido()+"---"+response.isEsDibujo());
+		System.out.println("PUES LLEGAMOS A DEVOLVER");
+		return new ResponseEntity<RespuestaFront>(response,HttpStatus.OK);
+		
+		
+	}
+	
 	
 }
