@@ -114,11 +114,9 @@ public class Partida {
 		System.out.println("------");
 		System.out.println("HiloJug:"+i+"  HiloTurno:"+j+"  Turno:"+turno_);
 		System.out.println("------");
-		if(hilos_[j].getSize()>turno_) {
-			System.out.println("SE FUNA EL HILO XD");
+		if(turnoJugado(idUser)) {
 			return null;
 		}else {
-			
 			return hilos_[j];
 		}
 	}
@@ -229,15 +227,23 @@ public class Partida {
 	
 	public void empezarPartida() {
 		this.hilos_ = new Hilo[nJugadores_]; //Construimos los hilos
-		System.out.println("Construyo bien");
 		int i=0;
 		for (Usuario u : jugadores_) {
-				hilos_[i]= new Hilo(u); //Inicializamos los hilos
-				System.out.println("inicializo bien");
+				hilos_[i]= new Hilo(u,this); //Inicializamos los hilos
 				i++;
 		}
 		this.estado_= DemoApplication.JUGANDO;
 		this.turno_=0;
 	}
 
+	public boolean turnoJugado(String idUser) {
+		int i = getHiloJugador(idUser);
+		int j = (i+turno_)%nJugadores_;
+		System.out.println(hilos_[j].getSize());
+		if(hilos_[j].getSize()>turno_) {
+			return true;
+		}else {
+			return false;
+		}
+	}
 }

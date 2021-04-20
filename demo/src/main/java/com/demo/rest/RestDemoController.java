@@ -450,6 +450,13 @@ public class RestDemoController {
 	public ResponseEntity<RespuestaFront> getResponse(@RequestHeader String identificador, @RequestHeader int idPartida){
 		
 		RespuestaFront response = game.getResponse(identificador,idPartida);
+		if(response.getId()==-1) {
+			//Turno 0
+			return new ResponseEntity<RespuestaFront>(HttpStatus.CONFLICT);
+		}else if(response.getId()==-2) {
+			//Ya jugaste
+			return new ResponseEntity<RespuestaFront>(HttpStatus.EXPECTATION_FAILED);
+		}
 		System.out.println(response.getId()+"---"+response.getContenido()+"---"+response.isEsDibujo());
 		System.out.println("PUES LLEGAMOS A DEVOLVER");
 		return new ResponseEntity<RespuestaFront>(response,HttpStatus.OK);

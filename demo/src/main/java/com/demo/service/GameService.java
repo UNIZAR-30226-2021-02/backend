@@ -174,7 +174,6 @@ public class GameService {
 		Partida p = partidaRepo.findById(idPartida);
 		Usuario u = usuarioRepo.findByNombre(identificador);
 		List<Usuario> amigos = u.getAmigo();
-		List<Usuario> jugadores = p.getJugadores_();
 		List<Usuario> respuesta = new ArrayList<>();
 		for(Usuario a: amigos) {
 			if(!p.isUser(a.getNombre())) {
@@ -236,8 +235,16 @@ public class GameService {
 	public RespuestaFront getResponse(String identificador, int idPartida) {
 		RespuestaFront respuesta;
 		Partida p = partidaRepo.findById(idPartida);
+		System.out.println(p.getTurno());
+		if(p.turnoJugado(identificador)) {
+			//Ya has jugado este turno
+			return new RespuestaFront(-2,false,null);
+		}else if (p.getTurno()==0) {
+			System.out.println("Turno 0");
+			//Primer turno
+			return new RespuestaFront(-1,false,null);
+		}else {
 		Usuario u = usuarioRepo.findByNombre(identificador);
-		int turno = p.getTurno();
 		Hilo h = p.getHiloRespuesta(u);
 		List <Respuesta> listaR = h.getRespuestas_();
 		Respuesta r = listaR.get(listaR.size()-1); 
@@ -252,5 +259,6 @@ public class GameService {
 		 }
 		 
 		return respuesta;
+		}
 	}
 }
