@@ -553,6 +553,7 @@
  EN ESTA VERSIÓN SE AÑADE LA LÓGICA DE LOS TURNOS Y FINALIZAR LAS PARTIDAS CUANDO SE PASAN TODOS LOS TURNOS. 
  
 
+
 - Listar amigos que no estén en tu partida (dibujo o frase):
     - Método: GET
     - URL: /api/listFriendsGame
@@ -584,9 +585,77 @@
     -Status code:
       - 200: se lista correctamente
       
+-----------------
+  VERSION 1.5.0
+-----------------
       
 
+- Devolver la respuesta sobre la que te toca dibujar o escribir:
+    - Método: GET
+    - URL: /api/returnResponse
+    - Permisos: TOKEN
+    - Petición: 
+      HEADER:
+        key="idPartida" y value="id"
+        key="identificador" y value="tu_nombre"
+      
+      
+      
+
+     - Respuesta: te devuelve la respuesta 
+    {
+    "id": id
+    "contenido": null si es una imagen y el contenido de la frase si es una frase
+    "esDibujo": true si es dibujo, false si es una frase
+    }
+    -Status code:
+      - 200: se devuelve correctamente
+      - 409: El turno es el 0, con lo cual no hay respuesta y toca escribir
+      - 417: ya has jugado en este turno, con lo cual no hay respuesta para que escribas
 
 
 
+- Devolver la imagen sobre la que te toca escribir, si el returnResponse anterior ha tenido el booleano de esDibujo a true:
+    - Método: GET
+    - URL: /api/returnResponse/id(es el id que te devuelve returnResponse)
+    - Permisos: TOKEN
+    - Petición: 
+      
+     - Respuesta: te devuelve la imagen
+    
+    -Status code:
+      - 200: se devuelve correctamente
 
+
+- Enviar texto como respuesta:
+    - Método: POST
+    - URL: /api/addText
+    - Permisos: TOKEN
+    - Petición: 
+      HEADER:
+        key="idPartida" y value="id"
+        key="autor" y value="tu_nombre"
+      
+      BODY:
+      contenido(meter el string sin mas, ni nombre de parametro ni nada)
+      
+    -Status code:
+      - 200: se añade correctamente
+      - 417: no se ha podido añadir porque ya has jugado tu turno o porque la partida ya está acabada
+
+
+- Enviar imagen como respuesta:
+    - Método: POST
+    - URL: /api/addImage
+    - Permisos: TOKEN
+    - Petición: 
+      HEADER:
+        key="idPartida" y value="id"
+        key="autor" y value="tu_nombre"
+      
+      BODY:
+      contenido: Esto es un MultiPartFile, no se como me lo enviais la verdad
+      
+    -Status code:
+      - 200: se añade correctamente
+      - 417: no se ha podido añadir porque ya has jugado tu turno o porque la partida ya está acabada

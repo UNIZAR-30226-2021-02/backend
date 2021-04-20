@@ -103,15 +103,38 @@ public class Partida {
 	}
 	
 	
+	public Hilo getHiloRespuesta(Usuario inicial) {
+		String idUser= inicial.getNombre();
+		int i = getHiloJugador(idUser);
+		if(i==-1) {
+			//El jugador no pertenece a la partida (no tiene hilo)
+			return null;
+		}
+		int j = (i+turno_)%nJugadores_;
+		System.out.println("------");
+		System.out.println("HiloJug:"+i+"  HiloTurno:"+j+"  Turno:"+turno_);
+		System.out.println("------");
+		if(turnoJugado(idUser)) {
+			return null;
+		}else {
+			return hilos_[j];
+		}
+	}
+	
+	
 	public int getHiloJugador(String jugador) {
 		for(int i=0;i<nJugadores_;i++) {
 			if(hilos_[i].getJugadorInicial_().getNombre().equals(jugador)) {
+				System.out.println("Hilo inicial:"+i);
 				return i;
+				
 			}
 		}
 		return -1; //Error, no se encontró el hilo
 	}
-		
+	
+	
+	
 	public Partida (Usuario host,String nombrePartida) {
 		this.nombre_ = nombrePartida; 
 		this.host_ = host;
@@ -204,15 +227,23 @@ public class Partida {
 	
 	public void empezarPartida() {
 		this.hilos_ = new Hilo[nJugadores_]; //Construimos los hilos
-		System.out.println("Construyo bien");
 		int i=0;
 		for (Usuario u : jugadores_) {
-				hilos_[i]= new Hilo(u); //Inicializamos los hilos
-				System.out.println("inicializo bien");
+				hilos_[i]= new Hilo(u,this); //Inicializamos los hilos
 				i++;
 		}
 		this.estado_= DemoApplication.JUGANDO;
 		this.turno_=0;
 	}
 
+	public boolean turnoJugado(String idUser) {
+		int i = getHiloJugador(idUser);
+		int j = (i+turno_)%nJugadores_;
+		System.out.println(hilos_[j].getSize());
+		if(hilos_[j].getSize()>turno_) {
+			return true;
+		}else {
+			return false;
+		}
+	}
 }
