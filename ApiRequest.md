@@ -590,6 +590,24 @@
       //Documentar returnResponse,returnImageResponse,addText,addImage
 
 
-
+- Devolver la respuesta sobre la que te toca dibujar o escribir:
+    - Método: GET
+    - URL: /api/returnResponse
+    - Permisos: TOKEN
+    - Petición: 
+      HEADER:
+        key="idPartida" y value="id"
+        key="identificador" y value="tu_nombre"
+      
+      
+      
+     - Respuesta: te devuelve la respuesta 
+    {
+    "id": id
+    "contenido": null si es una imagen y el contenido de la frase si es una frase
+    "esDibujo": true si es dibujo, false si es una frase
+    }
+    -Status code:
+      - 200: se lista correctamente
 
 

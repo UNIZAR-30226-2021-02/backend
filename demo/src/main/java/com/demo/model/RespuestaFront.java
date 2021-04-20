@@ -40,7 +40,7 @@ public class RespuestaFront {
 	private boolean esDibujo;
 	
 	public RespuestaFront (int idRespuesta,boolean esDibujo,String contenido){
-		this.id = id;
+		this.id = idRespuesta;
 		this.contenido = contenido;
 		this.esDibujo = esDibujo;
 	}
