@@ -608,6 +608,50 @@
     "esDibujo": true si es dibujo, false si es una frase
     }
     -Status code:
-      - 200: se lista correctamente
+      - 200: se devuelve correctamente
 
 
+- Devolver la imagen sobre la que te toca escribir, si el returnResponse anterior ha tenido el booleano de esDibujo a true:
+    - Método: GET
+    - URL: /api/returnResponse/id(es el id que te devuelve returnResponse)
+    - Permisos: TOKEN
+    - Petición: 
+      
+     - Respuesta: te devuelve la imagen
+    
+    -Status code:
+      - 200: se devuelve correctamente
+
+
+- Enviar texto como respuesta:
+    - Método: POST
+    - URL: /api/addText
+    - Permisos: TOKEN
+    - Petición: 
+      HEADER:
+        key="idPartida" y value="id"
+        key="autor" y value="tu_nombre"
+      
+      BODY:
+      contenido(meter el string sin mas, ni nombre de parametro ni nada)
+      
+    -Status code:
+      - 200: se añade correctamente
+      - 417: no se ha podido añadir porque ya has jugado tu turno o porque la partida ya está acabada
+
+
+- Enviar imagen como respuesta:
+    - Método: POST
+    - URL: /api/addImage
+    - Permisos: TOKEN
+    - Petición: 
+      HEADER:
+        key="idPartida" y value="id"
+        key="autor" y value="tu_nombre"
+      
+      BODY:
+      contenido: Esto es un MultiPartFile, no se como me lo enviais la verdad
+      
+    -Status code:
+      - 200: se añade correctamente
+      - 417: no se ha podido añadir porque ya has jugado tu turno o porque la partida ya está acabada
