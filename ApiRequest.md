@@ -517,7 +517,7 @@
 -----------------
   -EN ESTA VERSIÓN SE AÑADE LA POSIBILIDAD DE INICIAR UNA PARTIDA Y ENVIAR RESPUESTAS A LA MISMA
   
-  - Rechazar invitación a partida (debes ser el host):
+  - Empezar partida(debes ser el host):
     - Método: GET
     - URL: /api/startGame
     - Permisos: TOKEN
@@ -547,13 +547,111 @@
       - 417: el jugador no pertenece a la partida o ya ha jugado en ese turno (debe esperar a a que los demas jueguen)
       
       
-
-
+-----------------
+  VERSION 1.4.0
+-----------------
+ EN ESTA VERSIÓN SE AÑADE LA LÓGICA DE LOS TURNOS Y FINALIZAR LAS PARTIDAS CUANDO SE PASAN TODOS LOS TURNOS. 
  
 
+- Listar amigos que no estén en tu partida (dibujo o frase):
+    - Método: GET
+    - URL: /api/listFriendsGame
+    - Permisos: TOKEN
+    - Petición: 
+      HEADER:
+        key="idPartida" y value="id"
+        key="identificador" y value="tu_nombre"
+      
+      
+      
+     - Respuesta: te devuelve la partida lista de amigos que no están en partida
+   [ {
+    "mail": "1@.",
+    "nombre": "1",
+    "password": "123",
+    "token": null,
+    "role": "USER",
+    "fotPerf": "foto1.png",
+    "estrellas": 0,
+    "monedas": 0,
+    "pDibujo": 0,
+    "pListo": 0,
+    "pGracioso": 0,
+    "nAmigos": 0,
+    "amigo": null,
+    "peticion": null
+    }]
+    -Status code:
+      - 200: se lista correctamente
+      
+-----------------
+  VERSION 1.5.0
+-----------------
+      //Documentar returnResponse,returnImageResponse,addText,addImage
 
 
+- Devolver la respuesta sobre la que te toca dibujar o escribir:
+    - Método: GET
+    - URL: /api/returnResponse
+    - Permisos: TOKEN
+    - Petición: 
+      HEADER:
+        key="idPartida" y value="id"
+        key="identificador" y value="tu_nombre"
+      
+      
+      
+     - Respuesta: te devuelve la respuesta 
+    {
+    "id": id
+    "contenido": null si es una imagen y el contenido de la frase si es una frase
+    "esDibujo": true si es dibujo, false si es una frase
+    }
+    -Status code:
+      - 200: se devuelve correctamente
 
 
+- Devolver la imagen sobre la que te toca escribir, si el returnResponse anterior ha tenido el booleano de esDibujo a true:
+    - Método: GET
+    - URL: /api/returnResponse/id(es el id que te devuelve returnResponse)
+    - Permisos: TOKEN
+    - Petición: 
+      
+     - Respuesta: te devuelve la imagen
+    
+    -Status code:
+      - 200: se devuelve correctamente
 
 
+- Enviar texto como respuesta:
+    - Método: POST
+    - URL: /api/addText
+    - Permisos: TOKEN
+    - Petición: 
+      HEADER:
+        key="idPartida" y value="id"
+        key="autor" y value="tu_nombre"
+      
+      BODY:
+      contenido(meter el string sin mas, ni nombre de parametro ni nada)
+      
+    -Status code:
+      - 200: se añade correctamente
+      - 417: no se ha podido añadir porque ya has jugado tu turno o porque la partida ya está acabada
+
+
+- Enviar imagen como respuesta:
+    - Método: POST
+    - URL: /api/addImage
+    - Permisos: TOKEN
+    - Petición: 
+      HEADER:
+        key="idPartida" y value="id"
+        key="autor" y value="tu_nombre"
+      
+      BODY:
+      contenido: Esto es un MultiPartFile, no se como me lo enviais la verdad
+      
+    -Status code:
+      - 200: se añade correctamente
+      - 417: no se ha podido añadir porque ya has jugado tu turno o porque la partida ya está acabada
