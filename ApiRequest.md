@@ -584,7 +584,10 @@
     -Status code:
       - 200: se lista correctamente
       
-      
+-----------------
+  VERSION 1.5.0
+-----------------
+      //Documentar returnResponse,returnImageResponse,addText,addImage
 
 
 
