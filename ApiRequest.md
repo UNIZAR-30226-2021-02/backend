@@ -553,6 +553,7 @@
  EN ESTA VERSIÓN SE AÑADE LA LÓGICA DE LOS TURNOS Y FINALIZAR LAS PARTIDAS CUANDO SE PASAN TODOS LOS TURNOS. 
  
 
+
 - Listar amigos que no estén en tu partida (dibujo o frase):
     - Método: GET
     - URL: /api/listFriendsGame
@@ -587,8 +588,7 @@
 -----------------
   VERSION 1.5.0
 -----------------
-      //Documentar returnResponse,returnImageResponse,addText,addImage
-
+      
 
 - Devolver la respuesta sobre la que te toca dibujar o escribir:
     - Método: GET
@@ -601,6 +601,7 @@
       
       
       
+
      - Respuesta: te devuelve la respuesta 
     {
     "id": id
@@ -609,6 +610,9 @@
     }
     -Status code:
       - 200: se devuelve correctamente
+      - 409: El turno es el 0, con lo cual no hay respuesta y toca escribir
+      - 417: ya has jugado en este turno, con lo cual no hay respuesta para que escribas
+
 
 
 - Devolver la imagen sobre la que te toca escribir, si el returnResponse anterior ha tenido el booleano de esDibujo a true:
