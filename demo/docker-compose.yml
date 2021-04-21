@@ -22,3 +22,4 @@ services:
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=1234
+      - POSTGRES_INITDB_ARGS= "-E unicode"
