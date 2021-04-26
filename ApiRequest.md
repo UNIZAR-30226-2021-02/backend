@@ -58,7 +58,7 @@
   - Permisos: NADA
   - Petición: (body: raw + JSON donde pone Text)
     {
-    "nombre": "NOMBRE",
+    "mail": "mail",
     "password": "PSWD"
     }
 
@@ -116,10 +116,10 @@
   - version: -
   - Permisos: TOKEN
   - Petición: 
-    HEADER: añadir un campo: key="identificador" y value="tu_nombre"
+    HEADER: añadir un campo: key="identificador" y value="tu_mail"
     BODY: raw + JSON donde pone Text
     {
-    "nombre": "NOMBRE" //Nombre del user cuya petición quieres aceptar
+    "mail": "mail" //mail del user cuya petición quieres aceptar
     }
 
   - Status code:
@@ -147,10 +147,10 @@
   - version: -
   - Permisos: TOKEN
   - Petición: 
-    HEADER: añadir un campo: key="identificador" y value="tu_nombre"
+    HEADER: añadir un campo: key="identificador" y value="tu_mail"
     BODY: raw + JSON donde pone Text
     {
-    "nombre": "NOMBRE" //Nombre del user al que le envias la peticion
+    "mail": "mail" //Mail del user al que le envias la peticion
     }
 
   - Status code:
@@ -165,7 +165,7 @@
   - version: -
   - Permisos: TOKEN
   - Petición: 
-    HEADER: añadir un campo: key="identificador" y value="tu_nombre"
+    HEADER: añadir un campo: key="identificador" y value="tu_mail"
     
   - Status code:
     - 200: Todo bien
@@ -185,7 +185,7 @@
   - version: -
   - Permisos: TOKEN
   - Petición: 
-    HEADER: añadir un campo: key="identificador" y value="tu_nombre"
+    HEADER: añadir un campo: key="identificador" y value="tu_mail"
     
   - Status code:
     - 200: Todo bien
@@ -205,10 +205,10 @@
   - version: -
   - Permisos: TOKEN
   - Petición: 
-    HEADER: añadir un campo: key="identificador" y value="tu_nombre"
+    HEADER: añadir un campo: key="identificador" y value="tu_mail"
     BODY: raw + JSON donde pone Text
     {
-    "nombre": "NOMBRE" //Nombre del user que quieres eliminar de amigo
+    "mail": "mail" //mail del user que quieres eliminar de amigo
     }
 
   - Status code:
@@ -219,7 +219,7 @@
   - URL: /api/viewProfile
   - Permisos: TOKEN
   - Petición: 
-    HEADER: añadir un campo: key="identificador" y value="usuario"
+    HEADER: añadir un campo: key="identificador" y value="tu_mail"
 
   - Status code:
     - 200: Todo bien
@@ -258,7 +258,7 @@
   - Permisos: TOKEN
   - Petición:
     HEADER: 2 campos
-      key="identificador" y value="usuario"
+      key="identificador" y value="mail"
       key="idFoto" y value="foto" (foto0.png, foto1.png, ..., foto4.png)
 
   - Status code: 200 OK, el avatar ha sido cambiado
@@ -270,7 +270,7 @@
   - Permisos: TOKEN
   - Petición:
     HEADER:
-      key="identificador" y value="usuario" //Usuario = nombre viejo
+      key="identificador" y value="mail" 
     BODY:
       {
       "usuario": "Nombre" //Nombre nuevo
@@ -295,7 +295,7 @@
   - Permisos: TOKEN
   - Petición:
     HEADER:
-      key="identificador" y value="usuario" 
+      key="identificador" y value="mail" 
     BODY:
       {
       "nombre": "nombredelapartida"
@@ -339,7 +339,7 @@
   - Permisos: TOKEN
   - Petición:
     HEADER:
-      key="identificador" y value="usuario" 
+      key="identificador" y value="mail" 
 
   - Status code: 
       200 OK, muestra la lista
@@ -394,7 +394,7 @@
   - URL: /api/listInvite
   - Permisos: TOKEN
   - Petición: 
-    HEADER: key="identificador" y value="tu_nombre"
+    HEADER: key="identificador" y value="mail"
     
   - Status code:
     - 200: Todo bien
@@ -460,7 +460,7 @@
   - Permisos: TOKEN
   - Petición:
     HEADER:
-      key="identificador" y value="usuario" 
+      key="identificador" y value="mail" 
       key="idPartida" y value="id"
 
   - Status code: 
@@ -561,7 +561,7 @@
     - Petición: 
       HEADER:
         key="idPartida" y value="id"
-        key="identificador" y value="tu_nombre"
+        key="identificador" y value="mail"
       
       
       
