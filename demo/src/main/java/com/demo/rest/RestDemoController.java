@@ -82,7 +82,7 @@ public class RestDemoController {
 	public ResponseEntity<Usuario> register(@RequestBody Usuario usuario) {
 		usuario.printUser();
 		Usuario u = new Usuario();
-		String nombreUsuario = usuario.getNombre();
+		String nombreUsuario = usuario.getMail();
 		String mail = usuario.getMail();
 		System.out.println(mail);
 		if(usuarioRepo.findByMail(mail)==null&&usuarioRepo.findByNombre(nombreUsuario)==null) {
@@ -114,7 +114,7 @@ public class RestDemoController {
 	@PostMapping(value = "/login")
 	public ResponseEntity<Usuario> login(@RequestBody Usuario usuario) {
 	
-		Usuario u = usuarioRepo.findByNombre(usuario.getNombre());
+		Usuario u = usuarioRepo.findByMail(usuario.getMail());
 		
 		if(u !=null){
 			if(u.getPassword().equals(usuario.getPassword())) {
@@ -166,9 +166,9 @@ public class RestDemoController {
 	@PostMapping(value = "/acceptRequest")
 	public ResponseEntity<Usuario> acceptRequest(@RequestBody Usuario usuario,@RequestHeader String identificador){
 		
-		String nombreUsuario = usuario.getNombre();
-		Usuario amigo = usuarioRepo.findByNombre(nombreUsuario);
-		Usuario tu = usuarioRepo.findByNombre(identificador);
+		String mail = usuario.getMail();
+		Usuario amigo = usuarioRepo.findByMail(mail);
+		Usuario tu = usuarioRepo.findByMail(identificador);
 		System.out.println(identificador);
 		
 		
@@ -186,9 +186,9 @@ public class RestDemoController {
 	@PostMapping(value = "/denyRequest")
 	public ResponseEntity<Usuario> denyRequest(@RequestBody Usuario usuario,@RequestHeader String identificador){
 		
-		String nombreUsuario = usuario.getNombre();
-		Usuario amigo = usuarioRepo.findByNombre(nombreUsuario);
-		Usuario tu = usuarioRepo.findByNombre(identificador);
+		String mail = usuario.getMail();
+		Usuario amigo = usuarioRepo.findByMail(mail);
+		Usuario tu = usuarioRepo.findByMail(identificador);
 		System.out.println(identificador);
 		
 		
@@ -202,7 +202,7 @@ public class RestDemoController {
 	@GetMapping(value = "/listFriends")
 	public ResponseEntity<List<Usuario>> listFriends(@RequestHeader String identificador){
 				
-		List<Usuario> respuesta = usuarioRepo.findByNombre(identificador).getAmigo();
+		List<Usuario> respuesta = usuarioRepo.findByMail(identificador).getAmigo();
 		return new ResponseEntity<List<Usuario>>(respuesta,HttpStatus.OK);
 	}
 	
@@ -210,7 +210,7 @@ public class RestDemoController {
 	@GetMapping(value = "/listRequest")
 	public ResponseEntity<List<Usuario>> listRequest(@RequestHeader String identificador){
 		
-		List<Usuario> respuesta = usuarioRepo.findByNombre(identificador).getPeticion();
+		List<Usuario> respuesta = usuarioRepo.findByMail(identificador).getPeticion();
 		return new ResponseEntity<List<Usuario>>(respuesta,HttpStatus.OK);
 		
 	}
@@ -222,8 +222,8 @@ public class RestDemoController {
 	public ResponseEntity<Usuario> sendRequest(@RequestBody Usuario usuario,@RequestHeader String identificador){
 		
 		String nombreUsuario = usuario.getNombre();
-		Usuario destino = usuarioRepo.findByNombre(nombreUsuario);
-		Usuario tu = usuarioRepo.findByNombre(identificador);
+		Usuario destino = usuarioRepo.findByMail(nombreUsuario);
+		Usuario tu = usuarioRepo.findByMail(identificador);
 		System.out.println(identificador);
 		
 		
@@ -260,8 +260,8 @@ public class RestDemoController {
 	public ResponseEntity<Usuario> deleteFriend(@RequestBody Usuario usuario,@RequestHeader String identificador){
 		
 		String nombreUsuario = usuario.getNombre();
-		Usuario amigo = usuarioRepo.findByNombre(nombreUsuario);
-		Usuario tu = usuarioRepo.findByNombre(identificador);
+		Usuario amigo = usuarioRepo.findByMail(nombreUsuario);
+		Usuario tu = usuarioRepo.findByMail(identificador);
 		System.out.println(identificador);
 		
 		
@@ -280,7 +280,7 @@ public class RestDemoController {
 	@GetMapping(value = "/viewProfile")
 	public ResponseEntity<Usuario> viewProfile(@RequestHeader String identificador){
 		
-		Usuario u = usuarioRepo.findByNombre(identificador);
+		Usuario u = usuarioRepo.findByMail(identificador);
 		u.setNull();
 		return new ResponseEntity<Usuario>(u,HttpStatus.OK);
 	}
@@ -307,7 +307,7 @@ public class RestDemoController {
 		
 		
 		
-		Usuario u = usuarioRepo.findByNombre(identificador);
+		Usuario u = usuarioRepo.findByMail(identificador);
 		System.out.println(identificador+"--"+idFoto);
 		u.setFotPerf(idFoto);
 		usuarioRepo.save(u);
@@ -320,9 +320,9 @@ public class RestDemoController {
 	public ResponseEntity<Usuario> changeName(@RequestBody Usuario usuario,@RequestHeader String identificador){
 		
 		
-		Usuario u = usuarioRepo.findByNombre(identificador);
+		Usuario u = usuarioRepo.findByMail(identificador);
 		String nuevoNombre = usuario.getNombre();
-		if(usuarioRepo.findByNombre(nuevoNombre)==null) {
+		if(usuarioRepo.findByMail(nuevoNombre)==null) {
 			u.setNombre(usuario.getNombre());
 			usuarioRepo.save(u);
 			return new ResponseEntity<Usuario>(HttpStatus.OK);
