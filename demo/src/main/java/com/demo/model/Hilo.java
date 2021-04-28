@@ -54,9 +54,6 @@ public class Hilo {
 		this.respuestas_.add(respuesta);
 	}
 	
-	public List<Respuesta> getRespuestas() {
-		return this.respuestas_;
-	}
 	
 	public Integer getId_() {
 		return id_;

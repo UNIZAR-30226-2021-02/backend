@@ -1,6 +1,8 @@
 package com.demo.model;
 
 
+import java.nio.charset.StandardCharsets;
+
 import javax.persistence.Column;
 
 import javax.persistence.Entity;
@@ -51,6 +53,11 @@ public class Respuesta {
 
 	public void setContenido_(byte[] contenido_) {
 		this.contenido_ = contenido_;
+		if(this.esDibujo == false) {
+			this.frase = new String(contenido_,StandardCharsets.UTF_8);
+		}else {
+			this.frase=null;
+		}
 	}
 
 	public void setHilo(Hilo h) {
@@ -71,6 +78,8 @@ public class Respuesta {
 	
 	private boolean esDibujo;
 	
+	private String frase;
+	
 	public boolean isEsDibujo() {
 		return esDibujo;
 	}
@@ -83,9 +92,23 @@ public class Respuesta {
 		this.autor_ = autor;
 		this.contenido_ = contenido;
 		this.esDibujo = dibujo;
+		if(dibujo == false) {
+			this.frase = new String(contenido,StandardCharsets.UTF_8);
+		}else {
+			this.frase=null;
+		}
 	}
 	public Respuesta (){
 	}
+
+	public String getFrase() {
+		return frase;
+	}
+
+	public void setFrase(String frase) {
+		this.frase = frase;
+	}
+
 
 	
 }
