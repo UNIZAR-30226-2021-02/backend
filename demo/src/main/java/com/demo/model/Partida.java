@@ -1,5 +1,6 @@
 package com.demo.model;
 
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -83,7 +84,7 @@ public class Partida {
 	}
 	
 	public Hilo addRespuesta(Usuario inicial, Respuesta respuesta) {
-		String idUser= inicial.getNombre();
+		String idUser= inicial.getMail();
 		int i = getHiloJugador(idUser);
 		if(i==-1) {
 			//El jugador no pertenece a la partida (no tiene hilo)
@@ -104,7 +105,7 @@ public class Partida {
 	
 	
 	public Hilo getHiloRespuesta(Usuario inicial) {
-		String idUser= inicial.getNombre();
+		String idUser= inicial.getMail();
 		int i = getHiloJugador(idUser);
 		if(i==-1) {
 			//El jugador no pertenece a la partida (no tiene hilo)
@@ -124,7 +125,7 @@ public class Partida {
 	
 	public int getHiloJugador(String jugador) {
 		for(int i=0;i<nJugadores_;i++) {
-			if(hilos_[i].getJugadorInicial_().getNombre().equals(jugador)) {
+			if(hilos_[i].getJugadorInicial_().getMail().equals(jugador)) {
 				System.out.println("Hilo inicial:"+i);
 				return i;
 				
@@ -176,7 +177,7 @@ public class Partida {
 	
 	public boolean isUser(String usuario) {
 		for (Usuario u : jugadores_) {
-			if(u.getNombre().equals(usuario)) {
+			if(u.getMail().equals(usuario)) {
 				return true;
 			}
 		}
@@ -191,7 +192,30 @@ public class Partida {
 	public void setnJugadores_(int nJugadores_) {
 		this.nJugadores_ = nJugadores_;
 	}
-	public Hilo[] getHilos_() {
+	
+	public Hilo[] gethilos_() {
+		return hilos_;
+	}
+	
+	public Hilo[] mostrarTodo() {
+		List<Respuesta> respuestas = new ArrayList<Respuesta>();
+		Usuario u = new Usuario();;
+		for (Hilo h : hilos_) {
+			h.setPartida_(null);
+			h.setJugadorInicial_(null);
+			respuestas = h.getRespuestas_();
+			for(Respuesta r : respuestas) {
+				/*
+				u=r.getAutor_();
+				u.setNull();
+				r.setAutor_(u);
+				*/
+				r.setAutor_(null);
+				if(r.isEsDibujo()) {
+					r.setContenido_(null);
+				}
+			}
+		}
 		return hilos_;
 	}
 	public String getNombre() {

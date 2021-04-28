@@ -38,7 +38,7 @@ public class GameService {
 
 	
 	public Partida crearPartida(String identificador,Partida partidaPar) {
-		Usuario host = usuarioRepo.findByNombre(identificador);
+		Usuario host = usuarioRepo.findByMail(identificador);
 		Partida partida = new Partida(host,partidaPar.getNombre());
 		partidaRepo.save(partida);
 		//System.out.println(partida.getHost_());
@@ -51,9 +51,9 @@ public class GameService {
 			if(partida != null && partida.getEstado_().equals(DemoApplication.ESPERANDO)) {
 				if(partida.getnJugadores_()<DemoApplication.MAX_JUGADORES) {
 					if(! partida.isUser(identificador)) {
-						partida.addJugador(usuarioRepo.findByNombre(identificador));
-						
-						Usuario u = usuarioRepo.findByNombre(identificador);
+						Usuario u = usuarioRepo.findByMail(identificador);
+						partida.addJugador(u);
+											
 						
 						Invitaciones i = invitacionesRepo.findByPartidaAndInvitado(partida,u);
 						System.out.println(i);
@@ -84,7 +84,7 @@ public class GameService {
 	}
 
 	public List<Partida> getPartidasJugador(String identificador){
-		Usuario u = usuarioRepo.findByNombre(identificador);
+		Usuario u = usuarioRepo.findByMail(identificador);
 		List<Partida> respuesta = new ArrayList<Partida>();
 		for (Partida p : u.getPartidas()) {
 			p.setNull();
@@ -96,8 +96,8 @@ public class GameService {
 	
 	public boolean inviteGame(String idInvitado,String identificador, int idPartida) {
 		
-		Usuario u = usuarioRepo.findByNombre(idInvitado);
-		Usuario invitador = usuarioRepo.findByNombre(identificador);
+		Usuario u = usuarioRepo.findByMail(idInvitado);
+		Usuario invitador = usuarioRepo.findByMail(identificador);
 		Partida p = partidaRepo.findById(idPartida);
 		
 		if(p!=null&&u!=null&&invitador!=null) {
@@ -124,7 +124,7 @@ public class GameService {
 	
 	public void denyInvite(String identificador,int idPartida) {
 		
-		Usuario u = usuarioRepo.findByNombre(identificador);
+		Usuario u = usuarioRepo.findByMail(identificador);
 		
 		Partida p = partidaRepo.findById(idPartida);
 		
@@ -137,7 +137,7 @@ public class GameService {
 	}
 	
 	public List<Invitaciones> getInvitacionesJugador (String identificador){
-		Usuario u = usuarioRepo.findByNombre(identificador);
+		Usuario u = usuarioRepo.findByMail(identificador);
 		List<Invitaciones> lista = invitacionesRepo.findByInvitado(u);
 		List<Invitaciones> respuesta = new ArrayList<>();
 		if(lista==null) {
@@ -154,7 +154,7 @@ public class GameService {
 		return respuesta;
 	}
 	
-	public List<Usuario> listPlayers(String identificador,int idPartida){
+	public List<Usuario> listPlayers(int idPartida){
 		
 		
 		Partida p = partidaRepo.findById(idPartida);
@@ -172,11 +172,11 @@ public class GameService {
 	public List<Usuario> listPlayersGame(int idPartida, String identificador){
 		
 		Partida p = partidaRepo.findById(idPartida);
-		Usuario u = usuarioRepo.findByNombre(identificador);
+		Usuario u = usuarioRepo.findByMail(identificador);
 		List<Usuario> amigos = u.getAmigo();
 		List<Usuario> respuesta = new ArrayList<>();
 		for(Usuario a: amigos) {
-			if(!p.isUser(a.getNombre())) {
+			if(!p.isUser(a.getMail())) {
 				a.setNull();
 				respuesta.add(a);
 			}
@@ -189,7 +189,7 @@ public class GameService {
 	public int startGame(String identificador, int idPartida) {
 		// TODO Auto-generated method stub
 		Partida p = partidaRepo.findById(idPartida);
-		if(p.getHost_().getNombre().equals(identificador)) {
+		if(p.getHost_().getMail().equals(identificador)) {
 			//Eres el host
 			if(p.getEstado_().equals(DemoApplication.ESPERANDO)) {
 				//Esta sin empezar
@@ -213,7 +213,7 @@ public class GameService {
 		
 		System.out.println(contenido);
 		Partida p=partidaRepo.findById(idPartida);
-		Usuario u = usuarioRepo.findByNombre(autor);
+		Usuario u = usuarioRepo.findByMail(autor);
 		Respuesta r = new Respuesta(u,contenido,dibujo);
 		Hilo h = p.addRespuesta(u, r);
 		if(h==null) {
@@ -236,15 +236,18 @@ public class GameService {
 		RespuestaFront respuesta;
 		Partida p = partidaRepo.findById(idPartida);
 		System.out.println(p.getTurno());
-		if(p.turnoJugado(identificador)) {
-			//Ya has jugado este turno
-			return new RespuestaFront(-2,false,null);
+		if (p.getEstado_().equals(DemoApplication.VOTANDO)) {
+			//La fase de turnos ha acabado
+			return new RespuestaFront(-3,false,null);
 		}else if (p.getTurno()==0) {
 			System.out.println("Turno 0");
 			//Primer turno
 			return new RespuestaFront(-1,false,null);
+		}else if(p.turnoJugado(identificador)) {
+			//Ya has jugado este turno
+			return new RespuestaFront(-2,false,null);
 		}else {
-		Usuario u = usuarioRepo.findByNombre(identificador);
+		Usuario u = usuarioRepo.findByMail(identificador);
 		Hilo h = p.getHiloRespuesta(u);
 		List <Respuesta> listaR = h.getRespuestas_();
 		Respuesta r = listaR.get(listaR.size()-1); 
@@ -254,11 +257,15 @@ public class GameService {
 			 respuesta= new RespuestaFront(r.getId_(),true,null);
 		 }
 		 else {
-			 String contenido = new String(r.getContenido_(),StandardCharsets.UTF_8);
-			 respuesta= new RespuestaFront(r.getId_(),false,contenido);
+			 respuesta= new RespuestaFront(r.getId_(),false,r.getFrase());
 		 }
 		 
 		return respuesta;
 		}
+	}
+
+	public Hilo[] getAllRespuestas(int idPartida) {
+		Partida p = partidaRepo.findById(idPartida);
+		return p.mostrarTodo();
 	}
 }

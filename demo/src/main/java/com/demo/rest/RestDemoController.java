@@ -29,6 +29,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.demo.controller.AuthController;
+import com.demo.model.Hilo;
 import com.demo.model.Invitaciones;
 import com.demo.model.Partida;
 import com.demo.model.Respuesta;
@@ -82,7 +83,7 @@ public class RestDemoController {
 	public ResponseEntity<Usuario> register(@RequestBody Usuario usuario) {
 		usuario.printUser();
 		Usuario u = new Usuario();
-		String nombreUsuario = usuario.getMail();
+		String nombreUsuario = usuario.getNombre();
 		String mail = usuario.getMail();
 		System.out.println(mail);
 		if(usuarioRepo.findByMail(mail)==null&&usuarioRepo.findByNombre(nombreUsuario)==null) {
@@ -96,7 +97,7 @@ public class RestDemoController {
 			usuarioRepo.save(u);
 			System.out.println("Como el usuario no existe, se crea");
 			
-			String token = jwt.getJWTToken(nombreUsuario);
+			String token = jwt.getJWTToken(mail);
 			u.setToken(token);
 			return new ResponseEntity<Usuario>(u,HttpStatus.CREATED);
 		
@@ -125,11 +126,11 @@ public class RestDemoController {
 				System.out.println(usuario.getPassword());
 				System.out.println("---");
 				
-						String token = jwt.getJWTToken(u.getNombre());
+						String token = jwt.getJWTToken(u.getMail());
 
 						u.setToken(token);
 						u.setNull();
-						tokenRepo.addToken(u.getNombre(), token);
+						tokenRepo.addToken(u.getMail(), token);
 						tokenRepo.printTokens();
 						System.out.println("----------------");
 						return new ResponseEntity<Usuario>(u,HttpStatus.OK);
@@ -206,7 +207,7 @@ public class RestDemoController {
 		return new ResponseEntity<List<Usuario>>(respuesta,HttpStatus.OK);
 	}
 	
-	@CrossOrigin(origins = "http://localhost:8081")
+	
 	@GetMapping(value = "/listRequest")
 	public ResponseEntity<List<Usuario>> listRequest(@RequestHeader String identificador){
 		
@@ -221,7 +222,7 @@ public class RestDemoController {
 	@PostMapping(value = "/sendRequest")
 	public ResponseEntity<Usuario> sendRequest(@RequestBody Usuario usuario,@RequestHeader String identificador){
 		
-		String nombreUsuario = usuario.getNombre();
+		String nombreUsuario = usuario.getMail();
 		Usuario destino = usuarioRepo.findByMail(nombreUsuario);
 		Usuario tu = usuarioRepo.findByMail(identificador);
 		System.out.println(identificador);
@@ -259,7 +260,7 @@ public class RestDemoController {
 	@PostMapping(value = "/deleteFriend")
 	public ResponseEntity<Usuario> deleteFriend(@RequestBody Usuario usuario,@RequestHeader String identificador){
 		
-		String nombreUsuario = usuario.getNombre();
+		String nombreUsuario = usuario.getMail();
 		Usuario amigo = usuarioRepo.findByMail(nombreUsuario);
 		Usuario tu = usuarioRepo.findByMail(identificador);
 		System.out.println(identificador);
@@ -322,8 +323,8 @@ public class RestDemoController {
 		
 		Usuario u = usuarioRepo.findByMail(identificador);
 		String nuevoNombre = usuario.getNombre();
-		if(usuarioRepo.findByMail(nuevoNombre)==null) {
-			u.setNombre(usuario.getNombre());
+		if(usuarioRepo.findByNombre(nuevoNombre)==null && nuevoNombre != null) {
+			u.setNombre(nuevoNombre);
 			usuarioRepo.save(u);
 			return new ResponseEntity<Usuario>(HttpStatus.OK);
 		}
@@ -367,9 +368,9 @@ public class RestDemoController {
 	}
 	
 	@GetMapping(value = "/listPlayers")
-	public ResponseEntity<List<Usuario>> listPlayers(@RequestHeader String identificador,@RequestHeader int idPartida){
+	public ResponseEntity<List<Usuario>> listPlayers(@RequestHeader int idPartida){
 		
-		List<Usuario> respuesta = game.listPlayers(identificador,idPartida);
+		List<Usuario> respuesta = game.listPlayers(idPartida);
 		return new ResponseEntity<List<Usuario>>(respuesta,HttpStatus.OK);
 	}
 	
@@ -424,7 +425,7 @@ public class RestDemoController {
 	
 	@PostMapping(value = "/addImage")
 	public ResponseEntity<String> addRespuesta(@RequestHeader int idPartida,@RequestHeader String autor,@RequestBody MultipartFile contenido) throws IOException{
-		System.out.println("LLEGAMOS A AÑADIR RESPUESTA:"+ contenido.toString());		
+		//System.out.println("LLEGAMOS A AÑADIR RESPUESTA:"+ contenido.toString());		
 		if(game.addRespuesta(idPartida, autor, contenido.getBytes(),true)) {
 			return new ResponseEntity<String>(HttpStatus.OK);
 		}else {
@@ -440,28 +441,26 @@ public class RestDemoController {
 		
 		byte[]image = game.getImageResponse(idFoto);
 		
-
 		return new ResponseEntity<byte[]>(image,HttpStatus.OK);
-		
-		
 	}
+	
 	
 	@GetMapping(value = "/returnResponse")
 	public ResponseEntity<RespuestaFront> getResponse(@RequestHeader String identificador, @RequestHeader int idPartida){
 		
 		RespuestaFront response = game.getResponse(identificador,idPartida);
-		if(response.getId()==-1) {
-			//Turno 0
-			return new ResponseEntity<RespuestaFront>(HttpStatus.CONFLICT); //409
-		}else if(response.getId()==-2) {
-			//Ya jugaste
-			return new ResponseEntity<RespuestaFront>(HttpStatus.EXPECTATION_FAILED); //417
-		}
 		System.out.println(response.getId()+"---"+response.getContenido()+"---"+response.isEsDibujo());
 		System.out.println("PUES LLEGAMOS A DEVOLVER");
-		return new ResponseEntity<RespuestaFront>(response,HttpStatus.OK);
+		return new ResponseEntity<RespuestaFront>(response,HttpStatus.OK);	
+	}
+	
+	
+	@GetMapping(value = "/returnAllResponses")
+	public ResponseEntity<Hilo[]> getAllResponses(@RequestHeader int idPartida){
 		
+		Hilo[] respuesta = game.getAllRespuestas(idPartida);
 		
+		return new ResponseEntity<Hilo[]>(respuesta,HttpStatus.OK);	
 	}
 	
 	

@@ -109,6 +109,7 @@ public class Usuario {
 				for(Usuario a : peticion) {
 					a.printUser();
 					Usuario u = new Usuario();
+					u.setMail(a.getMail());
 					u.setNombre(a.getNombre());
 					u.setPuntos(a.getpGracioso(),a.getpListo(),a.getpDibujo(),a.getEstrellas(),a.getMonedas());
 					u.setFotPerf(a.getFotPerf());
@@ -236,6 +237,7 @@ public class Usuario {
 		if(this.amigo != null) {
 			for(Usuario a : amigo) {
 				Usuario u = new Usuario();
+				u.setMail(a.getMail());
 				u.setNombre(a.getNombre());
 				u.setPuntos(a.getpGracioso(),a.getpListo(),a.getpDibujo(),a.getEstrellas(),a.getMonedas());
 				
