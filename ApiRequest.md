@@ -530,23 +530,7 @@
       - 503: la partida ya está empezada
       - 417: no eres el host y por tanto no tienes permiso para iniciarla
 
-  - Enviar respuesta (dibujo o frase):
-    - Método: POST
-    - URL: /api/addRespuesta
-    - Permisos: TOKEN
-    - Petición: 
-      HEADER:
-        key="idPartida" y value="id"
-        key="autor" y value="tu_nombre"
-      BODY: raw + JSON donde pone Text
-        {
-        "contenido": [0,1,0,...] //Sea frase o dibujo es un array of bytes
-        }
-    -Status code:
-      - 200: se ha registrado la respuesta correctamente
-      - 417: el jugador no pertenece a la partida o ya ha jugado en ese turno (debe esperar a a que los demas jueguen)
-      
-      
+  
 -----------------
   VERSION 1.4.0
 -----------------
