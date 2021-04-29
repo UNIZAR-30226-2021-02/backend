@@ -14,7 +14,6 @@ import com.demo.model.Hilo;
 import com.demo.model.Invitaciones;
 import com.demo.model.Partida;
 import com.demo.model.Respuesta;
-import com.demo.model.RespuestaFront;
 import com.demo.model.Usuario;
 import com.demo.repository.*;
 
@@ -209,12 +208,12 @@ public class GameService {
 		}
 	}
 	
-	public boolean addRespuesta(int idPartida, String autor,byte[] contenido,boolean dibujo){
-		
+	public boolean addRespuesta(int idPartida, String autor,byte[] contenido,boolean dibujo, String frase){
+		Respuesta r;
 		System.out.println(contenido);
 		Partida p=partidaRepo.findById(idPartida);
 		Usuario u = usuarioRepo.findByMail(autor);
-		Respuesta r = new Respuesta(u,contenido,dibujo);
+		r= new Respuesta(u,contenido,dibujo,frase);
 		Hilo h = p.addRespuesta(u, r);
 		if(h==null) {
 			return false;
@@ -228,39 +227,32 @@ public class GameService {
 	}
 	
 	public byte[] getImageResponse(int idFoto) {
-		return respuestaRepo.findById(idFoto).getContenido_();
+		return respuestaRepo.findById(idFoto).getDibujo();
 	}
 	
 	
-	public RespuestaFront getResponse(String identificador, int idPartida) {
-		RespuestaFront respuesta;
+	public Respuesta getResponse(String identificador, int idPartida) {
 		Partida p = partidaRepo.findById(idPartida);
 		System.out.println(p.getTurno());
 		if (p.getEstado_().equals(DemoApplication.VOTANDO)) {
 			//La fase de turnos ha acabado
-			return new RespuestaFront(-3,false,null);
-		}else if (p.getTurno()==0) {
+			return new Respuesta(-3);
+		}else if (p.getTurno()==0 && !p.turnoJugado(identificador)) {
 			System.out.println("Turno 0");
 			//Primer turno
-			return new RespuestaFront(-1,false,null);
+			return new Respuesta(-1);
 		}else if(p.turnoJugado(identificador)) {
 			//Ya has jugado este turno
-			return new RespuestaFront(-2,false,null);
+			return new Respuesta(-2);
 		}else {
 		Usuario u = usuarioRepo.findByMail(identificador);
 		Hilo h = p.getHiloRespuesta(u);
 		List <Respuesta> listaR = h.getRespuestas_();
 		Respuesta r = listaR.get(listaR.size()-1); 
-		boolean esDibujo = r.isEsDibujo();
-		System.out.println(r.getId_()+"---"+r.getContenido_()+"---"+r.isEsDibujo());
-		 if(esDibujo) {
-			 respuesta= new RespuestaFront(r.getId_(),true,null);
-		 }
-		 else {
-			 respuesta= new RespuestaFront(r.getId_(),false,r.getFrase());
-		 }
-		 
-		return respuesta;
+		//System.out.println(r.getId_()+"---"+"---"+r.isEsDibujo());
+		r.setDibujo(null); 
+		r.setAutor_(null);
+		return r;
 		}
 	}
 

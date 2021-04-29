@@ -162,6 +162,7 @@ public class Usuario {
 	 
 	public void setNull() {
 		this.amigo=null;
+		this.password=null;
 		this.peticion=null;
 		this.partidas=null;
 		this.partidasHost=null;

@@ -64,6 +64,7 @@ public class Partida {
 	private Integer turno_;
 	
 	
+	
 	public List<Usuario> getJugadores_() {
 		return jugadores_;
 	}
@@ -199,21 +200,16 @@ public class Partida {
 	
 	public Hilo[] mostrarTodo() {
 		List<Respuesta> respuestas = new ArrayList<Respuesta>();
-		Usuario u = new Usuario();;
+		Usuario u = new Usuario();
 		for (Hilo h : hilos_) {
 			h.setPartida_(null);
 			h.setJugadorInicial_(null);
 			respuestas = h.getRespuestas_();
 			for(Respuesta r : respuestas) {
-				/*
-				u=r.getAutor_();
+				u = r.getAutor_();
 				u.setNull();
 				r.setAutor_(u);
-				*/
-				r.setAutor_(null);
-				if(r.isEsDibujo()) {
-					r.setContenido_(null);
-				}
+				r.setDibujo(null);
 			}
 		}
 		return hilos_;
