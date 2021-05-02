@@ -65,13 +65,15 @@ public class RestDemoController {
 	@Autowired
 	private GameService game;
 
-	
+
+	//YA NO SE USA
 	@GetMapping(value = "/all")
 	public List<Usuario> listar(){
 		return usuarioRepo.findAll();
 	}
 	
-	
+
+	//YA NO SE USA
 	@PostMapping(value="/prueba")
 	public void probar() {
 		
@@ -150,7 +152,7 @@ public class RestDemoController {
 	}
 	
 	
-	
+	//YA NO SE USA
 	@GetMapping(value = "/returnImage", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
 	public ResponseEntity<byte[]> getImage() throws IOException{
 		InputStream in = getClass().getResourceAsStream("prueba.jpg");
