@@ -47,17 +47,12 @@ public class Respuesta {
 	}
 
 
-	public byte[] getContenido_() {
-		return contenido_;
+	public byte[] getDibujo() {
+		return dibujo;
 	}
 
-	public void setContenido_(byte[] contenido_) {
-		this.contenido_ = contenido_;
-		if(this.esDibujo == false) {
-			this.frase = new String(contenido_,StandardCharsets.UTF_8);
-		}else {
-			this.frase=null;
-		}
+	public void setDibujo(byte[] contenido_) {
+		this.dibujo = contenido_;
 	}
 
 	public void setHilo(Hilo h) {
@@ -73,8 +68,8 @@ public class Respuesta {
 	
 	@Lob
 	@Type(type="org.hibernate.type.BinaryType")
-	@Column(name="contenido")
-	private byte[] contenido_;
+	@Column(name="dibujo")
+	private byte[] dibujo;
 	
 	private boolean esDibujo;
 	
@@ -88,17 +83,15 @@ public class Respuesta {
 		this.esDibujo = esDibujo;
 	}
 
-	public Respuesta (Usuario autor, byte[] contenido,boolean dibujo){
+	public Respuesta (Usuario autor, byte[] dibujo,boolean esDibujo,String frase){
 		this.autor_ = autor;
-		this.contenido_ = contenido;
-		this.esDibujo = dibujo;
-		if(dibujo == false) {
-			this.frase = new String(contenido,StandardCharsets.UTF_8);
-		}else {
-			this.frase=null;
-		}
+		this.dibujo = dibujo;
+		this.esDibujo = esDibujo;
+		this.frase=frase;
 	}
-	public Respuesta (){
+	
+	public Respuesta (int id) {
+		this.id_ = id;
 	}
 
 	public String getFrase() {
@@ -108,6 +101,8 @@ public class Respuesta {
 	public void setFrase(String frase) {
 		this.frase = frase;
 	}
+	
+	public Respuesta() {};
 
 
 	

@@ -33,7 +33,6 @@ import com.demo.model.Hilo;
 import com.demo.model.Invitaciones;
 import com.demo.model.Partida;
 import com.demo.model.Respuesta;
-import com.demo.model.RespuestaFront;
 import com.demo.model.Usuario;
 
 import com.demo.repository.TokenRepo;
@@ -66,13 +65,15 @@ public class RestDemoController {
 	@Autowired
 	private GameService game;
 
-	
+
+	//YA NO SE USA
 	@GetMapping(value = "/all")
 	public List<Usuario> listar(){
 		return usuarioRepo.findAll();
 	}
 	
-	
+
+	//YA NO SE USA
 	@PostMapping(value="/prueba")
 	public void probar() {
 		
@@ -151,7 +152,7 @@ public class RestDemoController {
 	}
 	
 	
-	
+	//YA NO SE USA
 	@GetMapping(value = "/returnImage", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
 	public ResponseEntity<byte[]> getImage() throws IOException{
 		InputStream in = getClass().getResourceAsStream("prueba.jpg");
@@ -415,7 +416,7 @@ public class RestDemoController {
 	@PostMapping(value = "/addText")
 	public ResponseEntity<String> addRespuesta(@RequestHeader int idPartida,@RequestHeader String autor,@RequestBody String contenido){
 				
-		if(game.addRespuesta(idPartida, autor, contenido.getBytes(),false)) {
+		if(game.addRespuesta(idPartida, autor,null,false,contenido)) {
 			return new ResponseEntity<String>(HttpStatus.OK);
 		}else {
 			return new ResponseEntity<String>(HttpStatus.EXPECTATION_FAILED);
@@ -426,7 +427,7 @@ public class RestDemoController {
 	@PostMapping(value = "/addImage")
 	public ResponseEntity<String> addRespuesta(@RequestHeader int idPartida,@RequestHeader String autor,@RequestBody MultipartFile contenido) throws IOException{
 		//System.out.println("LLEGAMOS A AÑADIR RESPUESTA:"+ contenido.toString());		
-		if(game.addRespuesta(idPartida, autor, contenido.getBytes(),true)) {
+		if(game.addRespuesta(idPartida, autor, contenido.getBytes(),true,null)) {
 			return new ResponseEntity<String>(HttpStatus.OK);
 		}else {
 			return new ResponseEntity<String>(HttpStatus.EXPECTATION_FAILED);
@@ -446,12 +447,11 @@ public class RestDemoController {
 	
 	
 	@GetMapping(value = "/returnResponse")
-	public ResponseEntity<RespuestaFront> getResponse(@RequestHeader String identificador, @RequestHeader int idPartida){
+	public ResponseEntity<Respuesta> getResponse(@RequestHeader String identificador, @RequestHeader int idPartida){
 		
-		RespuestaFront response = game.getResponse(identificador,idPartida);
-		System.out.println(response.getId()+"---"+response.getContenido()+"---"+response.isEsDibujo());
+		Respuesta response = game.getResponse(identificador,idPartida);
 		System.out.println("PUES LLEGAMOS A DEVOLVER");
-		return new ResponseEntity<RespuestaFront>(response,HttpStatus.OK);	
+		return new ResponseEntity<Respuesta>(response,HttpStatus.OK);	
 	}
 	
 	
