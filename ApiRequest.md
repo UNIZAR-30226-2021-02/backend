@@ -611,12 +611,13 @@
     }
 
     EXPLICACIÓN: ahora devolvemos siempre 200 y una respuesta, pero hay que mirar los campos para saber qué está pasando.
+    
       -id: codifica el caso
           Error/caso especial:
-              -3: partida empezada
-              -2: ya has jugado el turno
-              -1: es el primer turno y no hay respuesta previa (toca /addText)
-          Caso normal: contiene el identifiacdor de la respuesta (será positivo y os sirve para luego pedir la foto)
+        -3: partida acabada
+        -2: ya has jugado el turno
+        -1: es el primer turno y no hay respuesta previa (toca /addText)
+        -Caso normal: contiene el identifiacdor de la respuesta (será positivo y os sirve para luego pedir la foto)
       -autor: os lo devolvemos siempre a null (no os interesa xd)
       -esDibujo: es un boleano que indica si la id de la respuesta se corresponde con un dibujo/foto o no
       -frase: valdrá null si esDibujo es true, y contendrá la frase en cuestión cuando la respuesta no sea un dibujo 
