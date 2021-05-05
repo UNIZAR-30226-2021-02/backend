@@ -32,6 +32,7 @@ import com.demo.controller.AuthController;
 import com.demo.model.Hilo;
 import com.demo.model.Invitaciones;
 import com.demo.model.Partida;
+import com.demo.model.Puntos;
 import com.demo.model.Respuesta;
 import com.demo.model.Usuario;
 
@@ -463,5 +464,54 @@ public class RestDemoController {
 		return new ResponseEntity<Hilo[]>(respuesta,HttpStatus.OK);	
 	}
 	
+	@GetMapping(value = "/votarGracioso")
+	public ResponseEntity<String> votarGracioso(@RequestHeader int idPartida,@RequestHeader String identificador,@RequestHeader String votado){
+		if(game.votarGracioso(idPartida,identificador,votado)) {
+			return new ResponseEntity<String>(HttpStatus.OK);
+		}else {
+			return new ResponseEntity<String>(HttpStatus.EXPECTATION_FAILED);
+		}
+	}
+	
+	@GetMapping(value = "/votarListo")
+	public ResponseEntity<String> votarListo(@RequestHeader int idPartida,@RequestHeader String identificador,@RequestHeader String votado){
+		if(game.votarListo(idPartida,identificador,votado)) {
+			return new ResponseEntity<String>(HttpStatus.OK);
+		}else {
+			return new ResponseEntity<String>(HttpStatus.EXPECTATION_FAILED);
+		}
+	}
+	
+	@GetMapping(value = "/votarDibujo")
+	public ResponseEntity<String> votarDibujo(@RequestHeader int idPartida,@RequestHeader String identificador,@RequestHeader String votado){
+		if(game.votarDibujo(idPartida,identificador,votado)) {
+			return new ResponseEntity<String>(HttpStatus.OK);
+		}else {
+			return new ResponseEntity<String>(HttpStatus.EXPECTATION_FAILED);
+		}
+	}
+	
+	@GetMapping(value = "/puntosJugador")
+	public ResponseEntity<Puntos> puntosJugador(@RequestHeader int idPartida,@RequestHeader String identificador){
+		Puntos p = game.puntosJugador(idPartida,identificador);
+		System.out.println(p.getpListo_());
+		return new ResponseEntity<Puntos>(p,HttpStatus.OK);
+	}
+	
+	@GetMapping(value = "/puntosPartida")
+	public ResponseEntity<List<Puntos>> puntosPartida(@RequestHeader int idPartida){
+		List<Puntos> p = game.puntosPartida(idPartida);
+		if(p==null) {
+			return new ResponseEntity<List<Puntos>>(HttpStatus.EXPECTATION_FAILED);
+		}
+		return new ResponseEntity<List<Puntos>>(p,HttpStatus.OK);
+	}
+	
+	@GetMapping(value = "/resetVotos")
+	public ResponseEntity<String> resetVotos(@RequestHeader int idPartida){
+		game.resetVotos(idPartida);
+		return new ResponseEntity<String>(HttpStatus.OK);
+	}
+
 	
 }

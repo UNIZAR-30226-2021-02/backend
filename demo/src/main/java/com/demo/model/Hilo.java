@@ -34,7 +34,7 @@ public class Hilo {
 	private Partida partida_;
 	
 	public Hilo (Usuario inicial,Partida p){
-		this.partida_=p; //BASURA, PERMITIR PARTIDA_ = NULL (NO LA VOY A USAR)
+		this.partida_=p; 
 		this.jugadorInicial_ = inicial;
 		this.respuestas_ = new ArrayList<Respuesta>(); 
 	}

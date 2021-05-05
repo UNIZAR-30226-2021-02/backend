@@ -162,7 +162,6 @@ public class Partida {
 		this.host_.setNull();
 		this.hilos_ = null;
 		this.jugadores_ = null;
-		
 	}
 	
 	public void addJugador(Usuario jugador) {
@@ -265,5 +264,16 @@ public class Partida {
 		}else {
 			return false;
 		}
+	}
+	
+	public void votarGracioso(String id,int cantidad) {
+		
+		
+	}
+	public void votarListo(String id,int cantidad) {
+		
+	}
+	public void votarDibujo(String id,int cantidad) {
+	
 	}
 }

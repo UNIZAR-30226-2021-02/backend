@@ -260,8 +260,16 @@ public class Usuario {
 		this.pDibujo = pDibujar;
 		this.estrellas = estrellas;
 		this.monedas = monedas;
-		
-		
+	}
+	
+	public void votarGracioso(int cantidad) {
+		this.pGracioso = pGracioso+cantidad;
+	}
+	public void votarListo(int cantidad) {
+		this.pListo = pGracioso+cantidad;
+	}
+	public void votarDibujo(int cantidad) {
+		this.pDibujo = pGracioso+cantidad;
 	}
 
 	public void setAmigo(Usuario amigo) {

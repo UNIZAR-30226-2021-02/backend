@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import com.demo.model.Hilo;
 import com.demo.model.Invitaciones;
 import com.demo.model.Partida;
+import com.demo.model.Puntos;
 import com.demo.model.Respuesta;
 import com.demo.model.Usuario;
 import com.demo.repository.*;
@@ -33,6 +34,8 @@ public class GameService {
 	private RespuestaRepo respuestaRepo;
 	@Autowired
 	private InvitacionesRepo invitacionesRepo;
+	@Autowired
+	private PuntosRepo puntosRepo;
 	
 
 	
@@ -194,6 +197,7 @@ public class GameService {
 				//Esta sin empezar
 				p.empezarPartida();
 				partidaRepo.save(p);
+				//puntosRepo.ini(p);
 				invitacionesRepo.deleteAll(invitacionesRepo.findByPartida(p)); //Eliminamos invitaciones pendientes
 				//Notificar a todos de que ha empezado 
 				return 0;
@@ -214,6 +218,9 @@ public class GameService {
 		Partida p=partidaRepo.findById(idPartida);
 		Usuario u = usuarioRepo.findByMail(autor);
 		r= new Respuesta(u,contenido,dibujo,frase);
+		if((p.getTurno()%2==0 && dibujo) || (p.getTurno()%2==1 && !dibujo)) {
+			return false;
+		}
 		Hilo h = p.addRespuesta(u, r);
 		if(h==null) {
 			return false;
@@ -259,5 +266,48 @@ public class GameService {
 	public Hilo[] getAllRespuestas(int idPartida) {
 		Partida p = partidaRepo.findById(idPartida);
 		return p.mostrarTodo();
+	}
+
+	public boolean votarGracioso(int idPartida, String identificador, String votado) {
+		//Comprobar que no votes muchas veces(identificador)
+		Partida p = partidaRepo.findById(idPartida);
+		if (p.getEstado_().equals(DemoApplication.VOTANDO) && !puntosRepo.votadoGracioso(idPartida, identificador)) {
+			return puntosRepo.addPuntosGracioso(idPartida, votado,identificador);
+		}else {
+			return false;
+		}
+				
+	}
+
+	public boolean votarListo(int idPartida, String identificador, String votado) {
+		Partida p = partidaRepo.findById(idPartida);
+		if (p.getEstado_().equals(DemoApplication.VOTANDO) && !puntosRepo.votadoListo(idPartida, identificador)) {
+			return puntosRepo.addPuntosListo(idPartida, votado,identificador);
+		}else {
+			return false;
+		}
+	}
+
+	public boolean votarDibujo(int idPartida, String identificador, String votado) {
+		Partida p = partidaRepo.findById(idPartida);
+		if (p.getEstado_().equals(DemoApplication.VOTANDO) && !puntosRepo.votadoDibujo(idPartida, identificador)) {
+			return puntosRepo.addPuntosDibujo(idPartida, votado,identificador);
+		}else {
+			return false;
+		}
+	}
+
+	public Puntos puntosJugador(int idPartida, String identificador) {
+		return puntosRepo.getPuntosJugador(idPartida, identificador);	
+	}
+	
+	public List<Puntos> puntosPartida(int idPartida) {
+		//COMPROBAR QUE HAN VOTADO TODOS o AÑADIR CAMPO QUE LO INDIQUE
+		return puntosRepo.getPuntosPartida(idPartida);	
+	}
+	
+	public void resetVotos(int idPartida) {
+		Partida p = partidaRepo.findById(idPartida);
+		puntosRepo.ini(p);
 	}
 }
