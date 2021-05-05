@@ -302,8 +302,11 @@ public class GameService {
 	}
 	
 	public List<Puntos> puntosPartida(int idPartida) {
-		//COMPROBAR QUE HAN VOTADO TODOS o AÑADIR CAMPO QUE LO INDIQUE
-		return puntosRepo.getPuntosPartida(idPartida);	
+		if(puntosRepo.todosVotado(idPartida)) { //Si han votado todos
+			return puntosRepo.getPuntosPartida(idPartida);	
+		}else {
+			return null;
+		}
 	}
 	
 	public void resetVotos(int idPartida) {

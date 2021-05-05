@@ -501,10 +501,10 @@ public class RestDemoController {
 	@GetMapping(value = "/puntosPartida")
 	public ResponseEntity<List<Puntos>> puntosPartida(@RequestHeader int idPartida){
 		List<Puntos> p = game.puntosPartida(idPartida);
-		if(p==null) {
-			return new ResponseEntity<List<Puntos>>(HttpStatus.EXPECTATION_FAILED);
+		if(p!=null) {
+			return new ResponseEntity<List<Puntos>>(p,HttpStatus.OK);
 		}
-		return new ResponseEntity<List<Puntos>>(p,HttpStatus.OK);
+		return new ResponseEntity<List<Puntos>>(HttpStatus.EXPECTATION_FAILED);
 	}
 	
 	@GetMapping(value = "/resetVotos")
