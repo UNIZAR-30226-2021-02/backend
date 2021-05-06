@@ -79,9 +79,6 @@ public class Hilo {
 		this.jugadorInicial_ = jugadorInicial_;
 	}
 
-	public Usuario getjugadorInicial() {
-		return this.jugadorInicial_;
-	}
 	
 	public int getSize() {
 		return this.respuestas_.size();

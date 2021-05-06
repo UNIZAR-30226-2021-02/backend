@@ -272,7 +272,11 @@ public class GameService {
 		//Comprobar que no votes muchas veces(identificador)
 		Partida p = partidaRepo.findById(idPartida);
 		if (p.getEstado_().equals(DemoApplication.VOTANDO) && !puntosRepo.votadoGracioso(idPartida, identificador)) {
-			return puntosRepo.addPuntosGracioso(idPartida, votado,identificador);
+			boolean resultado=puntosRepo.addPuntosGracioso(idPartida, votado,identificador);
+			if(puntosRepo.todosVotado(idPartida)) {
+				//partidaRepo.deleteById(idPartida);
+			}
+			return resultado;
 		}else {
 			return false;
 		}
@@ -282,7 +286,14 @@ public class GameService {
 	public boolean votarListo(int idPartida, String identificador, String votado) {
 		Partida p = partidaRepo.findById(idPartida);
 		if (p.getEstado_().equals(DemoApplication.VOTANDO) && !puntosRepo.votadoListo(idPartida, identificador)) {
-			return puntosRepo.addPuntosListo(idPartida, votado,identificador);
+			boolean resultado=puntosRepo.addPuntosListo(idPartida, votado,identificador);
+			if(puntosRepo.todosVotado(idPartida)) {
+				System.out.println(p.getHost_());
+				if(p.getHost_() != null) {
+					//partidaRepo.delete(p);
+				}
+			}
+			return resultado;
 		}else {
 			return false;
 		}
@@ -291,7 +302,11 @@ public class GameService {
 	public boolean votarDibujo(int idPartida, String identificador, String votado) {
 		Partida p = partidaRepo.findById(idPartida);
 		if (p.getEstado_().equals(DemoApplication.VOTANDO) && !puntosRepo.votadoDibujo(idPartida, identificador)) {
-			return puntosRepo.addPuntosDibujo(idPartida, votado,identificador);
+			boolean resultado=puntosRepo.addPuntosDibujo(idPartida, votado,identificador);
+			if(puntosRepo.todosVotado(idPartida)) {
+				//partidaRepo.deleteById(idPartida);
+			}
+			return resultado;
 		}else {
 			return false;
 		}

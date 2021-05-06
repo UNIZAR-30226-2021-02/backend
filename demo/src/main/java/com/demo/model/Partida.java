@@ -50,7 +50,6 @@ public class Partida {
 
 	
 	@ManyToOne(fetch = FetchType.EAGER, optional = false)
-
 	private Usuario host_;
 	
 	private String estado_;  //esperando/puntuando/jugando

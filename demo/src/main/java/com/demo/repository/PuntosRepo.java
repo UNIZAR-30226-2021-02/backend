@@ -123,10 +123,12 @@ public class PuntosRepo {
 		for(Puntos p : puntos_) {
 			if(p.getIdPartida_()==idPartida) {
 				if(!p.votadoTodo()) {
+					System.out.println(p.votadoTodo());
 					return false;
 				}
 			}
-		}		
+		}
+		System.out.println("Toca funar");
 		return true;
 	}
 	

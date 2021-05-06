@@ -24,7 +24,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	@Autowired
 	private UserService userDetailsService;
 
-	    @Override
+	@Override
 	public void configure(HttpSecurity http) throws Exception {
 	       http.cors().and().csrf().disable()
 	       .addFilterAfter(new JWTAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class)
@@ -36,23 +36,23 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	       .antMatchers(HttpMethod.POST, "/api/login").permitAll()
 	       .antMatchers(HttpMethod.POST, "/api/register").permitAll()
 	       .antMatchers(HttpMethod.GET, "/api/returnImageProfile/*").permitAll()
-	       .antMatchers(HttpMethod.POST, "/api/addImage").permitAll()
+	       .antMatchers(HttpMethod.GET, "/api/returnImageResponse/*").permitAll()
 			.anyRequest().authenticated();
 	       
 	        
 	        
 	}
 	    
-	    
-	    @Override
-	    public void configure(WebSecurity web) throws Exception {
-	        web.ignoring().antMatchers("/v2/api-docs",
-	                                   "/configuration/ui",
-	                                   "/swagger-resources/**",
-	                                   "/configuration/security",
-	                                   "/swagger-ui.html",
-	                                   "/webjars/**");
-	    }
+    
+    @Override
+    public void configure(WebSecurity web) throws Exception {
+        web.ignoring().antMatchers("/v2/api-docs",
+                                   "/configuration/ui",
+                                   "/swagger-resources/**",
+                                   "/configuration/security",
+                                   "/swagger-ui.html",
+                                   "/webjars/**");
+    }
 	    
 	    
 
