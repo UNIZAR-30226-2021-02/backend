@@ -958,4 +958,29 @@ PD: me siento como el de riot cada vez que sacan parche, y ahora vamos con los p
    
     -Status code:
       - 200: se lista correctamente
+
+
+
+-----------------
+  VERSION 1.6.1
+-----------------
+
+- Se ha creado una petición para web para enviar el dibujo
+
+- Enviar imagen como respuesta:
+    - Método: POST
+    - URL: /api/addImage2
+    - Permisos: TOKEN
+    - Petición: 
+      HEADER:
+        key="idPartida" y value="id"
+        key="autor" y value="tu_mail"
+      
+      BODY:
+      contenido: Esto es el String que contiene la imagen.
+      
+    -Status code:
+      - 200: se añade correctamente
+      - 417: no se ha podido añadir porque ya has jugado tu turno o porque la partida ya está acabada
+
       
