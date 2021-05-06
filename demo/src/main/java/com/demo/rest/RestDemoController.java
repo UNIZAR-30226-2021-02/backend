@@ -35,6 +35,7 @@ import com.demo.controller.AuthController;
 import com.demo.model.Hilo;
 import com.demo.model.Invitaciones;
 import com.demo.model.Partida;
+import com.demo.model.Puntos;
 import com.demo.model.Respuesta;
 import com.demo.model.Usuario;
 
@@ -487,8 +488,7 @@ public class RestDemoController {
 		return new ResponseEntity<Hilo[]>(respuesta,HttpStatus.OK);	
 	}
 	
-<<<<<<< HEAD
-=======
+
 	@GetMapping(value = "/votarGracioso")
 	public ResponseEntity<String> votarGracioso(@RequestHeader int idPartida,@RequestHeader String identificador,@RequestHeader String votado){
 		if(game.votarGracioso(idPartida,identificador,votado)) {
@@ -538,6 +538,6 @@ public class RestDemoController {
 		return new ResponseEntity<String>(HttpStatus.OK);
 	}
 
->>>>>>> branch 'devFuncional' of https://github.com/UNIZAR-30226-2021-02/backend
+
 	
 }
