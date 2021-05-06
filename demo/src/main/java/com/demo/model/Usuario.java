@@ -195,7 +195,7 @@ public class Usuario {
 	 private List<Usuario> usuario;
 	 
 
-	 @OneToMany(mappedBy = "host_", fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+	 @OneToMany(mappedBy = "host_", fetch = FetchType.EAGER)
 
 	 private List<Partida> partidasHost;
 	 

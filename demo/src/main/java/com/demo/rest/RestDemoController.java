@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.StringTokenizer;
 
 import javax.annotation.PostConstruct;
 
@@ -27,6 +28,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.bind.annotation.RequestMethod;
+import java.io.ByteArrayInputStream;
+import java.util.Base64;
 
 import com.demo.controller.AuthController;
 import com.demo.model.Hilo;
@@ -436,7 +439,27 @@ public class RestDemoController {
 		
 	}
 	
+	@PostMapping(value = "/addImage2")
+	public ResponseEntity<String> addRespuesta2(@RequestHeader int idPartida,@RequestHeader String autor,@RequestBody String contenido) throws IOException{
+		//System.out.println("LLEGAMOS A AÑADIR RESPUESTA:"+ contenido.toString());		
+		String stringRecibido;
 
+		// tokenize the data
+		StringTokenizer st = new StringTokenizer(contenido,",");
+		st.nextToken(); //El primero no importa
+		String imageString = st.nextToken();
+		byte[] imageByte;
+		Base64.Decoder decoder = Base64.getDecoder();
+		imageByte = decoder.decode(imageString);
+		if(game.addRespuesta(idPartida, autor, imageByte,true,null)) {
+			return new ResponseEntity<String>(HttpStatus.OK);
+		}else {
+			return new ResponseEntity<String>(HttpStatus.EXPECTATION_FAILED);
+		}
+		
+	}
+	
+	
 	
 	@GetMapping(value = "/returnImageResponse/{idFoto}", produces = MediaType.IMAGE_PNG_VALUE)
 	public ResponseEntity<byte[]> getImageResponse(@PathVariable int idFoto){
@@ -464,5 +487,57 @@ public class RestDemoController {
 		return new ResponseEntity<Hilo[]>(respuesta,HttpStatus.OK);	
 	}
 	
+<<<<<<< HEAD
+=======
+	@GetMapping(value = "/votarGracioso")
+	public ResponseEntity<String> votarGracioso(@RequestHeader int idPartida,@RequestHeader String identificador,@RequestHeader String votado){
+		if(game.votarGracioso(idPartida,identificador,votado)) {
+			return new ResponseEntity<String>(HttpStatus.OK);
+		}else {
+			return new ResponseEntity<String>(HttpStatus.EXPECTATION_FAILED);
+		}
+	}
+	
+	@GetMapping(value = "/votarListo")
+	public ResponseEntity<String> votarListo(@RequestHeader int idPartida,@RequestHeader String identificador,@RequestHeader String votado){
+		if(game.votarListo(idPartida,identificador,votado)) {
+			return new ResponseEntity<String>(HttpStatus.OK);
+		}else {
+			return new ResponseEntity<String>(HttpStatus.EXPECTATION_FAILED);
+		}
+	}
+	
+	@GetMapping(value = "/votarDibujo")
+	public ResponseEntity<String> votarDibujo(@RequestHeader int idPartida,@RequestHeader String identificador,@RequestHeader String votado){
+		if(game.votarDibujo(idPartida,identificador,votado)) {
+			return new ResponseEntity<String>(HttpStatus.OK);
+		}else {
+			return new ResponseEntity<String>(HttpStatus.EXPECTATION_FAILED);
+		}
+	}
+	
+	@GetMapping(value = "/puntosJugador")
+	public ResponseEntity<Puntos> puntosJugador(@RequestHeader int idPartida,@RequestHeader String identificador){
+		Puntos p = game.puntosJugador(idPartida,identificador);
+		System.out.println(p.getpListo_());
+		return new ResponseEntity<Puntos>(p,HttpStatus.OK);
+	}
+	
+	@GetMapping(value = "/puntosPartida")
+	public ResponseEntity<List<Puntos>> puntosPartida(@RequestHeader int idPartida){
+		List<Puntos> p = game.puntosPartida(idPartida);
+		if(p!=null) {
+			return new ResponseEntity<List<Puntos>>(p,HttpStatus.OK);
+		}
+		return new ResponseEntity<List<Puntos>>(HttpStatus.EXPECTATION_FAILED);
+	}
+	
+	@GetMapping(value = "/resetVotos")
+	public ResponseEntity<String> resetVotos(@RequestHeader int idPartida){
+		game.resetVotos(idPartida);
+		return new ResponseEntity<String>(HttpStatus.OK);
+	}
+
+>>>>>>> branch 'devFuncional' of https://github.com/UNIZAR-30226-2021-02/backend
 	
 }

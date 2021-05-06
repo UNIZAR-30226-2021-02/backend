@@ -15,7 +15,6 @@ public class PuntosRepo {
 	private List<Puntos> puntos_ = new ArrayList<>();
 	
 	
-	
 	public boolean votadoGracioso(int idPartida, String identificador) {
 		for (Puntos p : puntos_) {
 			if(p.getIdPartida_()==idPartida && p.getIdUsuario_().equals(identificador)) {
@@ -119,5 +118,18 @@ public class PuntosRepo {
 			puntos_.add(puntos);
 		}
 	}
-
+	
+	public boolean todosVotado (int idPartida) {
+		for(Puntos p : puntos_) {
+			if(p.getIdPartida_()==idPartida) {
+				if(!p.votadoTodo()) {
+					System.out.println(p.votadoTodo());
+					return false;
+				}
+			}
+		}
+		System.out.println("Toca funar");
+		return true;
+	}
+	
 }
