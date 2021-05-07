@@ -21,7 +21,7 @@ public class Hilo {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Integer id_;
 	
-	@OneToMany(mappedBy = "hilo_", fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "hilo_", fetch = FetchType.EAGER,cascade = CascadeType.ALL)
 	private List<Respuesta> respuestas_;
 	
 	
@@ -33,9 +33,13 @@ public class Hilo {
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
 	private Partida partida_;
 	
-	public Hilo (Usuario inicial){
+	public Hilo (Usuario inicial,Partida p){
+		this.partida_=p; 
 		this.jugadorInicial_ = inicial;
 		this.respuestas_ = new ArrayList<Respuesta>(); 
+	}
+	public Hilo() {
+		
 	}
 	
 	public Partida getPartida_() {
@@ -50,9 +54,6 @@ public class Hilo {
 		this.respuestas_.add(respuesta);
 	}
 	
-	public List<Respuesta> getRespuestas() {
-		return this.respuestas_;
-	}
 	
 	public Integer getId_() {
 		return id_;
@@ -78,9 +79,6 @@ public class Hilo {
 		this.jugadorInicial_ = jugadorInicial_;
 	}
 
-	public Usuario getjugadorInicial() {
-		return this.jugadorInicial_;
-	}
 	
 	public int getSize() {
 		return this.respuestas_.size();

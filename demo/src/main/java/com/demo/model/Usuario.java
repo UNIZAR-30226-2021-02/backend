@@ -109,6 +109,7 @@ public class Usuario {
 				for(Usuario a : peticion) {
 					a.printUser();
 					Usuario u = new Usuario();
+					u.setMail(a.getMail());
 					u.setNombre(a.getNombre());
 					u.setPuntos(a.getpGracioso(),a.getpListo(),a.getpDibujo(),a.getEstrellas(),a.getMonedas());
 					u.setFotPerf(a.getFotPerf());
@@ -161,6 +162,7 @@ public class Usuario {
 	 
 	public void setNull() {
 		this.amigo=null;
+		this.password=null;
 		this.peticion=null;
 		this.partidas=null;
 		this.partidasHost=null;
@@ -193,7 +195,7 @@ public class Usuario {
 	 private List<Usuario> usuario;
 	 
 
-	 @OneToMany(mappedBy = "host_", fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+	 @OneToMany(mappedBy = "host_", fetch = FetchType.EAGER)
 
 	 private List<Partida> partidasHost;
 	 
@@ -236,6 +238,7 @@ public class Usuario {
 		if(this.amigo != null) {
 			for(Usuario a : amigo) {
 				Usuario u = new Usuario();
+				u.setMail(a.getMail());
 				u.setNombre(a.getNombre());
 				u.setPuntos(a.getpGracioso(),a.getpListo(),a.getpDibujo(),a.getEstrellas(),a.getMonedas());
 				
@@ -257,8 +260,16 @@ public class Usuario {
 		this.pDibujo = pDibujar;
 		this.estrellas = estrellas;
 		this.monedas = monedas;
-		
-		
+	}
+	
+	public void votarGracioso(int cantidad) {
+		this.pGracioso = pGracioso+cantidad;
+	}
+	public void votarListo(int cantidad) {
+		this.pListo = pGracioso+cantidad;
+	}
+	public void votarDibujo(int cantidad) {
+		this.pDibujo = pGracioso+cantidad;
 	}
 
 	public void setAmigo(Usuario amigo) {
@@ -319,6 +330,15 @@ public class Usuario {
 
 	public void setFotPerf(String fotPerf) {
 		this.fotPerf = fotPerf;
+	}
+	
+	public boolean esAmigoDe(Usuario u) {
+		for(Usuario a : amigo) {
+			if (a.getNombre().equalsIgnoreCase(u.getNombre())){
+				return true;
+			}
+		}
+		return false;
 	}
 
 	public Usuario() {

@@ -19,6 +19,7 @@ public interface InvitacionesRepo extends JpaRepository<Invitaciones,Integer>{
 	*/
 	
 	Invitaciones findById(int id);
+	List<Invitaciones> findByPartida(Partida idPartida);
 	
 	Invitaciones findByPartidaAndInvitado(Partida idPartida,Usuario invitadoMail);
 	

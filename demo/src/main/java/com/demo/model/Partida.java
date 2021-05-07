@@ -1,5 +1,6 @@
 package com.demo.model;
 
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,13 +15,15 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OrderColumn;
+
+import com.demo.DemoApplication;
 
 
 
 @Entity
 public class Partida {
 	
-	//Identificador??
 	
 
 	@Id
@@ -39,38 +42,26 @@ public class Partida {
 
 	private List<Usuario> jugadores_;
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+
 	
 	@OneToMany(mappedBy="partida")
 	private List<Invitaciones> invitaciones;
-	
-	
-	
-	
-	
+		
 
 	
 	@ManyToOne(fetch = FetchType.EAGER, optional = false)
-
 	private Usuario host_;
 	
 	private String estado_;  //esperando/puntuando/jugando
 	
 	
 	
-	@OneToMany(mappedBy = "partida_", fetch = FetchType.LAZY,cascade = CascadeType.ALL)
-	private List<Hilo> hilos_; //mismo tamaño que jugadores
+	@OneToMany(mappedBy = "partida_", fetch = FetchType.EAGER,cascade = CascadeType.ALL)
+	@OrderColumn
+	private Hilo[] hilos_; //mismo tamaño que jugadores
+	
+	private Integer turno_;
+	
 	
 	
 	public List<Usuario> getJugadores_() {
@@ -92,42 +83,67 @@ public class Partida {
 		this.estado_ = estado_;
 	}
 	
-	public void addRespuesta(Usuario inicial, Respuesta respuesta) {
-		for (Hilo h : hilos_) {
-			if(h.getjugadorInicial().equals(inicial)) {
-				h.addRespuesta(respuesta);
-				break;
-			}
+	public Hilo addRespuesta(Usuario inicial, Respuesta respuesta) {
+		String idUser= inicial.getMail();
+		int i = getHiloJugador(idUser);
+		if(i==-1) {
+			//El jugador no pertenece a la partida (no tiene hilo)
+			return null;
+		}
+		int j = (i+turno_)%nJugadores_;
+		System.out.println("------");
+		System.out.println("HiloJug:"+i+"  HiloTurno:"+j+"  Turno:"+turno_);
+		System.out.println("------");
+		if(hilos_[j].getSize()>turno_) {
+			return null;
+		}else {
+			hilos_[j].addRespuesta(respuesta);
+			opTurno();
+			return hilos_[j];
 		}
 	}
 	
-	boolean terminada() {
-		for (Hilo h : hilos_) {
-			if(h.getSize() < this.nJugadores_) {
-				return false;
-			}
+	
+	public Hilo getHiloRespuesta(Usuario inicial) {
+		String idUser= inicial.getMail();
+		int i = getHiloJugador(idUser);
+		if(i==-1) {
+			//El jugador no pertenece a la partida (no tiene hilo)
+			return null;
 		}
-		this.estado_ = "puntuando";
-		return true;
+		int j = (i+turno_)%nJugadores_;
+		System.out.println("------");
+		System.out.println("HiloJug:"+i+"  HiloTurno:"+j+"  Turno:"+turno_);
+		System.out.println("------");
+		if(turnoJugado(idUser)) {
+			return null;
+		}else {
+			return hilos_[j];
+		}
 	}
 	
-	Hilo getHiloJugador(Usuario jugador) {
-		for (Hilo h : hilos_) {
-			if(h.getjugadorInicial().equals(jugador)) {
-				return h;
+	
+	public int getHiloJugador(String jugador) {
+		for(int i=0;i<nJugadores_;i++) {
+			if(hilos_[i].getJugadorInicial_().getMail().equals(jugador)) {
+				System.out.println("Hilo inicial:"+i);
+				return i;
+				
 			}
 		}
-		return null;
+		return -1; //Error, no se encontró el hilo
 	}
-		
+	
+	
+	
 	public Partida (Usuario host,String nombrePartida) {
 		this.nombre_ = nombrePartida; 
 		this.host_ = host;
 		this.estado_ = "esperando";
 		this.nJugadores_ = 1;
-		this.hilos_ = new ArrayList<Hilo>();
 		this.jugadores_ = new ArrayList<Usuario>();
 		this.jugadores_.add(host);
+		this.turno_=-1; //Sin empezar
 	}
 	
 	public Partida () {
@@ -145,10 +161,6 @@ public class Partida {
 		this.host_.setNull();
 		this.hilos_ = null;
 		this.jugadores_ = null;
-		
-	}
-	public void addHilo(Hilo hilo) {
-		this.hilos_.add(hilo);
 	}
 	
 	public void addJugador(Usuario jugador) {
@@ -164,21 +176,14 @@ public class Partida {
 	
 	public boolean isUser(String usuario) {
 		for (Usuario u : jugadores_) {
-			if(u.getNombre().equals(usuario)) {
+			if(u.getMail().equals(usuario)) {
 				return true;
 			}
 		}
 		return false;
 	}
 	
-	public boolean isInvited(String usuario) {
-		/*for (Usuario u : invitados_) {
-			if(u.getNombre().equals(usuario)) {
-				return true;
-			}
-		}*/
-		return false;
-	}
+	
 	
 	public int getnJugadores_() {
 		return nJugadores_;
@@ -186,7 +191,25 @@ public class Partida {
 	public void setnJugadores_(int nJugadores_) {
 		this.nJugadores_ = nJugadores_;
 	}
-	public List<Hilo> getHilos_() {
+	
+	public Hilo[] gethilos_() {
+		return hilos_;
+	}
+	
+	public Hilo[] mostrarTodo() {
+		List<Respuesta> respuestas = new ArrayList<Respuesta>();
+		Usuario u = new Usuario();
+		for (Hilo h : hilos_) {
+			h.setPartida_(null);
+			h.setJugadorInicial_(null);
+			respuestas = h.getRespuestas_();
+			for(Respuesta r : respuestas) {
+				u = r.getAutor_();
+				u.setNull();
+				r.setAutor_(u);
+				r.setDibujo(null);
+			}
+		}
 		return hilos_;
 	}
 	public String getNombre() {
@@ -195,5 +218,61 @@ public class Partida {
 	public void setNombre(String nombre) {
 		this.nombre_ = nombre;
 	}
+	public void setTurno(int i) {
+		this.turno_=i;
+	}
+	public int getTurno() {
+		return this.turno_;
+	}
+	
+	private void opTurno() {
+		boolean avanzar = true;
+		for (Hilo h : hilos_) { //Comprobar que se ha jugado cada hilo
+			if(h.getSize() <= turno_) {
+				avanzar=false; //Si queda algun hilo restante
+			}
+		}
+		if(avanzar) {
+			if(turno_==nJugadores_-1) {
+				//La partida ha acabado
+				this.estado_=DemoApplication.VOTANDO;
+				return;
+			}
+			turno_++; //AVISAR A LOS JUGADORES
+		}
+		//	AVANZAR TURNO POR TIMEOUT
+	}
+	
+	public void empezarPartida() {
+		this.hilos_ = new Hilo[nJugadores_]; //Construimos los hilos
+		int i=0;
+		for (Usuario u : jugadores_) {
+				hilos_[i]= new Hilo(u,this); //Inicializamos los hilos
+				i++;
+		}
+		this.estado_= DemoApplication.JUGANDO;
+		this.turno_=0;
+	}
 
+	public boolean turnoJugado(String idUser) {
+		int i = getHiloJugador(idUser);
+		int j = (i+turno_)%nJugadores_;
+		System.out.println(hilos_[j].getSize());
+		if(hilos_[j].getSize()>turno_) {
+			return true;
+		}else {
+			return false;
+		}
+	}
+	
+	public void votarGracioso(String id,int cantidad) {
+		
+		
+	}
+	public void votarListo(String id,int cantidad) {
+		
+	}
+	public void votarDibujo(String id,int cantidad) {
+	
+	}
 }

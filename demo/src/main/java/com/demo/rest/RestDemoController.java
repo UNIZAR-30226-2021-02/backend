@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.StringTokenizer;
 
 import javax.annotation.PostConstruct;
 
@@ -25,11 +26,17 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.bind.annotation.RequestMethod;
+import java.io.ByteArrayInputStream;
+import java.util.Base64;
 
 import com.demo.controller.AuthController;
+import com.demo.model.Hilo;
 import com.demo.model.Invitaciones;
 import com.demo.model.Partida;
+import com.demo.model.Puntos;
+import com.demo.model.Respuesta;
 import com.demo.model.Usuario;
 
 import com.demo.repository.TokenRepo;
@@ -62,13 +69,15 @@ public class RestDemoController {
 	@Autowired
 	private GameService game;
 
-	
+
+	//YA NO SE USA
 	@GetMapping(value = "/all")
 	public List<Usuario> listar(){
 		return usuarioRepo.findAll();
 	}
 	
-	
+
+	//YA NO SE USA
 	@PostMapping(value="/prueba")
 	public void probar() {
 		
@@ -93,7 +102,7 @@ public class RestDemoController {
 			usuarioRepo.save(u);
 			System.out.println("Como el usuario no existe, se crea");
 			
-			String token = jwt.getJWTToken(nombreUsuario);
+			String token = jwt.getJWTToken(mail);
 			u.setToken(token);
 			return new ResponseEntity<Usuario>(u,HttpStatus.CREATED);
 		
@@ -111,7 +120,7 @@ public class RestDemoController {
 	@PostMapping(value = "/login")
 	public ResponseEntity<Usuario> login(@RequestBody Usuario usuario) {
 	
-		Usuario u = usuarioRepo.findByNombre(usuario.getNombre());
+		Usuario u = usuarioRepo.findByMail(usuario.getMail());
 		
 		if(u !=null){
 			if(u.getPassword().equals(usuario.getPassword())) {
@@ -122,11 +131,11 @@ public class RestDemoController {
 				System.out.println(usuario.getPassword());
 				System.out.println("---");
 				
-						String token = jwt.getJWTToken(u.getNombre());
+						String token = jwt.getJWTToken(u.getMail());
 
 						u.setToken(token);
 						u.setNull();
-						tokenRepo.addToken(u.getNombre(), token);
+						tokenRepo.addToken(u.getMail(), token);
 						tokenRepo.printTokens();
 						System.out.println("----------------");
 						return new ResponseEntity<Usuario>(u,HttpStatus.OK);
@@ -147,7 +156,7 @@ public class RestDemoController {
 	}
 	
 	
-	
+	//YA NO SE USA
 	@GetMapping(value = "/returnImage", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
 	public ResponseEntity<byte[]> getImage() throws IOException{
 		InputStream in = getClass().getResourceAsStream("prueba.jpg");
@@ -163,9 +172,9 @@ public class RestDemoController {
 	@PostMapping(value = "/acceptRequest")
 	public ResponseEntity<Usuario> acceptRequest(@RequestBody Usuario usuario,@RequestHeader String identificador){
 		
-		String nombreUsuario = usuario.getNombre();
-		Usuario amigo = usuarioRepo.findByNombre(nombreUsuario);
-		Usuario tu = usuarioRepo.findByNombre(identificador);
+		String mail = usuario.getMail();
+		Usuario amigo = usuarioRepo.findByMail(mail);
+		Usuario tu = usuarioRepo.findByMail(identificador);
 		System.out.println(identificador);
 		
 		
@@ -183,9 +192,9 @@ public class RestDemoController {
 	@PostMapping(value = "/denyRequest")
 	public ResponseEntity<Usuario> denyRequest(@RequestBody Usuario usuario,@RequestHeader String identificador){
 		
-		String nombreUsuario = usuario.getNombre();
-		Usuario amigo = usuarioRepo.findByNombre(nombreUsuario);
-		Usuario tu = usuarioRepo.findByNombre(identificador);
+		String mail = usuario.getMail();
+		Usuario amigo = usuarioRepo.findByMail(mail);
+		Usuario tu = usuarioRepo.findByMail(identificador);
 		System.out.println(identificador);
 		
 		
@@ -199,15 +208,15 @@ public class RestDemoController {
 	@GetMapping(value = "/listFriends")
 	public ResponseEntity<List<Usuario>> listFriends(@RequestHeader String identificador){
 				
-		List<Usuario> respuesta = usuarioRepo.findByNombre(identificador).getAmigo();
+		List<Usuario> respuesta = usuarioRepo.findByMail(identificador).getAmigo();
 		return new ResponseEntity<List<Usuario>>(respuesta,HttpStatus.OK);
 	}
 	
-	@CrossOrigin(origins = "http://localhost:8081")
+	
 	@GetMapping(value = "/listRequest")
 	public ResponseEntity<List<Usuario>> listRequest(@RequestHeader String identificador){
 		
-		List<Usuario> respuesta = usuarioRepo.findByNombre(identificador).getPeticion();
+		List<Usuario> respuesta = usuarioRepo.findByMail(identificador).getPeticion();
 		return new ResponseEntity<List<Usuario>>(respuesta,HttpStatus.OK);
 		
 	}
@@ -218,9 +227,9 @@ public class RestDemoController {
 	@PostMapping(value = "/sendRequest")
 	public ResponseEntity<Usuario> sendRequest(@RequestBody Usuario usuario,@RequestHeader String identificador){
 		
-		String nombreUsuario = usuario.getNombre();
-		Usuario destino = usuarioRepo.findByNombre(nombreUsuario);
-		Usuario tu = usuarioRepo.findByNombre(identificador);
+		String nombreUsuario = usuario.getMail();
+		Usuario destino = usuarioRepo.findByMail(nombreUsuario);
+		Usuario tu = usuarioRepo.findByMail(identificador);
 		System.out.println(identificador);
 		
 		
@@ -256,9 +265,9 @@ public class RestDemoController {
 	@PostMapping(value = "/deleteFriend")
 	public ResponseEntity<Usuario> deleteFriend(@RequestBody Usuario usuario,@RequestHeader String identificador){
 		
-		String nombreUsuario = usuario.getNombre();
-		Usuario amigo = usuarioRepo.findByNombre(nombreUsuario);
-		Usuario tu = usuarioRepo.findByNombre(identificador);
+		String nombreUsuario = usuario.getMail();
+		Usuario amigo = usuarioRepo.findByMail(nombreUsuario);
+		Usuario tu = usuarioRepo.findByMail(identificador);
 		System.out.println(identificador);
 		
 		
@@ -277,7 +286,7 @@ public class RestDemoController {
 	@GetMapping(value = "/viewProfile")
 	public ResponseEntity<Usuario> viewProfile(@RequestHeader String identificador){
 		
-		Usuario u = usuarioRepo.findByNombre(identificador);
+		Usuario u = usuarioRepo.findByMail(identificador);
 		u.setNull();
 		return new ResponseEntity<Usuario>(u,HttpStatus.OK);
 	}
@@ -304,7 +313,7 @@ public class RestDemoController {
 		
 		
 		
-		Usuario u = usuarioRepo.findByNombre(identificador);
+		Usuario u = usuarioRepo.findByMail(identificador);
 		System.out.println(identificador+"--"+idFoto);
 		u.setFotPerf(idFoto);
 		usuarioRepo.save(u);
@@ -317,10 +326,10 @@ public class RestDemoController {
 	public ResponseEntity<Usuario> changeName(@RequestBody Usuario usuario,@RequestHeader String identificador){
 		
 		
-		Usuario u = usuarioRepo.findByNombre(identificador);
+		Usuario u = usuarioRepo.findByMail(identificador);
 		String nuevoNombre = usuario.getNombre();
-		if(usuarioRepo.findByNombre(nuevoNombre)==null) {
-			u.setNombre(usuario.getNombre());
+		if(usuarioRepo.findByNombre(nuevoNombre)==null && nuevoNombre != null) {
+			u.setNombre(nuevoNombre);
 			usuarioRepo.save(u);
 			return new ResponseEntity<Usuario>(HttpStatus.OK);
 		}
@@ -336,8 +345,9 @@ public class RestDemoController {
 		return new ResponseEntity<Partida>(p,HttpStatus.OK);
 	}
 	
-	@GetMapping(value = "/enterGame")
-	public ResponseEntity<Partida> enterGame(@RequestHeader String identificador,@RequestHeader int idPartida){
+	
+	@GetMapping(value = "/acceptInvite")
+	public ResponseEntity<Partida> acceptInvite(@RequestHeader String identificador,@RequestHeader int idPartida){
 		
 		if(game.addJugador(identificador,idPartida)) {
 			
@@ -362,6 +372,12 @@ public class RestDemoController {
 		return new ResponseEntity<List<Invitaciones>>(respuesta,HttpStatus.OK);
 	}
 	
+	@GetMapping(value = "/listPlayers")
+	public ResponseEntity<List<Usuario>> listPlayers(@RequestHeader int idPartida){
+		
+		List<Usuario> respuesta = game.listPlayers(idPartida);
+		return new ResponseEntity<List<Usuario>>(respuesta,HttpStatus.OK);
+	}
 	
 	@GetMapping(value = "/inviteGame")
 	public ResponseEntity<String> inviteGame(@RequestHeader int idPartida,@RequestHeader String identificador,@RequestHeader String idInvitado){
@@ -380,5 +396,148 @@ public class RestDemoController {
 		game.denyInvite(identificador, idPartida);
 		return new ResponseEntity<Usuario>(HttpStatus.OK);
 	}
+	
+
+	@GetMapping(value = "/listFriendsGame")
+	public ResponseEntity<List<Usuario>> listFriendsGame(@RequestHeader int idPartida, @RequestHeader String identificador){
+		List<Usuario> respuesta = game.listPlayersGame(idPartida,identificador);
+		return new ResponseEntity<List<Usuario>>(respuesta,HttpStatus.OK);
+	}
+
+	@GetMapping(value = "/startGame")
+	public ResponseEntity<String> startGame(@RequestHeader int idPartida,@RequestHeader String identificador){
+		int aux = game.startGame(identificador, idPartida);	
+		if(0==aux) { //Correcto
+			return new ResponseEntity<String>(HttpStatus.OK);
+		}
+		else if(1==aux){ //Partida empezada
+			return new ResponseEntity<String>(HttpStatus.SERVICE_UNAVAILABLE); //503
+		}else { //No eres el host
+			return new ResponseEntity<String>(HttpStatus.EXPECTATION_FAILED);
+		}
+	}
+	
+	@PostMapping(value = "/addText")
+	public ResponseEntity<String> addRespuesta(@RequestHeader int idPartida,@RequestHeader String autor,@RequestBody String contenido){
+				
+		if(game.addRespuesta(idPartida, autor,null,false,contenido)) {
+			
+			return new ResponseEntity<String>(HttpStatus.OK);
+		}else {
+			return new ResponseEntity<String>(HttpStatus.EXPECTATION_FAILED);
+		}
+		
+	}
+	
+	@PostMapping(value = "/addImage")
+	public ResponseEntity<String> addRespuesta(@RequestHeader int idPartida,@RequestHeader String autor,@RequestBody MultipartFile contenido) throws IOException{
+		//System.out.println("LLEGAMOS A AÑADIR RESPUESTA:"+ contenido.toString());		
+		if(game.addRespuesta(idPartida, autor, contenido.getBytes(),true,null)) {
+			return new ResponseEntity<String>(HttpStatus.OK);
+		}else {
+			return new ResponseEntity<String>(HttpStatus.EXPECTATION_FAILED);
+		}
+		
+	}
+	
+	@PostMapping(value = "/addImage2")
+	public ResponseEntity<String> addRespuesta2(@RequestHeader int idPartida,@RequestHeader String autor,@RequestBody String contenido) throws IOException{
+		//System.out.println("LLEGAMOS A AÑADIR RESPUESTA:"+ contenido.toString());		
+		String stringRecibido;
+
+		// tokenize the data
+		StringTokenizer st = new StringTokenizer(contenido,",");
+		st.nextToken(); //El primero no importa
+		String imageString = st.nextToken();
+		byte[] imageByte;
+		Base64.Decoder decoder = Base64.getDecoder();
+		imageByte = decoder.decode(imageString);
+		if(game.addRespuesta(idPartida, autor, imageByte,true,null)) {
+			return new ResponseEntity<String>(HttpStatus.OK);
+		}else {
+			return new ResponseEntity<String>(HttpStatus.EXPECTATION_FAILED);
+		}
+		
+	}
+	
+	
+	
+	@GetMapping(value = "/returnImageResponse/{idFoto}", produces = MediaType.IMAGE_PNG_VALUE)
+	public ResponseEntity<byte[]> getImageResponse(@PathVariable int idFoto){
+		
+		byte[]image = game.getImageResponse(idFoto);
+		
+		return new ResponseEntity<byte[]>(image,HttpStatus.OK);
+	}
+	
+	
+	@GetMapping(value = "/returnResponse")
+	public ResponseEntity<Respuesta> getResponse(@RequestHeader String identificador, @RequestHeader int idPartida){
+		
+		Respuesta response = game.getResponse(identificador,idPartida);
+		System.out.println("PUES LLEGAMOS A DEVOLVER");
+		return new ResponseEntity<Respuesta>(response,HttpStatus.OK);	
+	}
+	
+	
+	@GetMapping(value = "/returnAllResponses")
+	public ResponseEntity<Hilo[]> getAllResponses(@RequestHeader int idPartida){
+		
+		Hilo[] respuesta = game.getAllRespuestas(idPartida);
+		
+		return new ResponseEntity<Hilo[]>(respuesta,HttpStatus.OK);	
+	}
+	
+
+	@GetMapping(value = "/votarGracioso")
+	public ResponseEntity<String> votarGracioso(@RequestHeader int idPartida,@RequestHeader String identificador,@RequestHeader String votado){
+		if(game.votarGracioso(idPartida,identificador,votado)) {
+			return new ResponseEntity<String>(HttpStatus.OK);
+		}else {
+			return new ResponseEntity<String>(HttpStatus.EXPECTATION_FAILED);
+		}
+	}
+	
+	@GetMapping(value = "/votarListo")
+	public ResponseEntity<String> votarListo(@RequestHeader int idPartida,@RequestHeader String identificador,@RequestHeader String votado){
+		if(game.votarListo(idPartida,identificador,votado)) {
+			return new ResponseEntity<String>(HttpStatus.OK);
+		}else {
+			return new ResponseEntity<String>(HttpStatus.EXPECTATION_FAILED);
+		}
+	}
+	
+	@GetMapping(value = "/votarDibujo")
+	public ResponseEntity<String> votarDibujo(@RequestHeader int idPartida,@RequestHeader String identificador,@RequestHeader String votado){
+		if(game.votarDibujo(idPartida,identificador,votado)) {
+			return new ResponseEntity<String>(HttpStatus.OK);
+		}else {
+			return new ResponseEntity<String>(HttpStatus.EXPECTATION_FAILED);
+		}
+	}
+	
+	@GetMapping(value = "/puntosJugador")
+	public ResponseEntity<Puntos> puntosJugador(@RequestHeader int idPartida,@RequestHeader String identificador){
+		Puntos p = game.puntosJugador(idPartida,identificador);
+		System.out.println(p.getpListo_());
+		return new ResponseEntity<Puntos>(p,HttpStatus.OK);
+	}
+	
+	@GetMapping(value = "/puntosPartida")
+	public ResponseEntity<List<Puntos>> puntosPartida(@RequestHeader int idPartida){
+		List<Puntos> p = game.puntosPartida(idPartida);
+		if(p!=null) {
+			return new ResponseEntity<List<Puntos>>(p,HttpStatus.OK);
+		}
+		return new ResponseEntity<List<Puntos>>(HttpStatus.EXPECTATION_FAILED);
+	}
+	
+	@GetMapping(value = "/resetVotos")
+	public ResponseEntity<String> resetVotos(@RequestHeader int idPartida){
+		game.resetVotos(idPartida);
+		return new ResponseEntity<String>(HttpStatus.OK);
+	}
+
+
 	
 }
