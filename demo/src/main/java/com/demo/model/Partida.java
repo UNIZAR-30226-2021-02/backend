@@ -16,6 +16,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OrderColumn;
+import javax.persistence.PreRemove;
 
 import com.demo.DemoApplication;
 
@@ -49,7 +50,7 @@ public class Partida {
 		
 
 	
-	@ManyToOne(fetch = FetchType.EAGER, optional = false)
+	@ManyToOne(fetch = FetchType.LAZY, optional = false)
 	private Usuario host_;
 	
 	private String estado_;  //esperando/puntuando/jugando
@@ -268,14 +269,4 @@ public class Partida {
 		}
 	}
 	
-	public void votarGracioso(String id,int cantidad) {
-		
-		
-	}
-	public void votarListo(String id,int cantidad) {
-		
-	}
-	public void votarDibujo(String id,int cantidad) {
-	
-	}
 }

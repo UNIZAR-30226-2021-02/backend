@@ -290,7 +290,7 @@ public class GameService {
 			if(puntosRepo.todosVotado(idPartida)) {
 				System.out.println(p.getHost_());
 				if(p.getHost_() != null) {
-					//partidaRepo.delete(p);
+					partidaRepo.delete(p);
 				}
 			}
 			return resultado;
