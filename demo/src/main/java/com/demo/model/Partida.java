@@ -201,7 +201,10 @@ public class Partida {
 		Usuario u = new Usuario();
 		for (Hilo h : hilos_) {
 			h.setPartida_(null);
-			h.setJugadorInicial_(null);
+			Usuario u2 = h.getJugadorInicial_();
+			u2.setNull();
+			h.setJugadorInicial_(u2);
+			
 			respuestas = h.getRespuestas_();
 			for(Respuesta r : respuestas) {
 				u = r.getAutor_();
