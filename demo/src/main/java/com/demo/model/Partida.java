@@ -16,6 +16,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OrderColumn;
+import javax.persistence.PreRemove;
 
 import com.demo.DemoApplication;
 
@@ -56,7 +57,7 @@ public class Partida {
 	
 	
 	
-	@OneToMany(mappedBy = "partida_", fetch = FetchType.EAGER,cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "partida_", fetch = FetchType.EAGER,cascade = CascadeType.ALL) //NO TOCAR ESTE CASCADE
 	@OrderColumn
 	private Hilo[] hilos_; //mismo tamaño que jugadores
 	
@@ -95,6 +96,7 @@ public class Partida {
 		System.out.println("HiloJug:"+i+"  HiloTurno:"+j+"  Turno:"+turno_);
 		System.out.println("------");
 		if(hilos_[j].getSize()>turno_) {
+			System.out.println("Hilo size mayor :"+hilos_[j].getSize());
 			return null;
 		}else {
 			hilos_[j].addRespuesta(respuesta);
@@ -201,7 +203,10 @@ public class Partida {
 		Usuario u = new Usuario();
 		for (Hilo h : hilos_) {
 			h.setPartida_(null);
-			h.setJugadorInicial_(null);
+			Usuario u2 = h.getJugadorInicial_();
+			u2.setNull();
+			h.setJugadorInicial_(u2);
+			
 			respuestas = h.getRespuestas_();
 			for(Respuesta r : respuestas) {
 				u = r.getAutor_();
@@ -209,6 +214,7 @@ public class Partida {
 				r.setAutor_(u);
 				r.setDibujo(null);
 			}
+			h.setRespuestas_(respuestas);
 		}
 		return hilos_;
 	}
@@ -265,14 +271,4 @@ public class Partida {
 		}
 	}
 	
-	public void votarGracioso(String id,int cantidad) {
-		
-		
-	}
-	public void votarListo(String id,int cantidad) {
-		
-	}
-	public void votarDibujo(String id,int cantidad) {
-	
-	}
 }

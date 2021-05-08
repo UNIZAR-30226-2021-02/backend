@@ -13,7 +13,8 @@ public class Puntos {
 	private boolean votadoGracioso;
 	private boolean votadoListo;
 	private boolean votadoDibujo;
-
+	private boolean consultado;
+	
 	
 	
 	public Puntos (int idPartida, String idUsuario){
@@ -24,11 +25,19 @@ public class Puntos {
 		this.pListo_=0;
 		this.votadoDibujo = false;
 		this.votadoListo = false;
-		this.votadoGracioso = false;	
+		this.votadoGracioso = false;
+		this.consultado = false;
 		 
 	}
 	public Puntos() {
 		
+	}
+	
+	public boolean isConsultado() {
+		return consultado;
+	}
+	public void setConsultado(boolean consultado) {
+		this.consultado = consultado;
 	}
 	
 	public void sumarPGracioso(int puntos) {
@@ -91,5 +100,14 @@ public class Puntos {
 	public boolean votadoTodo() {
 		return votadoDibujo && votadoListo && votadoGracioso;
 	}
+	
+	
+	public int calcularEstrellas() {
+		return (pDibujo_+pGracioso_+pListo_)/3;
+	}
+	public int calcularMonedas() {
+		return pDibujo_+pGracioso_+pListo_;
+	}
+	
 
 }

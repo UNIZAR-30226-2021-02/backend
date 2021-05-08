@@ -26,11 +26,11 @@ public class Hilo {
 	
 	
 
-	@ManyToOne(fetch = FetchType.LAZY, optional = false)
+	@ManyToOne(fetch = FetchType.EAGER, optional = false) //Este y el de abajo no rompen
 	private Usuario jugadorInicial_;
 	//Notificar cuando acaba el hilo??
 	
-	@ManyToOne(fetch = FetchType.LAZY, optional = false)
+	@ManyToOne(fetch = FetchType.EAGER, optional = false,cascade = CascadeType.ALL) //Estaban en LAZY y sin cascade
 	private Partida partida_;
 	
 	public Hilo (Usuario inicial,Partida p){

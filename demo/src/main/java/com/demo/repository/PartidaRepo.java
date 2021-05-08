@@ -32,7 +32,25 @@ public interface PartidaRepo extends JpaRepository<Partida,Integer>{
 	public int deleteInvite(@Param("mailUsuario") String nombreUsuario,@Param("idPartida") int idPartida);
 	
 	
+	@Transactional
+	@Modifying
+	@Query(value = "DELETE FROM Partida WHERE Partida.id_ = :idPartida " , nativeQuery = true)
+	public int deletePartida(@Param("idPartida") int idPartida);
 	
+	@Transactional
+	@Modifying
+	@Query(value = "DELETE FROM Hilo WHERE partida__id_ = :idPartida " , nativeQuery = true)
+	public int deleteHilosPartida(@Param("idPartida") int idPartida);
+	
+	@Transactional
+	@Modifying
+	@Query( nativeQuery = true, value = "DELETE FROM Respuesta USING Hilo WHERE Hilo.id_=Respuesta.hilo__id_ AND  Hilo.partida__id_ = :idPartida"	)
+	public int deleteRespuestasPartida(@Param("idPartida") int idPartida);
+	
+	@Transactional
+	@Modifying
+	@Query(value = "DELETE FROM Jugadores WHERE partida = :idPartida " , nativeQuery = true)
+	public int deleteJugadoresPartida(@Param("idPartida") int idPartida);
 	
 	
 	/*

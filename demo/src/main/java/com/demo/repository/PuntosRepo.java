@@ -3,6 +3,7 @@ package com.demo.repository;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.demo.model.Partida;
@@ -14,6 +15,8 @@ public class PuntosRepo {
 	
 	private List<Puntos> puntos_ = new ArrayList<>();
 	
+	@Autowired
+	UsuarioRepo usuarioRepo;
 	
 	public boolean votadoGracioso(int idPartida, String identificador) {
 		for (Puntos p : puntos_) {
@@ -89,10 +92,13 @@ public class PuntosRepo {
 	
 	
 	
-	public List<Puntos> getPuntosPartida(int idPartida){
+	public List<Puntos> getPuntosPartida(int idPartida,String identificador){
 		List<Puntos> respuesta = new ArrayList<>();
 		for(Puntos p : puntos_) {
 			if(p.getIdPartida_()==idPartida) {
+				if(identificador.equals(p.getIdUsuario_())) {
+					p.setConsultado(true);
+				}
 				respuesta.add(p);
 			}
 		}
@@ -131,5 +137,36 @@ public class PuntosRepo {
 		System.out.println("Toca funar");
 		return true;
 	}
+	
+	public boolean todosConsultado(int idPartida) {
+		for(Puntos p : puntos_) {
+			if(p.getIdPartida_()==idPartida) {
+				if(!p.isConsultado()) {
+					System.out.println(p.votadoTodo());
+					return false;
+				}
+			}
+		}
+		System.out.println("Toca funar puntos");
+		return true;
+		
+	}
+	
+	public void delete(int idPartida) {
+		for(Puntos p : puntos_) {
+			if(p.getIdPartida_()==idPartida) {
+				Usuario u = usuarioRepo.findByMail(p.getIdUsuario_());
+				u.setpGracioso(u.getpGracioso()+p.getpGracioso_());
+				u.setpListo(u.getpListo()+p.getpListo_());
+				u.setpDibujo(u.getpDibujo()+p.getpDibujo_());
+				u.setEstrellas(u.getEstrellas()+p.calcularEstrellas());
+				u.setMonedas(u.getMonedas()+p.calcularMonedas());
+				usuarioRepo.save(u);
+				puntos_.remove(p);
+			}
+		}
+	}
+	
+	
 	
 }
