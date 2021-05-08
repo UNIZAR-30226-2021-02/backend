@@ -50,14 +50,14 @@ public class Partida {
 		
 
 	
-	@ManyToOne(fetch = FetchType.LAZY, optional = false)
+	@ManyToOne(fetch = FetchType.EAGER, optional = false)
 	private Usuario host_;
 	
 	private String estado_;  //esperando/puntuando/jugando
 	
 	
 	
-	@OneToMany(mappedBy = "partida_", fetch = FetchType.EAGER,cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "partida_", fetch = FetchType.EAGER,cascade = CascadeType.ALL) //NO TOCAR ESTE CASCADE
 	@OrderColumn
 	private Hilo[] hilos_; //mismo tamaño que jugadores
 	
@@ -96,6 +96,7 @@ public class Partida {
 		System.out.println("HiloJug:"+i+"  HiloTurno:"+j+"  Turno:"+turno_);
 		System.out.println("------");
 		if(hilos_[j].getSize()>turno_) {
+			System.out.println("Hilo size mayor :"+hilos_[j].getSize());
 			return null;
 		}else {
 			hilos_[j].addRespuesta(respuesta);
@@ -213,6 +214,7 @@ public class Partida {
 				r.setAutor_(u);
 				r.setDibujo(null);
 			}
+			h.setRespuestas_(respuestas);
 		}
 		return hilos_;
 	}

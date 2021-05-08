@@ -19,6 +19,7 @@ public class DemoApplication {
 	public static String ESPERANDO = "esperando";
 	public static String JUGANDO = "jugando";
 	public static String VOTANDO = "votando";
+	public static String ACABADA = "acabada";
 	
 	public static void main(String[] args){
 		
