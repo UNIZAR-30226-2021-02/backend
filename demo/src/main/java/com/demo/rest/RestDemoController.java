@@ -524,8 +524,8 @@ public class RestDemoController {
 	}
 	
 	@GetMapping(value = "/puntosPartida")
-	public ResponseEntity<List<Puntos>> puntosPartida(@RequestHeader int idPartida){
-		List<Puntos> p = game.puntosPartida(idPartida);
+	public ResponseEntity<List<Puntos>> puntosPartida(@RequestHeader int idPartida,@RequestHeader String identificador){
+		List<Puntos> p = game.puntosPartida(idPartida,identificador);
 		if(p!=null) {
 			return new ResponseEntity<List<Puntos>>(p,HttpStatus.OK);
 		}
