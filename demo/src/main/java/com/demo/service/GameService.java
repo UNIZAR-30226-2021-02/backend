@@ -197,7 +197,6 @@ public class GameService {
 				//Esta sin empezar
 				p.empezarPartida();
 				partidaRepo.save(p);
-				//puntosRepo.ini(p);
 				invitacionesRepo.deleteAll(invitacionesRepo.findByPartida(p)); //Eliminamos invitaciones pendientes
 				//Notificar a todos de que ha empezado 
 				return 0;
@@ -222,6 +221,9 @@ public class GameService {
 			return false;
 		}
 		Hilo h = p.addRespuesta(u, r);
+		if(p.getEstado_().equals(DemoApplication.VOTANDO)) {
+			puntosRepo.ini(p);
+		}
 		if(h==null) {
 			return false;
 		}else {
