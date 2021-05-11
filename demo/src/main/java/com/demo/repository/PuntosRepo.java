@@ -1,11 +1,13 @@
 package com.demo.repository;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.demo.DemoApplication;
 import com.demo.model.Partida;
 import com.demo.model.Puntos;
 import com.demo.model.Usuario;
@@ -154,7 +156,13 @@ public class PuntosRepo {
 	
 	public void delete(int idPartida) {
 		for(Puntos p : puntos_) {
+			System.out.println(p.getIdUsuario_()+"--"+p.getIdPartida_());
+		}
+		Iterator it = puntos_.iterator();
+		while(it.hasNext()) {
+			Puntos p = (Puntos) it.next();
 			if(p.getIdPartida_()==idPartida) {
+				System.out.println(p.getIdUsuario_());
 				Usuario u = usuarioRepo.findByMail(p.getIdUsuario_());
 				u.setpGracioso(u.getpGracioso()+p.getpGracioso_());
 				u.setpListo(u.getpListo()+p.getpListo_());
@@ -162,8 +170,25 @@ public class PuntosRepo {
 				u.setEstrellas(u.getEstrellas()+p.calcularEstrellas());
 				u.setMonedas(u.getMonedas()+p.calcularMonedas());
 				usuarioRepo.save(u);
+				Puntos p2 = p;
+				System.out.println("ME VOY A FUNAR A :"+p.getIdUsuario_()+"--"+p.getIdPartida_());
+				puntos_.remove(p2);
+				for(Puntos p1 : puntos_) {
+					System.out.println("Queda:"+p1.getIdUsuario_()+"--"+p1.getIdPartida_());
+				}
+			}else {
+				System.out.println(p.getIdUsuario_()+"---"+p.getIdPartida_());
+			}
+			
+		}/*
+		for(Puntos p : puntos_) {
+			if(p.getIdPartida_()==idPartida) {
+				System.out.println("ME VOY A FUNAR A :"+p.getIdUsuario_()+"--"+p.getIdPartida_());
 				puntos_.remove(p);
 			}
+		}*/
+		for(Puntos p : puntos_) {
+			System.out.println(p.getIdUsuario_()+"--"+p.getIdPartida_());
 		}
 	}
 	
