@@ -192,6 +192,13 @@ public class PuntosRepo {
 		}
 	}
 	
-	
+	public boolean votadoJugador(int idPartida, String identificador) {
+		for(Puntos p : puntos_) {
+			if(p.getIdPartida_()==idPartida&&p.getIdUsuario_().equals(identificador)) {
+				return p.votadoTodo();
+			}
+		}
+		return false;
+	}
 	
 }

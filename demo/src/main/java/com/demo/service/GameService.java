@@ -244,7 +244,10 @@ public class GameService {
 	public Respuesta getResponse(String identificador, int idPartida) {
 		Partida p = partidaRepo.findById(idPartida);
 		System.out.println(p.getTurno());
-		if (p.getEstado_().equals(DemoApplication.VOTANDO)) {
+		if(p.getEstado_().equals(DemoApplication.VOTANDO)&& puntosRepo.votadoJugador(idPartida,identificador)) {
+			return new Respuesta(-4);
+		}
+		else if (p.getEstado_().equals(DemoApplication.VOTANDO)) {
 			//La fase de turnos ha acabado
 			return new Respuesta(-3);
 		}else if (p.getTurno()==0 && !p.turnoJugado(identificador)) {
