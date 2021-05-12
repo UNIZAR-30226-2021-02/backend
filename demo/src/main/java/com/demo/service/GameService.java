@@ -324,11 +324,12 @@ public class GameService {
 			Puntos p = puntosRepo.getPuntosJugador(idPartida, identificador);
 			List<Integer> resp = new ArrayList<>();
 			if(puntosRepo.todosConsultado(idPartida)) {
-				/*
+				
+				
 				partidaRepo.deleteRespuestasPartida(idPartida);
 				partidaRepo.deleteJugadoresPartida(idPartida);
 				partidaRepo.deleteHilosPartida(idPartida);
-				partidaRepo.deletePartida(idPartida);*/
+				partidaRepo.deletePartida(idPartida);
 				puntosRepo.delete(idPartida);
 			}if(p !=null) {
 				resp.add(p.calcularEstrellas());
