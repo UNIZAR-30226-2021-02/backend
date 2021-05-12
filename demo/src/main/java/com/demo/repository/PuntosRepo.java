@@ -96,8 +96,12 @@ public class PuntosRepo {
 	
 	public List<Puntos> getPuntosPartida(int idPartida,String identificador){
 		List<Puntos> respuesta = new ArrayList<>();
+		Usuario u = new Usuario();
 		for(Puntos p : puntos_) {
 			if(p.getIdPartida_()==idPartida) {
+				u = usuarioRepo.findByMail(p.getIdUsuario_().getMail());
+				u.setNull();
+				p.setIdUsuario_(u);
 				respuesta.add(p);
 			}
 		}
@@ -107,9 +111,13 @@ public class PuntosRepo {
 	
 	
 	public Puntos getPuntosJugador(int idPartida, String idUsuario) {
+		Usuario u = new Usuario();
 		for (Puntos p : puntos_) {
 			if(p.getIdPartida_()==idPartida && p.getIdUsuario_().getMail().equals(idUsuario)) {
 				p.setConsultado(true);
+				u = usuarioRepo.findByMail(p.getIdUsuario_().getMail());
+				u.setNull();
+				p.setIdUsuario_(u);
 				return p;
 			}
 		}
@@ -119,11 +127,8 @@ public class PuntosRepo {
 	public void ini(Partida p) {
 		int idPartida = p.getId();
 		List<Usuario> jugadores = p.getJugadores_();
-		Usuario aux =  new Usuario();
 		for(Usuario u : jugadores) {
-			aux = u;
-			aux.setNull();
-			Puntos puntos = new Puntos(idPartida,aux);
+			Puntos puntos = new Puntos(idPartida,u);
 			puntos_.add(puntos);
 		}
 	}

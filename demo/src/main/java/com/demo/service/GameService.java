@@ -345,6 +345,7 @@ public class GameService {
 		if(puntosRepo.todosVotado(idPartida) && partidaRepo.findById(idPartida) != null) { //Si han votado todos
 			
 			List<Puntos> p = puntosRepo.getPuntosPartida(idPartida,identificador);
+			
 			if(puntosRepo.todosConsultado(idPartida)) {
 				/*
 				partidaRepo.deleteRespuestasPartida(idPartida);
