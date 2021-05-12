@@ -14,7 +14,9 @@ import com.google.firebase.FirebaseOptions;
 public class FCMInitializer {
     @Value("${app.firebase-configuration-file}")
     private String firebaseConfigPath;
-    @PostConstruct
+    
+    private FirebaseApp firebaseApp;
+    //@PostConstruct
     public void initialize() {
     	
         try {
@@ -23,6 +25,9 @@ public class FCMInitializer {
                 .setCredentials(GoogleCredentials.fromStream(new ClassPathResource(firebaseConfigPath).getInputStream())).build();
             if (FirebaseApp.getApps().isEmpty()) {
                         FirebaseApp.initializeApp(options);
+            }
+            else {
+            	this.firebaseApp = FirebaseApp.getInstance();
             }
         } catch (IOException e) {
                 e.printStackTrace();

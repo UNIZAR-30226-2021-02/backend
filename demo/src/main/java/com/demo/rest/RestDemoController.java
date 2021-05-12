@@ -32,6 +32,7 @@ import java.io.ByteArrayInputStream;
 import java.util.Base64;
 
 import com.demo.controller.AuthController;
+import com.demo.fcm.Note;
 import com.demo.model.Hilo;
 import com.demo.model.Invitaciones;
 import com.demo.model.Partida;
@@ -42,6 +43,7 @@ import com.demo.model.Usuario;
 import com.demo.repository.TokenRepo;
 import com.demo.repository.UsuarioRepo;
 import com.demo.service.GameService;
+import com.demo.service.NotificationService;
 import com.demo.service.UserService;
 
 
@@ -50,6 +52,10 @@ import com.demo.service.UserService;
 @RequestMapping(value = "/api")
 public class RestDemoController {
 
+	
+	@Autowired
+	private NotificationService notificationService;
+	
 	
 	@Autowired
 	private AuthController jwt;
@@ -539,7 +545,23 @@ public class RestDemoController {
 		game.resetVotos(idPartida);
 		return new ResponseEntity<String>(HttpStatus.OK);
 	}
+	
+	
+	@GetMapping(value = "/sendNotification")
+	public ResponseEntity<String> sendNotification(@RequestHeader int idPartida){
+		
+		Note note = new Note("TOKEN","TITULO","CUERPO");
+		
+		notificationService.sendPnsToDevice(note);
+		return new ResponseEntity<String>(HttpStatus.OK);
+	}
 
-
+	
+	 @PostMapping("/topic")
+	    public String sendPnsToTopic(@RequestBody Note notificationRequestDto) {
+	        return notificationService.sendPnsToTopic(notificationRequestDto);
+	    }
+	
+	 
 	
 }
