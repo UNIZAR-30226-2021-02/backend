@@ -19,5 +19,5 @@ docker push proyectokalboware/app:v${version}
 git add .
 git commit -m "dockercompose actualizado"
 git push
-ssh -n ${USER}@35.246.75.160 "cd ~/backend/demo;git pull;docker-compose down;docker-compose up"
+ssh  ${USER}@35.246.75.160 "cd ~/backend/demo;git pull;docker-compose down;docker-compose up"
 fi
