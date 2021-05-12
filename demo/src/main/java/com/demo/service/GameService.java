@@ -319,8 +319,26 @@ public class GameService {
 		}
 	}
 
-	public Puntos puntosJugador(int idPartida, String identificador) {
-		return puntosRepo.getPuntosJugador(idPartida, identificador);	
+	public List<Integer> puntosJugador(int idPartida, String identificador) {
+		if(puntosRepo.todosVotado(idPartida) && partidaRepo.findById(idPartida) != null) {
+			Puntos p = puntosRepo.getPuntosJugador(idPartida, identificador);
+			List<Integer> resp = new ArrayList<>();
+			if(puntosRepo.todosConsultado(idPartida)) {
+				/*
+				partidaRepo.deleteRespuestasPartida(idPartida);
+				partidaRepo.deleteJugadoresPartida(idPartida);
+				partidaRepo.deleteHilosPartida(idPartida);
+				partidaRepo.deletePartida(idPartida);*/
+				puntosRepo.delete(idPartida);
+			}if(p !=null) {
+				resp.add(p.calcularEstrellas());
+				resp.add(p.calcularMonedas());
+			}
+			
+			return resp;	
+		}else {
+			return null;
+		}
 	}
 	
 	public List<Puntos> puntosPartida(int idPartida,String identificador) {
@@ -333,7 +351,7 @@ public class GameService {
 				partidaRepo.deleteJugadoresPartida(idPartida);
 				partidaRepo.deleteHilosPartida(idPartida);
 				partidaRepo.deletePartida(idPartida);*/
-				puntosRepo.delete(idPartida);
+				//puntosRepo.delete(idPartida);
 			}
 			return p;
 		}else {

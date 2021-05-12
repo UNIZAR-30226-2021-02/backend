@@ -22,7 +22,7 @@ public class PuntosRepo {
 	
 	public boolean votadoGracioso(int idPartida, String identificador) {
 		for (Puntos p : puntos_) {
-			if(p.getIdPartida_()==idPartida && p.getIdUsuario_().equals(identificador)) {
+			if(p.getIdPartida_()==idPartida && p.getIdUsuario_().getMail().equals(identificador)) {
 				return p.isVotadoGracioso();
 				
 			}
@@ -32,7 +32,7 @@ public class PuntosRepo {
 	
 	public boolean votadoListo(int idPartida, String identificador) {
 		for (Puntos p : puntos_) {
-			if(p.getIdPartida_()==idPartida && p.getIdUsuario_().equals(identificador)) {
+			if(p.getIdPartida_()==idPartida && p.getIdUsuario_().getMail().equals(identificador)) {
 				return p.isVotadoListo();
 				
 			}
@@ -42,7 +42,7 @@ public class PuntosRepo {
 	
 	public boolean votadoDibujo(int idPartida, String identificador) {
 		for (Puntos p : puntos_) {
-			if(p.getIdPartida_()==idPartida && p.getIdUsuario_().equals(identificador)) {
+			if(p.getIdPartida_()==idPartida && p.getIdUsuario_().getMail().equals(identificador)) {
 				return p.isVotadoDibujo();
 				
 			}
@@ -53,10 +53,10 @@ public class PuntosRepo {
 	public boolean addPuntosDibujo(int idPartida, String idUsuario, String identificador) {
 		int bien = 0;
 		for (Puntos p : puntos_) {
-			if(p.getIdPartida_()==idPartida && p.getIdUsuario_().equals(idUsuario)) {
+			if(p.getIdPartida_()==idPartida && p.getIdUsuario_().getMail().equals(idUsuario)) {
 				p.sumarPDibujo(1);
 				bien++;
-			}if(p.getIdPartida_()==idPartida && p.getIdUsuario_().equals(identificador)){
+			}if(p.getIdPartida_()==idPartida && p.getIdUsuario_().getMail().equals(identificador)){
 				p.setVotadoDibujo(true);
 				bien++;
 			}
@@ -67,10 +67,10 @@ public class PuntosRepo {
 	public boolean addPuntosListo(int idPartida, String idUsuario, String identificador) {
 		int bien = 0;
 		for (Puntos p : puntos_) {
-			if(p.getIdPartida_()==idPartida && p.getIdUsuario_().equals(idUsuario)) {
+			if(p.getIdPartida_()==idPartida && p.getIdUsuario_().getMail().equals(idUsuario)) {
 				p.sumarPListo(1);
 				bien++;
-			}if(p.getIdPartida_()==idPartida && p.getIdUsuario_().equals(identificador)){
+			}if(p.getIdPartida_()==idPartida && p.getIdUsuario_().getMail().equals(identificador)){
 				p.setVotadoListo(true);
 				bien++;
 			}
@@ -81,10 +81,10 @@ public class PuntosRepo {
 	public boolean addPuntosGracioso(int idPartida, String idUsuario, String identificador) {
 		int bien = 0;
 		for (Puntos p : puntos_) {
-			if(p.getIdPartida_()==idPartida && p.getIdUsuario_().equals(idUsuario)) {
+			if(p.getIdPartida_()==idPartida && p.getIdUsuario_().getMail().equals(idUsuario)) {
 				p.sumarPGracioso(1);
 				bien++;
-			}if(p.getIdPartida_()==idPartida && p.getIdUsuario_().equals(identificador)){
+			}if(p.getIdPartida_()==idPartida && p.getIdUsuario_().getMail().equals(identificador)){
 				p.setVotadoGracioso(true);
 				bien++;
 			}
@@ -98,9 +98,6 @@ public class PuntosRepo {
 		List<Puntos> respuesta = new ArrayList<>();
 		for(Puntos p : puntos_) {
 			if(p.getIdPartida_()==idPartida) {
-				if(identificador.equals(p.getIdUsuario_())) {
-					p.setConsultado(true);
-				}
 				respuesta.add(p);
 			}
 		}
@@ -111,7 +108,8 @@ public class PuntosRepo {
 	
 	public Puntos getPuntosJugador(int idPartida, String idUsuario) {
 		for (Puntos p : puntos_) {
-			if(p.getIdPartida_()==idPartida && p.getIdUsuario_().equals(idUsuario)) {
+			if(p.getIdPartida_()==idPartida && p.getIdUsuario_().getMail().equals(idUsuario)) {
+				p.setConsultado(true);
 				return p;
 			}
 		}
@@ -121,8 +119,11 @@ public class PuntosRepo {
 	public void ini(Partida p) {
 		int idPartida = p.getId();
 		List<Usuario> jugadores = p.getJugadores_();
+		Usuario aux =  new Usuario();
 		for(Usuario u : jugadores) {
-			Puntos puntos = new Puntos(idPartida,u.getMail());
+			aux = u;
+			aux.setNull();
+			Puntos puntos = new Puntos(idPartida,aux);
 			puntos_.add(puntos);
 		}
 	}
@@ -154,47 +155,37 @@ public class PuntosRepo {
 		
 	}
 	
+	
+	
+	
+	
 	public void delete(int idPartida) {
 		for(Puntos p : puntos_) {
 			System.out.println(p.getIdUsuario_()+"--"+p.getIdPartida_());
 		}
-		Iterator it = puntos_.iterator();
-		while(it.hasNext()) {
-			Puntos p = (Puntos) it.next();
+		List<Puntos> borrados = new ArrayList<Puntos>();
+		for(Puntos p : puntos_) {
 			if(p.getIdPartida_()==idPartida) {
 				System.out.println(p.getIdUsuario_());
-				Usuario u = usuarioRepo.findByMail(p.getIdUsuario_());
+				Usuario u =p.getIdUsuario_();
 				u.setpGracioso(u.getpGracioso()+p.getpGracioso_());
 				u.setpListo(u.getpListo()+p.getpListo_());
 				u.setpDibujo(u.getpDibujo()+p.getpDibujo_());
 				u.setEstrellas(u.getEstrellas()+p.calcularEstrellas());
 				u.setMonedas(u.getMonedas()+p.calcularMonedas());
 				usuarioRepo.save(u);
-				Puntos p2 = p;
-				System.out.println("ME VOY A FUNAR A :"+p.getIdUsuario_()+"--"+p.getIdPartida_());
-				puntos_.remove(p2);
-				for(Puntos p1 : puntos_) {
-					System.out.println("Queda:"+p1.getIdUsuario_()+"--"+p1.getIdPartida_());
-				}
-			}else {
-				System.out.println(p.getIdUsuario_()+"---"+p.getIdPartida_());
+				borrados.add(p);			
 			}
-			
-		}/*
-		for(Puntos p : puntos_) {
-			if(p.getIdPartida_()==idPartida) {
-				System.out.println("ME VOY A FUNAR A :"+p.getIdUsuario_()+"--"+p.getIdPartida_());
-				puntos_.remove(p);
-			}
-		}*/
-		for(Puntos p : puntos_) {
-			System.out.println(p.getIdUsuario_()+"--"+p.getIdPartida_());
+		}
+		puntos_.removeAll(borrados);
+		for(Puntos p1 : puntos_) {
+			System.out.println(p1.getIdUsuario_()+"--"+p1.getIdPartida_());
 		}
 	}
 	
 	public boolean votadoJugador(int idPartida, String identificador) {
 		for(Puntos p : puntos_) {
-			if(p.getIdPartida_()==idPartida&&p.getIdUsuario_().equals(identificador)) {
+			if(p.getIdPartida_()==idPartida&&p.getIdUsuario_().getMail().equals(identificador)) {
 				return p.votadoTodo();
 			}
 		}

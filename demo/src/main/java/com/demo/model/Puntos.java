@@ -6,7 +6,7 @@ public class Puntos {
 	
 
 	private int idPartida_;
-	private String idUsuario_;
+	private Usuario idUsuario_;
 	private int pGracioso_;
 	private int pListo_;
 	private int pDibujo_;
@@ -17,7 +17,7 @@ public class Puntos {
 	
 	
 	
-	public Puntos (int idPartida, String idUsuario){
+	public Puntos (int idPartida, Usuario idUsuario){
 		this.idPartida_=idPartida;
 		this.idUsuario_=idUsuario;
 		this.pGracioso_=0;
@@ -55,10 +55,10 @@ public class Puntos {
 	public void setIdPartida_(int idPartida_) {
 		this.idPartida_ = idPartida_;
 	}
-	public String getIdUsuario_() {
+	public Usuario getIdUsuario_() {
 		return idUsuario_;
 	}
-	public void setIdUsuario_(String idUsuario_) {
+	public void setIdUsuario_(Usuario idUsuario_) {
 		this.idUsuario_ = idUsuario_;
 	}
 	public int getpGracioso_() {
@@ -103,7 +103,17 @@ public class Puntos {
 	
 	
 	public int calcularEstrellas() {
-		return (pDibujo_+pGracioso_+pListo_)/3;
+		int result=0;
+		if(pDibujo_>=2) {result++;
+			if(pDibujo_>=5) {result++;
+				if(pDibujo_>=8) {result++;}}}
+		if(pGracioso_>=2) {result++;
+		if(pGracioso_>=5) {result++;
+			if(pGracioso_>=8) {result++;}}}
+		if(pListo_>=2) {result++;
+		if(pListo_>=5) {result++;
+			if(pListo_>=8) {result++;}}}
+		return result;
 	}
 	public int calcularMonedas() {
 		return pDibujo_+pGracioso_+pListo_;
