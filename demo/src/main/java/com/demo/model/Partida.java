@@ -127,6 +127,7 @@ public class Partida {
 	
 	public int getHiloJugador(String jugador) {
 		for(int i=0;i<nJugadores_;i++) {
+			System.out.println(hilos_[i].getJugadorInicial_().getMail());
 			if(hilos_[i].getJugadorInicial_().getMail().equals(jugador)) {
 				System.out.println("Hilo inicial:"+i);
 				return i;
@@ -262,8 +263,10 @@ public class Partida {
 
 	public boolean turnoJugado(String idUser) {
 		int i = getHiloJugador(idUser);
+		System.out.println("Hilo del jugador:"+i);
 		int j = (i+turno_)%nJugadores_;
-		System.out.println(hilos_[j].getSize());
+		System.out.println("Hilo de este turno:"+j);
+		//System.out.println(hilos_[j].getSize());
 		if(hilos_[j].getSize()>turno_) {
 			return true;
 		}else {

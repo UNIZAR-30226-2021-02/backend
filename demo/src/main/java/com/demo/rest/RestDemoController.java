@@ -121,7 +121,7 @@ public class RestDemoController {
 	public ResponseEntity<Usuario> login(@RequestBody Usuario usuario) {
 	
 		Usuario u = usuarioRepo.findByMail(usuario.getMail());
-		
+		System.out.println(usuario.getPassword());
 		if(u !=null){
 			if(u.getPassword().equals(usuario.getPassword())) {
 				service.loadUserByUsername(u.getNombre());
@@ -517,10 +517,12 @@ public class RestDemoController {
 	}
 	
 	@GetMapping(value = "/puntosJugador")
-	public ResponseEntity<Puntos> puntosJugador(@RequestHeader int idPartida,@RequestHeader String identificador){
-		Puntos p = game.puntosJugador(idPartida,identificador);
-		System.out.println(p.getpListo_());
-		return new ResponseEntity<Puntos>(p,HttpStatus.OK);
+	public ResponseEntity<List<Integer>> puntosJugador(@RequestHeader int idPartida,@RequestHeader String identificador){
+		List<Integer> p = game.puntosJugador(idPartida,identificador);
+		if(p!=null) {
+			return new ResponseEntity<List<Integer>>(p,HttpStatus.OK);
+		}
+		return new ResponseEntity<List<Integer>>(HttpStatus.EXPECTATION_FAILED);
 	}
 	
 	@GetMapping(value = "/puntosPartida")
