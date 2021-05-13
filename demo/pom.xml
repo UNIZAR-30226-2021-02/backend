@@ -110,7 +110,7 @@
 			 
 			<artifactId>firebase-admin</artifactId>
 			 
-			<version>6.15.0</version>
+			<version>6.8.0</version>
 			 
 		</dependency>
 
