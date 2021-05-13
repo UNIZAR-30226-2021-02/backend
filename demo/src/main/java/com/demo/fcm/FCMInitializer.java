@@ -19,24 +19,24 @@ public class FCMInitializer {
 	
 	
 	
-    private String firebaseConfigPath = "serviceAccountKey.json";
+  
+    private String firebaseConfig="serviceAccountKey.json";
 
-    
+    private FirebaseApp firebaseApp;
+
     @PostConstruct
-    public void initialize() {
-    	
+    private void initialize() {
         try {
-        	System.out.println("El path es "+ firebaseConfigPath);
             FirebaseOptions options = new FirebaseOptions.Builder()
-                    .setCredentials(GoogleCredentials.fromStream(new ClassPathResource(firebaseConfigPath).getInputStream())).build();
+                    .setCredentials(GoogleCredentials.fromStream(new ClassPathResource(firebaseConfig).getInputStream())).build();
+
             if (FirebaseApp.getApps().isEmpty()) {
-            	
-                FirebaseApp.initializeApp(options);
-                
+                this.firebaseApp = FirebaseApp.initializeApp(options);
+            } else {
+                this.firebaseApp = FirebaseApp.getInstance();
             }
         } catch (IOException e) {
-            
+            System.out.println(e);
+        }
     }
-
-}
 }

@@ -39,6 +39,7 @@ import com.demo.controller.AuthController;
 import com.demo.fcm.Note;
 import com.demo.model.Hilo;
 import com.demo.model.Invitaciones;
+import com.demo.model.Nota;
 import com.demo.model.Partida;
 import com.demo.model.Puntos;
 import com.demo.model.Respuesta;
@@ -551,13 +552,17 @@ public class RestDemoController {
 		return new ResponseEntity<String>(HttpStatus.OK);
 	}
 	
-	
+	/*
 	@GetMapping(value = "/sendNotification")
 	public ResponseEntity<String> sendNotification(){
-		String TOPIC = "TARGET";
-				
+		String TOPIC = "si";
+		
+		
+		String inigo = "cWaH0QF9TwigLV1l5WWfeT:APA91bE7YVL3mMFbahY5F_6LAuepybLFPiHuYlq_19qqtPR5Xl9M4gOWnK5C0B82UUY5hAHo9XfwYFFaVBFYpInn8ri3qUUhYlhmr_ibsOZmtqzsv2rgZ15Ai11ad9h-i2eVgao8ahaF";
+		String hector = "cJa3fiHST5estCfnZFCMRq:APA91bEuJ5HECcHo6pGq-2_lYHCB7ttUvQDchz3otjwEJEhfV2hxtYOGdOD9YNTT8ziU5Uga47OuY2UhiKdm09UW7kQAgFdvayHtmQVuUfAWUNilYPXHsLD1oRiLId88X4P8sgKAZ6Y_";
 		JSONObject body = new JSONObject();
-		body.put("to", "/topics/" + TOPIC);
+		//body.put("to", "/topics/" + TOPIC);
+		body.put("to",inigo);
 		body.put("priority", "high");
 
 		JSONObject notification = new JSONObject();
@@ -565,9 +570,15 @@ public class RestDemoController {
 		notification.put("body", "Happy Message!");
 		
 		
+		/*
+		JSONObject data = new JSONObject();
+		data.put("Key-1", "JSA Data 1");
+		data.put("Key-2", "JSA Data 2");
+		
+	
 
 		body.put("notification", notification);
-	
+		//body.put("data", data);
 		
 		HttpEntity<String> request = new HttpEntity<>(body.toString());
 
@@ -587,7 +598,17 @@ public class RestDemoController {
 		return new ResponseEntity<>("Push Notification ERROR!", HttpStatus.BAD_REQUEST);
 	
 		
-	}
+	}*/
+
+	 @GetMapping("/token")
+	    public String sendPnsToDevice() {
+		 	Nota nota = new Nota();
+		 	nota.setBody("CUERPO");
+		 	String inigo = "cWaH0QF9TwigLV1l5WWfeT:APA91bE7YVL3mMFbahY5F_6LAuepybLFPiHuYlq_19qqtPR5Xl9M4gOWnK5C0B82UUY5hAHo9XfwYFFaVBFYpInn8ri3qUUhYlhmr_ibsOZmtqzsv2rgZ15Ai11ad9h-i2eVgao8ahaF";
+		 	nota.setTarget(inigo);
+		 	nota.setTitle("TITULO");
+	        return notificationService.sendPnsToDevice(nota);
+	    }
 
 	
 	 
