@@ -171,8 +171,9 @@ public class PuntosRepo {
 		List<Puntos> borrados = new ArrayList<Puntos>();
 		for(Puntos p : puntos_) {
 			if(p.getIdPartida_()==idPartida) {
+				Usuario u = usuarioRepo.findByMail(p.getIdUsuario_().getMail());
 				System.out.println(p.getIdUsuario_());
-				Usuario u =p.getIdUsuario_();
+				
 				u.setpGracioso(u.getpGracioso()+p.getpGracioso_());
 				u.setpListo(u.getpListo()+p.getpListo_());
 				u.setpDibujo(u.getpDibujo()+p.getpDibujo_());
