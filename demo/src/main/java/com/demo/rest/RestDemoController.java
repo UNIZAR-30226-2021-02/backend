@@ -5,11 +5,15 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 
 import javax.annotation.PostConstruct;
 
 import org.apache.commons.io.IOUtils;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -105,6 +109,7 @@ public class RestDemoController {
 			u.setnAmigos(0);
 			u.setPuntos(new Integer(0),new Integer(0),new Integer(0),new Integer(0),new Integer(0));
 			u.setFotPerf("foto0.png");
+			u.setToken(usuario.getToken());
 			usuarioRepo.save(u);
 			System.out.println("Como el usuario no existe, se crea");
 			
@@ -548,20 +553,44 @@ public class RestDemoController {
 	
 	
 	@GetMapping(value = "/sendNotification")
-	public ResponseEntity<String> sendNotification(@RequestHeader int idPartida){
+	public ResponseEntity<String> sendNotification(){
+		String TOPIC = "TARGET";
+				
+		JSONObject body = new JSONObject();
+		body.put("to", "/topics/" + TOPIC);
+		body.put("priority", "high");
+
+		JSONObject notification = new JSONObject();
+		notification.put("title", "JSA Notification");
+		notification.put("body", "Happy Message!");
 		
-		Note note = new Note("TOKEN","TITULO","CUERPO");
 		
-		notificationService.sendPnsToDevice(note);
-		return new ResponseEntity<String>(HttpStatus.OK);
+
+		body.put("notification", notification);
+	
+		
+		HttpEntity<String> request = new HttpEntity<>(body.toString());
+
+		CompletableFuture<String> pushNotification = notificationService.send(request);
+		CompletableFuture.allOf(pushNotification).join();
+
+		try {
+			String firebaseResponse = pushNotification.get();
+			
+			return new ResponseEntity<>(firebaseResponse, HttpStatus.OK);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		} catch (ExecutionException e) {
+			e.printStackTrace();
+		}
+
+		return new ResponseEntity<>("Push Notification ERROR!", HttpStatus.BAD_REQUEST);
+	
+		
 	}
 
 	
-	 @PostMapping("/topic")
-	    public String sendPnsToTopic(@RequestBody Note notificationRequestDto) {
-	        return notificationService.sendPnsToTopic(notificationRequestDto);
-	    }
-	
+	 
 	 
 	
 }
