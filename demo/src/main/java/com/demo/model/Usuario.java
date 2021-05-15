@@ -228,7 +228,7 @@ public class Usuario {
 
 	
 
-	@OneToMany(mappedBy = "autor_",fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = "autor_",fetch = FetchType.EAGER) 
 	 
 	 private List<Respuesta> respuestas;
 	 

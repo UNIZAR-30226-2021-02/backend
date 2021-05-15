@@ -30,6 +30,13 @@
 	
 	
 	<dependency>
+	<groupId>org.json</groupId>
+	<artifactId>json</artifactId>
+	<version>20160810</version>
+	</dependency>
+	
+	
+	<dependency>
     <groupId>commons-io</groupId>
     <artifactId>commons-io</artifactId>
     <version>2.6</version>
@@ -110,7 +117,7 @@
 			 
 			<artifactId>firebase-admin</artifactId>
 			 
-			<version>6.15.0</version>
+			<version>6.9.0</version>
 			 
 		</dependency>
 
