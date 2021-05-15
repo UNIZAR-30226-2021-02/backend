@@ -5,11 +5,15 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 
 import javax.annotation.PostConstruct;
 
 import org.apache.commons.io.IOUtils;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -32,8 +36,10 @@ import java.io.ByteArrayInputStream;
 import java.util.Base64;
 
 import com.demo.controller.AuthController;
+import com.demo.fcm.Note;
 import com.demo.model.Hilo;
 import com.demo.model.Invitaciones;
+import com.demo.model.Nota;
 import com.demo.model.Partida;
 import com.demo.model.Puntos;
 import com.demo.model.Respuesta;
@@ -42,6 +48,7 @@ import com.demo.model.Usuario;
 import com.demo.repository.TokenRepo;
 import com.demo.repository.UsuarioRepo;
 import com.demo.service.GameService;
+import com.demo.service.NotificationService;
 import com.demo.service.UserService;
 
 
@@ -50,6 +57,10 @@ import com.demo.service.UserService;
 @RequestMapping(value = "/api")
 public class RestDemoController {
 
+	
+	@Autowired
+	private NotificationService notificationService;
+	
 	
 	@Autowired
 	private AuthController jwt;
@@ -99,6 +110,7 @@ public class RestDemoController {
 			u.setnAmigos(0);
 			u.setPuntos(new Integer(0),new Integer(0),new Integer(0),new Integer(0),new Integer(0));
 			u.setFotPerf("foto0.png");
+			u.setToken(usuario.getToken());
 			usuarioRepo.save(u);
 			System.out.println("Como el usuario no existe, se crea");
 			
@@ -539,7 +551,67 @@ public class RestDemoController {
 		game.resetVotos(idPartida);
 		return new ResponseEntity<String>(HttpStatus.OK);
 	}
+	
+	/*
+	@GetMapping(value = "/sendNotification")
+	public ResponseEntity<String> sendNotification(){
+		String TOPIC = "si";
+		
+		
+		String inigo = "cWaH0QF9TwigLV1l5WWfeT:APA91bE7YVL3mMFbahY5F_6LAuepybLFPiHuYlq_19qqtPR5Xl9M4gOWnK5C0B82UUY5hAHo9XfwYFFaVBFYpInn8ri3qUUhYlhmr_ibsOZmtqzsv2rgZ15Ai11ad9h-i2eVgao8ahaF";
+		String hector = "cJa3fiHST5estCfnZFCMRq:APA91bEuJ5HECcHo6pGq-2_lYHCB7ttUvQDchz3otjwEJEhfV2hxtYOGdOD9YNTT8ziU5Uga47OuY2UhiKdm09UW7kQAgFdvayHtmQVuUfAWUNilYPXHsLD1oRiLId88X4P8sgKAZ6Y_";
+		JSONObject body = new JSONObject();
+		//body.put("to", "/topics/" + TOPIC);
+		body.put("to",inigo);
+		body.put("priority", "high");
 
+		JSONObject notification = new JSONObject();
+		notification.put("title", "JSA Notification");
+		notification.put("body", "Happy Message!");
+		
+		
+		/*
+		JSONObject data = new JSONObject();
+		data.put("Key-1", "JSA Data 1");
+		data.put("Key-2", "JSA Data 2");
+		
+	
 
+		body.put("notification", notification);
+		//body.put("data", data);
+		
+		HttpEntity<String> request = new HttpEntity<>(body.toString());
+
+		CompletableFuture<String> pushNotification = notificationService.send(request);
+		CompletableFuture.allOf(pushNotification).join();
+
+		try {
+			String firebaseResponse = pushNotification.get();
+			
+			return new ResponseEntity<>(firebaseResponse, HttpStatus.OK);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		} catch (ExecutionException e) {
+			e.printStackTrace();
+		}
+
+		return new ResponseEntity<>("Push Notification ERROR!", HttpStatus.BAD_REQUEST);
+	
+		
+	}*/
+
+	 @GetMapping("/token")
+	    public String sendPnsToDevice() {
+		 	Nota nota = new Nota();
+		 	nota.setBody("CUERPO");
+		 	String inigo = "cWaH0QF9TwigLV1l5WWfeT:APA91bE7YVL3mMFbahY5F_6LAuepybLFPiHuYlq_19qqtPR5Xl9M4gOWnK5C0B82UUY5hAHo9XfwYFFaVBFYpInn8ri3qUUhYlhmr_ibsOZmtqzsv2rgZ15Ai11ad9h-i2eVgao8ahaF";
+		 	nota.setTarget(inigo);
+		 	nota.setTitle("TITULO");
+	        return notificationService.sendPnsToDevice(nota);
+	    }
+
+	
+	 
+	 
 	
 }

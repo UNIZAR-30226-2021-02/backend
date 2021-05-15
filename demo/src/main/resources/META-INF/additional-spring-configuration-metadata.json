@@ -1,5 +1,27 @@
-{"properties": [{
-  "name": "app.api.swagger.enable",
-  "type": "java.lang.String",
-  "description": "A description for 'app.api.swagger.enable'"
-}]}
+{"properties": [
+  {
+    "name": "app.api.swagger.enable",
+    "type": "java.lang.String",
+    "description": "A description for 'app.api.swagger.enable'"
+  },
+  {
+    "name": "app.firebase-configuration-file",
+    "type": "java.lang.String",
+    "description": "A description for 'app.firebase-configuration-file'"
+  },
+  {
+    "name": "firebaseConfig",
+    "type": "java.lang.String",
+    "description": "A description for 'firebaseConfig'"
+  },
+  {
+    "name": "firebaseConfig",
+    "type": "java.lang.String",
+    "description": "A description for 'firebaseConfig'"
+  },
+  {
+    "name": "firebaseConfig",
+    "type": "java.lang.String",
+    "description": "A description for 'firebaseConfig'"
+  }
+]}
