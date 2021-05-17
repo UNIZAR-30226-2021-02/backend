@@ -611,12 +611,13 @@
     }
 
     EXPLICACIÓN: ahora devolvemos siempre 200 y una respuesta, pero hay que mirar los campos para saber qué está pasando.
+    
       -id: codifica el caso
           Error/caso especial:
-              -3: partida empezada
-              -2: ya has jugado el turno
-              -1: es el primer turno y no hay respuesta previa (toca /addText)
-          Caso normal: contiene el identifiacdor de la respuesta (será positivo y os sirve para luego pedir la foto)
+        -3: partida acabada
+        -2: ya has jugado el turno
+        -1: es el primer turno y no hay respuesta previa (toca /addText)
+        -Caso normal: contiene el identifiacdor de la respuesta (será positivo y os sirve para luego pedir la foto)
       -autor: os lo devolvemos siempre a null (no os interesa xd)
       -esDibujo: es un boleano que indica si la id de la respuesta se corresponde con un dibujo/foto o no
       -frase: valdrá null si esDibujo es true, y contendrá la frase en cuestión cuando la respuesta no sea un dibujo 
@@ -957,4 +958,29 @@ PD: me siento como el de riot cada vez que sacan parche, y ahora vamos con los p
    
     -Status code:
       - 200: se lista correctamente
+
+
+
+-----------------
+  VERSION 1.6.1
+-----------------
+
+- Se ha creado una petición para web para enviar el dibujo
+
+- Enviar imagen como respuesta:
+    - Método: POST
+    - URL: /api/addImage2
+    - Permisos: TOKEN
+    - Petición: 
+      HEADER:
+        key="idPartida" y value="id"
+        key="autor" y value="tu_mail"
+      
+      BODY:
+      contenido: Esto es el String que contiene la imagen.
+      
+    -Status code:
+      - 200: se añade correctamente
+      - 417: no se ha podido añadir porque ya has jugado tu turno o porque la partida ya está acabada
+
       

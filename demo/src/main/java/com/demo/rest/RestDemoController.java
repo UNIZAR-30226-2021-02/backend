@@ -356,7 +356,9 @@ public class RestDemoController {
 	
 	@PostMapping(value = "/newGame")
 	public ResponseEntity<Partida> newGame(@RequestBody Partida partida,@RequestHeader String identificador){
+
 		if(partida.getNombre().length()>20) return new ResponseEntity<Partida>(HttpStatus.EXPECTATION_FAILED);		
+
 		Partida p = game.crearPartida(identificador,partida);
 		p.setNull();
 		return new ResponseEntity<Partida>(p,HttpStatus.OK);

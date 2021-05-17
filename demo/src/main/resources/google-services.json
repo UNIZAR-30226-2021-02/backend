@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "675405123947",
+    "project_id": "proyectosoftware-60b2e",
+    "storage_bucket": "proyectosoftware-60b2e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:675405123947:android:7de54ad2bc9062f9d4bc2e",
+        "android_client_info": {
+          "package_name": "es.proyecto_PictyoPhone"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "675405123947-bbjv88ccti3m4g0qt2tfqtnejbf2fnsu.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCpxSTNdyZ6e-S1X-SysQrRIC2HoWxDrfM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "675405123947-bbjv88ccti3m4g0qt2tfqtnejbf2fnsu.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
