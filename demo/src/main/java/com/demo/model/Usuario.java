@@ -129,6 +129,23 @@ public class Usuario {
 	 
 	 
 	 
+	 public List<Invitaciones> getInvitaciones() {
+		return invitaciones;
+	}
+
+	public void setInvitaciones(List<Invitaciones> invitaciones) {
+		this.invitaciones = invitaciones;
+	}
+
+	@ManyToMany(cascade = CascadeType.ALL)
+		@JoinTable(
+		        name = "desbloqueadas",
+		        joinColumns = @JoinColumn(name = "foto", nullable = false),
+		        inverseJoinColumns = @JoinColumn(name="usuario", nullable = false)
+		    )
+
+		private List<Foto> fotos;
+	 
 	 
 	 
 	 @ManyToMany(mappedBy="invitador")
