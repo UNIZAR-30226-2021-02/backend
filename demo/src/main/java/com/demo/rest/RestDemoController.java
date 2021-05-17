@@ -37,6 +37,7 @@ import java.util.Base64;
 
 import com.demo.controller.AuthController;
 import com.demo.fcm.Note;
+import com.demo.model.Foto;
 import com.demo.model.Hilo;
 import com.demo.model.Invitaciones;
 import com.demo.model.Nota;
@@ -112,6 +113,7 @@ public class RestDemoController {
 			u.setFotPerf("foto0.png");
 			u.setToken(usuario.getToken());
 			usuarioRepo.save(u);
+			game.comprarFoto(mail,"foto0.png");
 			System.out.println("Como el usuario no existe, se crea");
 			
 			String token = jwt.getJWTToken(mail);
@@ -325,12 +327,15 @@ public class RestDemoController {
 		
 		
 		
-		Usuario u = usuarioRepo.findByMail(identificador);
-		System.out.println(identificador+"--"+idFoto);
-		u.setFotPerf(idFoto);
-		usuarioRepo.save(u);
+		
+		if(game.cambiarFoto(identificador, idFoto)){
+			return new ResponseEntity<Integer>(HttpStatus.OK);
+		}
+		else return new ResponseEntity<Integer>(HttpStatus.EXPECTATION_FAILED);
+		
+		
 
-		return new ResponseEntity<Integer>(HttpStatus.OK);
+		
 		
 	}
 	
@@ -351,7 +356,7 @@ public class RestDemoController {
 	
 	@PostMapping(value = "/newGame")
 	public ResponseEntity<Partida> newGame(@RequestBody Partida partida,@RequestHeader String identificador){
-				
+		if(partida.getNombre().length()>20) return new ResponseEntity<Partida>(HttpStatus.EXPECTATION_FAILED);		
 		Partida p = game.crearPartida(identificador,partida);
 		p.setNull();
 		return new ResponseEntity<Partida>(p,HttpStatus.OK);
@@ -611,7 +616,35 @@ public class RestDemoController {
 	    }
 
 	
+	 @GetMapping("/listPictures")
+	 public ResponseEntity<List<Foto>> listPictures(){	
+		 List<Foto> respuesta = game.listarFotos();
+		 return new ResponseEntity<List<Foto>>(respuesta,HttpStatus.OK);
+	 }
+	 
+	 @GetMapping("/listUnlockedPictures")
+	 public ResponseEntity<List<Foto>> listUnlockedPictures(@RequestHeader String identificador){	 
+		 List<Foto> respuesta = game.listarFotosCompradas(identificador);
+		 return new ResponseEntity<List<Foto>>(respuesta,HttpStatus.OK);
+	 }
+	 
+	 @GetMapping("/unlockPicture")
+	 public ResponseEntity<String> unlockPicture(@RequestHeader String identificador, @RequestHeader String idFoto){
+		 if(game.comprarFoto(identificador,idFoto)) {
+			 return new ResponseEntity<String>(HttpStatus.OK);
+		 }
+		 else {
+			 return new ResponseEntity<String>(HttpStatus.EXPECTATION_FAILED);
+		 }
+	 }
 	 
 	 
+	 @GetMapping("/setMonedas")
+	 public ResponseEntity<String> unlockPicture(@RequestHeader String identificador,@RequestHeader int monedas){
+		 Usuario u = usuarioRepo.findByMail(identificador);
+		 u.setMonedas(monedas);
+		 usuarioRepo.save(u);
+		 return new ResponseEntity<String>(HttpStatus.OK);
+	 }
 	
 }

@@ -19,12 +19,18 @@ public class Foto {
 	
 	@ManyToMany(mappedBy="fotos")
 	private List<Usuario> usDesbloqueados;
-
-
+	
+	public Foto(Integer precio,String idFoto) {
+		this.precio = precio;
+		this.idFoto = idFoto;
+	}
+	
+	public Foto() {};
+	
 	public String getIdFoto() {
 		return idFoto;
 	}
-
+	
 
 	public void setIdFoto(String idFoto) {
 		this.idFoto = idFoto;
@@ -40,11 +46,11 @@ public class Foto {
 		this.precio = precio;
 	}
 
-
+	/*
 	public List<Usuario> getUsDesbloqueados() {
 		return usDesbloqueados;
 	}
-
+	*/
 
 	public void setUsDesbloqueados(List<Usuario> usDesbloqueados) {
 		this.usDesbloqueados = usDesbloqueados;

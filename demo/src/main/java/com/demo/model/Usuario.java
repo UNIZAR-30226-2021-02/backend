@@ -144,11 +144,26 @@ public class Usuario {
 		        inverseJoinColumns = @JoinColumn(name="usuario", nullable = false)
 		    )
 
-		private List<Foto> fotos;
+		private List<Foto> fotos = new ArrayList<>();
 	 
 	 
 	 
-	 @ManyToMany(mappedBy="invitador")
+	 public List<Foto> getFotos() {
+		return fotos;
+	}
+
+	public void setFotos(List<Foto> fotos) {
+		this.fotos = fotos;
+	}
+	
+	public void addFoto(Foto f) {
+		fotos.add(f);
+	}
+	public boolean noComprada(Foto f) {
+		return !fotos.contains(f);
+	}
+
+	@ManyToMany(mappedBy="invitador")
 	 private List<Invitaciones> invitador;
 	 
 	 

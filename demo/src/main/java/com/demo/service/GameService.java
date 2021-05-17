@@ -5,11 +5,14 @@ import java.util.ArrayList;
 
 import java.util.List;
 
+import javax.annotation.PostConstruct;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 
+import com.demo.model.Foto;
 import com.demo.model.Hilo;
 import com.demo.model.Invitaciones;
 import com.demo.model.Partida;
@@ -36,6 +39,8 @@ public class GameService {
 	private InvitacionesRepo invitacionesRepo;
 	@Autowired
 	private PuntosRepo puntosRepo;
+	@Autowired
+	private FotoRepo fotoRepo;
 	
 
 	
@@ -365,5 +370,62 @@ public class GameService {
 	public void resetVotos(int idPartida) {
 		Partida p = partidaRepo.findById(idPartida);
 		puntosRepo.ini(p);
+	}
+	
+	
+	
+	
+	public List<Foto> listarFotos(){
+		return fotoRepo.findAll();
+	}
+	
+	public List<Foto> listarFotosCompradas(String identificador){
+		Usuario u = usuarioRepo.findByMail(identificador);
+		return u.getFotos();
+	}
+	
+	public boolean comprarFoto(String identificador,String idFoto) {
+		Usuario u = usuarioRepo.findByMail(identificador);
+		Foto f = fotoRepo.findByIdFoto(idFoto);
+		
+		if(u.getMonedas()>=f.getPrecio()&&u.noComprada(f)) {
+			
+			u.setMonedas(u.getMonedas()-f.getPrecio());
+			u.addFoto(f);
+			usuarioRepo.save(u);
+			return true;
+		}
+		else return false;
+		
+	}
+	
+	public boolean cambiarFoto(String identificador, String idFoto) {
+		Usuario u = usuarioRepo.findByMail(identificador);
+		Foto f = fotoRepo.findByIdFoto(idFoto);
+		
+		if(!u.noComprada(f)) {
+			u.setFotPerf(idFoto);
+			usuarioRepo.save(u);
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+	
+	@PostConstruct
+	public void poblarFotos() {
+		
+		Foto f0 = new Foto(0,"foto0.png");
+		Foto f1 = new Foto(3,"foto1.png");
+		Foto f2 = new Foto(50,"foto2.png");
+		Foto f3 = new Foto(100,"foto3.png");
+		Foto f4 = new Foto(200,"foto4.png");
+		
+		fotoRepo.save(f0);
+		fotoRepo.save(f1);
+		fotoRepo.save(f2);
+		fotoRepo.save(f3);
+		fotoRepo.save(f4);
 	}
 }
