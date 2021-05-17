@@ -413,6 +413,30 @@ public class GameService {
 		}
 	}
 	
+	
+	
+	public void ponerRespuestasDefault(int idPartida) {
+		Partida p = partidaRepo.findById(idPartida);
+		for(Usuario u: p.getJugadores_()) {
+					
+			if(!p.turnoJugado(u.getMail())) {
+				Respuesta r;
+				if(p.getTurno()%2==0) {
+						
+					addRespuesta(p.getId(),u.getMail(),null,false,"Nadie ha respondido");
+			
+				}
+				else {
+					
+					addRespuesta(p.getId(),u.getMail(),null,true,null);
+				
+				}
+				
+			}
+	
+		}	
+	}
+	
 	@PostConstruct
 	public void poblarFotos() {
 		
