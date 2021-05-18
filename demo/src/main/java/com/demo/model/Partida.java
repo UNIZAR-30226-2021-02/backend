@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.CompletableFuture;
@@ -27,10 +28,15 @@ import javax.persistence.PreRemove;
 import javax.persistence.Transient;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Configurable;
+import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.context.annotation.Scope;
+import org.springframework.context.annotation.aspectj.EnableSpringConfigured;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
+import org.springframework.stereotype.Service;
 
 import com.demo.DemoApplication;
 import com.demo.repository.HiloRepo;
@@ -40,12 +46,18 @@ import com.demo.service.GameService;
 
 
 
+
+
+@EnableSpringConfigured
+@Configurable
 @Entity
 public class Partida {
 	
 	
 	
 	
+	
+		
 	
 
 	@Id
@@ -55,11 +67,11 @@ public class Partida {
 	private int nJugadores_;
 	
 	
-	@Transient
-	static HashMap<Integer,MyThread > threads = new HashMap<Integer, MyThread>();
+	
+	
 	
 
-	@ManyToMany(cascade = CascadeType.ALL)
+	@ManyToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
 	@JoinTable(
 	        name = "jugadores",
 	        joinColumns = @JoinColumn(name = "partida", nullable = false),
@@ -273,7 +285,7 @@ public class Partida {
 			}
 			turno_++; //AVISAR A LOS JUGADORES
 		
-			//ponerTimer();
+			
 			
 			
 			
@@ -293,7 +305,7 @@ public class Partida {
 		}
 		this.estado_= DemoApplication.JUGANDO;
 		this.turno_=0;
-		//ponerTimer();
+		
 	}
 
 	public boolean turnoJugado(String idUser) {
@@ -311,72 +323,10 @@ public class Partida {
 	
 	
 	
-	class MyThread implements Runnable {
-		  
-		@Autowired
-		private ApplicationContext applicationContext;
-	    
-				
-		
-	    private String name;
-	    Thread t;
-	  
-	    MyThread(String threadname)
-	    {
-	        name = threadname;
-	        t = new Thread(this, name);
-	        System.out.println("New thread: " + t);
-	       
-	        t.start(); // Starting the thread
-	    }
-	  
-	   
-	    
-	    // execution of thread starts from run() method
-	    public void run()
-	    {
-	    	long delay = 86400000;
-			long delayPrueba = 60000;
-	        try {
-				Thread.sleep(delayPrueba);
-				System.out.println("TIEMPO TERMINADO PARTIDA:" +id_);
-				GameService game = new GameService();
-				applicationContext.getAutowireCapableBeanFactory().initializeBean(game, null);
-
-				applicationContext.getAutowireCapableBeanFactory().autowireBean(game);
-				game.ponerRespuestasDefault(id_);
-				
-				
-				
-			} catch (InterruptedException e) {
-				System.out.println("Nos lo hemos funao");
-				
-			}
-	        	        	        
-	    }
-	  
-	    // for stopping the thread
-	    public void stop()
-	    {
-	    	t.interrupt();
-	    }
-	}
 	
 	
 	
 	
-	public void ponerTimer() {
-		System.out.println("LLAMAMOS A PONER TIMER");
-		MyThread t = threads.get(id_);
-		if(t!=null) {
-			System.out.println("Despertamos el thread");
-			t.stop();
-		}
-		t = new MyThread("nombre");
-		threads.put(id_, t);	
-		
 	
-		
-		
-	}
+	
 }
