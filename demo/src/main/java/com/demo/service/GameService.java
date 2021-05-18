@@ -2,13 +2,17 @@ package com.demo.service;
 
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-
+import java.util.HashMap;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
+import javax.persistence.Transient;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
+import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 
@@ -23,8 +27,13 @@ import com.demo.repository.*;
 
 import com.demo.DemoApplication;
 
+
 @Service
 public class GameService {
+	
+	
+	@Autowired
+	private static HashMap<Integer,MyThread > threads = new HashMap<Integer, MyThread>();
 	
 	
 	@Autowired
@@ -42,16 +51,45 @@ public class GameService {
 	@Autowired
 	private FotoRepo fotoRepo;
 	
+	
+	
+	
+	public void ponerTimer(int idPartida) {
+			
+			
+			
+			System.out.println("LLAMAMOS A PONER TIMER");
+			MyThread t = threads.get(idPartida);
+			if(t!=null) {
+				System.out.println("Despertamos el thread");
+				t.stop();
+			}
+			t = new MyThread("nombre",idPartida);
+			threads.put(idPartida, t);	
+			
+		
+			
+			
+		}
+	
 
 	
 	public Partida crearPartida(String identificador,Partida partidaPar) {
 		Usuario host = usuarioRepo.findByMail(identificador);
 		Partida partida = new Partida(host,partidaPar.getNombre());
+		
+		
 		partidaRepo.save(partida);
 		//System.out.println(partida.getHost_());
 		partidaRepo.save(partida);
-		return partidaRepo.findById(partida.getId());
+		int idPartida = partida.getId();
+		
+		return partidaRepo.findById(idPartida);
 	}
+	
+	
+	
+	
 	
 	public boolean addJugador(String identificador, int id) {
 		Partida partida = partidaRepo.findById(id);
@@ -202,6 +240,7 @@ public class GameService {
 				//Esta sin empezar
 				p.empezarPartida();
 				partidaRepo.save(p);
+				ponerTimer(idPartida);
 				invitacionesRepo.deleteAll(invitacionesRepo.findByPartida(p)); //Eliminamos invitaciones pendientes
 				//Notificar a todos de que ha empezado 
 				return 0;
@@ -222,10 +261,16 @@ public class GameService {
 		Partida p=partidaRepo.findById(idPartida);
 		Usuario u = usuarioRepo.findByMail(autor);
 		r= new Respuesta(u,contenido,dibujo,frase);
+		int turnoAntes = p.getTurno();
 		if((p.getTurno()%2==0 && dibujo) || (p.getTurno()%2==1 && !dibujo)) {
 			return false;
 		}
 		Hilo h = p.addRespuesta(u, r);
+		int turnoDespues = p.getTurno();
+		
+		if(turnoDespues > turnoAntes) {
+			ponerTimer(p.getId());
+		}
 		if(p.getEstado_().equals(DemoApplication.VOTANDO)) {
 			System.out.println("INICIALIZAMOS");
 			puntosRepo.ini(p);
@@ -452,4 +497,61 @@ public class GameService {
 		fotoRepo.save(f3);
 		fotoRepo.save(f4);
 	}
+	
+	
+	
+	
+	public class MyThread implements Runnable {
+		  
+		@Autowired
+		private ApplicationContext applicationContext;
+	     @Autowired
+	     private GameService game;
+				
+		
+	    private String name;
+	    Thread t;
+	    private int idPartida;
+	    MyThread(String threadname,int idPartida)
+	    {
+	        
+	    	this.idPartida = idPartida;
+	    	name = threadname;
+	        t = new Thread(this, name);
+	        System.out.println("New thread: " + t);
+	       
+	        t.start(); // Starting the thread
+	    }
+	  
+	   
+	    
+	    // execution of thread starts from run() method
+	    public void run()
+	    {
+	    	long delay = 86400000;
+			long delayPrueba = 600000;
+	        try {
+				Thread.sleep(delayPrueba);
+				System.out.println("TIEMPO TERMINADO PARTIDA:" +idPartida);
+				
+				
+				ponerRespuestasDefault(idPartida);
+				
+				
+				
+			} catch (InterruptedException e) {
+				System.out.println("Nos lo hemos funao");
+				
+			}
+	        	        	        
+	    }
+	  
+	    // for stopping the thread
+	    public void stop()
+	    {
+	    	t.interrupt();
+	    }
+	}
+
+	
 }
