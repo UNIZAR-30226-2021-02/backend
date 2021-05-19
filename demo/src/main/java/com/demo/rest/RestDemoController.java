@@ -630,6 +630,12 @@ public class RestDemoController {
 		 return new ResponseEntity<List<Foto>>(respuesta,HttpStatus.OK);
 	 }
 	 
+	 @GetMapping("/listLockedPictures")
+	 public ResponseEntity<List<Foto>> listLockedPictures(@RequestHeader String identificador){	 
+		 List<Foto> respuesta = game.listarFotosBloqueadas(identificador);
+		 return new ResponseEntity<List<Foto>>(respuesta,HttpStatus.OK);
+	 }
+	 
 	 @GetMapping("/unlockPicture")
 	 public ResponseEntity<String> unlockPicture(@RequestHeader String identificador, @RequestHeader String idFoto){
 		 if(game.comprarFoto(identificador,idFoto)) {

@@ -429,6 +429,19 @@ public class GameService {
 		return u.getFotos();
 	}
 	
+	public List<Foto> listarFotosBloqueadas(String identificador){
+		Usuario u = usuarioRepo.findByMail(identificador);
+		List<Foto> compradas =  u.getFotos();
+		List<Foto> todas = fotoRepo.findAll();
+		List<Foto> respuesta = new ArrayList<>();
+		for(Foto f : todas) {
+			if(!compradas.contains(f)) {
+				respuesta.add(f);
+			}
+		}
+		return respuesta;
+	}
+	
 	public boolean comprarFoto(String identificador,String idFoto) {
 		Usuario u = usuarioRepo.findByMail(identificador);
 		Foto f = fotoRepo.findByIdFoto(idFoto);
