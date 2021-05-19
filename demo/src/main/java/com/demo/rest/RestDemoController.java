@@ -267,7 +267,7 @@ public class RestDemoController {
 				return new ResponseEntity<Usuario>(HttpStatus.EXPECTATION_FAILED);
 			}
 		}else {
-			return new ResponseEntity<Usuario>(HttpStatus.NO_CONTENT);
+			return new ResponseEntity<Usuario>(HttpStatus.METHOD_NOT_ALLOWED);
 		}
 
 		
