@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -335,6 +336,7 @@ public class GameService {
 			}
 			return resultado;
 		}else {
+			System.out.println("CAGASTE");
 			return false;
 		}
 }
@@ -349,6 +351,7 @@ public class GameService {
 				//p.setEstado_(DemoApplication.ACABADA);
 				partidaRepo.save(p);
 			}
+			System.out.println("hoola");
 			return resultado;
 		}else {
 			return false;
@@ -374,8 +377,6 @@ public class GameService {
 			Puntos p = puntosRepo.getPuntosJugador(idPartida, identificador);
 			List<Integer> resp = new ArrayList<>();
 			if(puntosRepo.todosConsultado(idPartida)) {
-				
-				
 				partidaRepo.deleteRespuestasPartida(idPartida);
 				partidaRepo.deleteJugadoresPartida(idPartida);
 				partidaRepo.deleteHilosPartida(idPartida);
@@ -393,7 +394,7 @@ public class GameService {
 	}
 	
 	public List<Puntos> puntosPartida(int idPartida,String identificador) {
-		if(puntosRepo.todosVotado(idPartida) && partidaRepo.findById(idPartida) != null) { //Si han votado todos
+		if(/*puntosRepo.todosVotado(idPartida) &&*/ partidaRepo.findById(idPartida) != null) { //Si han votado todos
 			
 			List<Puntos> p = puntosRepo.getPuntosPartida(idPartida,identificador);
 			
@@ -542,7 +543,7 @@ public class GameService {
 	    public void run()
 	    {
 	    	long delay = 86400000;
-			long delayPrueba = 600000;
+			long delayPrueba = 60000;
 	        try {
 				Thread.sleep(delayPrueba);
 				System.out.println("TIEMPO TERMINADO PARTIDA:" +idPartida);

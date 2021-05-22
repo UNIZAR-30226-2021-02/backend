@@ -71,7 +71,7 @@ public class Partida {
 	
 	
 
-	@ManyToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+	@ManyToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY) //Antes era EAGER (con lazy van los puntos)
 	@JoinTable(
 	        name = "jugadores",
 	        joinColumns = @JoinColumn(name = "partida", nullable = false),
@@ -87,7 +87,7 @@ public class Partida {
 		
 
 	
-	@ManyToOne(fetch = FetchType.EAGER, optional = false)
+	@ManyToOne(fetch = FetchType.EAGER, optional = false) //Antes era EAGER,luego LAZY
 	private Usuario host_;
 	
 	private String estado_;  //esperando/puntuando/jugando

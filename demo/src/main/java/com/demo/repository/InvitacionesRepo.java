@@ -2,6 +2,8 @@ package com.demo.repository;
 
 import java.util.List;
 
+import javax.transaction.Transactional;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -17,12 +19,9 @@ public interface InvitacionesRepo extends JpaRepository<Invitaciones,Integer>{
 
 	Usuario findByMail(String mail);
 	*/
-	
 	Invitaciones findById(int id);
 	List<Invitaciones> findByPartida(Partida idPartida);
-	
 	Invitaciones findByPartidaAndInvitado(Partida idPartida,Usuario invitadoMail);
-	
 	List<Invitaciones> findByInvitado(Usuario invitadoMail);
 	/*
 	@Query(value = "SELECT Usuario.nombre FROM Amigos INNER JOIN Usuario ON Amigos.mail_amigo = mail  WHERE Amigos.mail_usuario = :mailUsuario" , nativeQuery = true)

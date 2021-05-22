@@ -216,7 +216,7 @@ public class Usuario {
 		this.peticion.remove(peticion);
 	}
 
-	 @ManyToMany(mappedBy="jugadores_")	
+	 @ManyToMany(mappedBy="jugadores_",fetch = FetchType.LAZY)	
 	 private List<Partida> partidas;
 	 
 	 @ManyToMany(mappedBy="peticion")

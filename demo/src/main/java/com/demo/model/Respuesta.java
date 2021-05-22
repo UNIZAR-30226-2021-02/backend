@@ -62,7 +62,7 @@ public class Respuesta {
 
 	private Usuario autor_;
 
-	@ManyToOne(fetch = FetchType.EAGER, optional = false)
+	@ManyToOne(fetch = FetchType.LAZY, optional = false) // Estaba en EAGER
 	private Hilo hilo_;
 
 	

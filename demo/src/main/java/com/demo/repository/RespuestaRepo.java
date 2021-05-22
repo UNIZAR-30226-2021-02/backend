@@ -2,6 +2,8 @@ package com.demo.repository;
 
 import java.util.List;
 
+import javax.transaction.Transactional;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -15,7 +17,6 @@ public interface RespuestaRepo extends JpaRepository<Respuesta,Integer>{
 
 	Usuario findByMail(String mail);
 	*/
-	
 	Respuesta findById(int id);
 	/*
 	@Query(value = "SELECT Usuario.nombre FROM Amigos INNER JOIN Usuario ON Amigos.mail_amigo = mail  WHERE Amigos.mail_usuario = :mailUsuario" , nativeQuery = true)

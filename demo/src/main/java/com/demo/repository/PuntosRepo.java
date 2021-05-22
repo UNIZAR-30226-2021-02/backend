@@ -52,44 +52,68 @@ public class PuntosRepo {
 	
 	public boolean addPuntosDibujo(int idPartida, String idUsuario, String identificador) {
 		int bien = 0;
+		Puntos p1 = null,p2 = null;
 		for (Puntos p : puntos_) {
 			if(p.getIdPartida_()==idPartida && p.getIdUsuario_().getMail().equals(idUsuario)) {
-				p.sumarPDibujo(1);
+				p1 = p;
 				bien++;
 			}if(p.getIdPartida_()==idPartida && p.getIdUsuario_().getMail().equals(identificador)){
-				p.setVotadoDibujo(true);
+				p2 = p;
 				bien++;
 			}
+			if (bien==2) {
+				System.out.println("añado dibujo");
+				p1.sumarPDibujo(1);
+				p2.setVotadoDibujo(true);
+				return true;
+			}
 		}
-		return bien==2;
+		return false;
 	}
 	
 	public boolean addPuntosListo(int idPartida, String idUsuario, String identificador) {
 		int bien = 0;
+		Puntos p1 = null,p2 = null;
 		for (Puntos p : puntos_) {
+			System.out.println(p.getIdPartida_());
+			System.out.println(p.getIdUsuario_().getMail());
 			if(p.getIdPartida_()==idPartida && p.getIdUsuario_().getMail().equals(idUsuario)) {
-				p.sumarPListo(1);
+				p1 = p;
 				bien++;
 			}if(p.getIdPartida_()==idPartida && p.getIdUsuario_().getMail().equals(identificador)){
-				p.setVotadoListo(true);
+				p2 = p;
 				bien++;
 			}
+			if (bien==2) {
+				System.out.println("añado listo");
+				p1.sumarPListo(1);
+				p2.setVotadoListo(true);
+				return true;
+			}
 		}
-		return bien==2;
+		return false;
 	}
 	
 	public boolean addPuntosGracioso(int idPartida, String idUsuario, String identificador) {
 		int bien = 0;
+		Puntos p1 = null,p2 = null;
 		for (Puntos p : puntos_) {
 			if(p.getIdPartida_()==idPartida && p.getIdUsuario_().getMail().equals(idUsuario)) {
-				p.sumarPGracioso(1);
+				p1 = p;
 				bien++;
 			}if(p.getIdPartida_()==idPartida && p.getIdUsuario_().getMail().equals(identificador)){
-				p.setVotadoGracioso(true);
+				p2 = p;
 				bien++;
 			}
+			if (bien==2) {
+				System.out.println("añado gracioso");
+				p1.sumarPGracioso(1);
+				p2.setVotadoGracioso(true);
+				return true;
+			}
 		}
-		return bien==2;
+		
+		return false;
 	}
 	
 	
@@ -129,6 +153,8 @@ public class PuntosRepo {
 		List<Usuario> jugadores = p.getJugadores_();
 		for(Usuario u : jugadores) {
 			Puntos puntos = new Puntos(idPartida,u);
+			System.out.println(puntos.getIdPartida_());
+			System.out.println(puntos.getIdUsuario_().getMail());
 			puntos_.add(puntos);
 		}
 	}
@@ -173,7 +199,6 @@ public class PuntosRepo {
 			if(p.getIdPartida_()==idPartida) {
 				Usuario u = usuarioRepo.findByMail(p.getIdUsuario_().getMail());
 				System.out.println(p.getIdUsuario_());
-				
 				u.setpGracioso(u.getpGracioso()+p.getpGracioso_());
 				u.setpListo(u.getpListo()+p.getpListo_());
 				u.setpDibujo(u.getpDibujo()+p.getpDibujo_());

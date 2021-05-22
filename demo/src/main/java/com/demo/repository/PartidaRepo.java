@@ -11,7 +11,6 @@ import org.springframework.data.repository.query.Param;
 
 import com.demo.model.Partida;
 import com.demo.model.Usuario;
-
 public interface PartidaRepo extends JpaRepository<Partida,Integer>{
 
 	//Usuario findByNombre(String nombre);

@@ -21,7 +21,7 @@ public class Hilo {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Integer id_;
 	
-	@OneToMany(mappedBy = "hilo_", fetch = FetchType.EAGER,cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "hilo_", fetch = FetchType.LAZY,cascade = CascadeType.ALL) //Estaba en EAGER
 	private List<Respuesta> respuestas_;
 	
 	
