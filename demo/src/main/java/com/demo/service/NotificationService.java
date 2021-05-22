@@ -60,7 +60,7 @@ public class NotificationService {
 	  public String sendPnsToDevice(Nota notificationRequestDto) {
 	        Message message = Message.builder()
 	                .setToken(notificationRequestDto.getTarget())
-	                .setNotification(new Notification(notificationRequestDto.getTitle(), notificationRequestDto.getBody()))
+	                
 	                .putData("content", notificationRequestDto.getTitle())
 	                .putData("body", notificationRequestDto.getBody())
 	                .build();

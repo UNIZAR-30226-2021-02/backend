@@ -157,7 +157,7 @@
     - 200: peticion enviada correctamente
     - 208: tenías una petición de el usuario al que quieres enviar la peticion, no envías la petición y se añade directamente como amigo 
     - 417: ya le habías enviado una petición o sois amigos
-    - 204: no existe el usuario al que quieres enviar la petición
+    - 405: no existe el usuario al que quieres enviar la petición
 
 - Listar peticiones amistad:
   - Método: GET
