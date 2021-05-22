@@ -216,7 +216,7 @@ public class Usuario {
 		this.peticion.remove(peticion);
 	}
 
-	 @ManyToMany(mappedBy="jugadores_",fetch = FetchType.LAZY)	
+	 @ManyToMany(mappedBy="jugadores_",fetch = FetchType.EAGER)	
 	 private List<Partida> partidas;
 	 
 	 @ManyToMany(mappedBy="peticion")
@@ -234,7 +234,8 @@ public class Usuario {
 	 public List<Partida> getPartidas() {
 		return partidas;
 	}
-
+	 
+	 @OneToMany(mappedBy = "jugadores_",fetch = FetchType.LAZY,cascade = CascadeType.ALL) //NO TOCAR
 	public void setPartidas(List<Partida> partidas) {
 		this.partidas = partidas;
 	}
@@ -260,7 +261,7 @@ public class Usuario {
 
 	
 
-	@OneToMany(mappedBy = "autor_",fetch = FetchType.EAGER) 
+	@OneToMany(mappedBy = "autor_",fetch = FetchType.LAZY) //No tocar 
 	 
 	 private List<Respuesta> respuestas;
 	 

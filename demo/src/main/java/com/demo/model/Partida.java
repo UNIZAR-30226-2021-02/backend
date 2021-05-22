@@ -87,14 +87,14 @@ public class Partida {
 		
 
 	
-	@ManyToOne(fetch = FetchType.EAGER, optional = false) //Antes era EAGER,luego LAZY
+	@ManyToOne(fetch = FetchType.EAGER, optional = false) //Antes era EAGER (no tocar, creo)
 	private Usuario host_;
 	
 	private String estado_;  //esperando/puntuando/jugando
 	
 	
 	
-	@OneToMany(mappedBy = "partida_", fetch = FetchType.EAGER,cascade = CascadeType.ALL) //NO TOCAR ESTE CASCADE
+	@OneToMany(mappedBy = "partida_", fetch = FetchType.LAZY,cascade = CascadeType.ALL) //NO TOCAR ESTE CASCADE
 	@OrderColumn
 	private Hilo[] hilos_; //mismo tamaño que jugadores
 	
