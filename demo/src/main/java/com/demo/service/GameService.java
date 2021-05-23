@@ -376,14 +376,13 @@ public class GameService {
 		if(puntosRepo.todosVotado(idPartida) && partidaRepo.findById(idPartida) != null) {
 			Puntos p = puntosRepo.getPuntosJugador(idPartida, identificador);
 			List<Integer> resp = new ArrayList<>();
-			//if(puntosRepo.todosConsultado(idPartida)) {
+			if(puntosRepo.todosConsultado(idPartida)) {
 				partidaRepo.deleteRespuestasPartida(idPartida);
 				partidaRepo.deleteJugadoresPartida(idPartida);
 				partidaRepo.deleteHilosPartida(idPartida);
 				partidaRepo.deletePartida(idPartida);
 				puntosRepo.delete(idPartida);
-			//}
-			if(p !=null) {
+			}if(p !=null) {
 				resp.add(p.calcularEstrellas());
 				resp.add(p.calcularMonedas());
 			}
