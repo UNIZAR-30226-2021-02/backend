@@ -84,7 +84,7 @@ public class Usuario {
 		this.nAmigos = nAmigos;
 	}
 
-	@ManyToMany(cascade = CascadeType.ALL)
+	@ManyToMany(fetch = FetchType.EAGER,cascade = CascadeType.ALL)
 	@JoinTable(
 	        name = "amigos",
 	        joinColumns = @JoinColumn(name = "mailUsuario", nullable = false),
@@ -93,7 +93,7 @@ public class Usuario {
 	private List<Usuario> amigo;
 	
 	
-	@ManyToMany(cascade = CascadeType.ALL)
+	@ManyToMany(fetch = FetchType.EAGER,cascade = CascadeType.ALL)
 	@JoinTable(
 	        name = "peticiones",
 	        joinColumns = @JoinColumn(name = "mail_recibe", nullable = false),
@@ -124,7 +124,7 @@ public class Usuario {
 	
 	 
 	 
-	 @ManyToMany(mappedBy="invitado")
+	 @ManyToMany(mappedBy="invitado",fetch = FetchType.EAGER)
 	 private List<Invitaciones> invitaciones;
 	 
 	 
@@ -137,7 +137,7 @@ public class Usuario {
 		this.invitaciones = invitaciones;
 	}
 
-	@ManyToMany(cascade = CascadeType.ALL)
+	@ManyToMany(fetch = FetchType.EAGER)
 		@JoinTable(
 		        name = "desbloqueadas",
 		        joinColumns = @JoinColumn(name = "foto", nullable = false),
@@ -216,18 +216,18 @@ public class Usuario {
 		this.peticion.remove(peticion);
 	}
 
-	 @ManyToMany(mappedBy="jugadores_",fetch = FetchType.LAZY)	
+	 @ManyToMany(mappedBy="jugadores_",fetch = FetchType.EAGER)	
 	 private List<Partida> partidas;
 	 
-	 @ManyToMany(mappedBy="peticion")
+	 @ManyToMany(mappedBy="peticion",fetch = FetchType.EAGER)
 	 private List<Usuario> usuario2;
 	
 	
-	 @ManyToMany(mappedBy="amigo")	
+	 @ManyToMany(mappedBy="amigo",fetch = FetchType.EAGER)	
 	 private List<Usuario> usuario;
 	 
 
-	 @OneToMany(mappedBy = "host_",fetch = FetchType.LAZY,cascade = CascadeType.ALL) //NO TOCAR
+	 @OneToMany(mappedBy = "host_",fetch = FetchType.EAGER,cascade = CascadeType.ALL) //NO TOCAR
 
 	 private List<Partida> partidasHost;
 	 
@@ -375,5 +375,20 @@ public class Usuario {
 
 	public Usuario() {
 		
+	}
+	
+	public Usuario(Usuario u) {
+		this.fotPerf = u.fotPerf;
+		this.mail = u.mail;
+		this.monedas = u.monedas;
+		this.nAmigos = u.nAmigos;
+		this.nombre = u.nombre;
+		this.password = u.password;
+		this.pDibujo = u.pDibujo;
+		this.pGracioso = u.pGracioso;
+		this.pListo = u.pListo;
+		this.role = u.role;
+		this.estrellas = u.estrellas;
+		this.fotos = u.fotos;
 	}
 }

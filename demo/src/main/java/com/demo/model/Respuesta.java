@@ -58,11 +58,12 @@ public class Respuesta {
 	public void setHilo(Hilo h) {
 		this.hilo_= h;
 	}
-	@OneToOne
-
+	
+	
+	@OneToOne(fetch = FetchType.EAGER)
 	private Usuario autor_;
 
-	@ManyToOne(fetch = FetchType.LAZY, optional = false) // Estaba en EAGER
+	@ManyToOne(fetch = FetchType.EAGER, optional = false) // Estaba en EAGER
 	private Hilo hilo_;
 
 	

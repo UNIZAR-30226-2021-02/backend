@@ -2,6 +2,10 @@ package com.demo.rest;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
+import java.math.BigInteger;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
@@ -106,7 +110,24 @@ public class RestDemoController {
 		if(usuarioRepo.findByMail(mail)==null&&usuarioRepo.findByNombre(nombreUsuario)==null) {
 			u.setNombre(nombreUsuario);
 			u.setMail(mail);
-			u.setPassword(usuario.getPassword());
+			
+			
+			  MessageDigest digest = null;
+			try {
+				digest = MessageDigest.getInstance("SHA-512");
+			} catch (NoSuchAlgorithmException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			  digest.reset();
+			  try {
+				digest.update(usuario.getPassword().getBytes("utf8"));
+			} catch (UnsupportedEncodingException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			  String toReturn = String.format("%0128x", new BigInteger(1, digest.digest()));
+			u.setPassword(toReturn);
 			u.setRole("USER");
 			u.setnAmigos(0);
 			u.setPuntos(new Integer(0),new Integer(0),new Integer(0),new Integer(0),new Integer(0));
@@ -137,7 +158,24 @@ public class RestDemoController {
 		Usuario u = usuarioRepo.findByMail(usuario.getMail());
 		System.out.println(usuario.getPassword());
 		if(u !=null){
-			if(u.getPassword().equals(usuario.getPassword())) {
+			
+			  MessageDigest digest = null;
+				try {
+					digest = MessageDigest.getInstance("SHA-512");
+				} catch (NoSuchAlgorithmException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				  digest.reset();
+				  try {
+					digest.update(usuario.getPassword().getBytes("utf8"));
+				} catch (UnsupportedEncodingException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				  String toReturn = String.format("%0128x", new BigInteger(1, digest.digest()));
+			
+			if(u.getPassword().equals(toReturn)) {
 				service.loadUserByUsername(u.getNombre());
 				
 				System.out.println("Logeado correctamente");

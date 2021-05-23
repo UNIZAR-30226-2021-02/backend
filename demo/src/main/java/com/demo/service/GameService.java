@@ -373,6 +373,7 @@ public class GameService {
 	}
 
 	public List<Integer> puntosJugador(int idPartida, String identificador) {
+		Usuario u2 = new Usuario(usuarioRepo.findByMail(identificador));
 		if(puntosRepo.todosVotado(idPartida) && partidaRepo.findById(idPartida) != null) {
 			Puntos p = puntosRepo.getPuntosJugador(idPartida, identificador);
 			List<Integer> resp = new ArrayList<>();
@@ -386,11 +387,13 @@ public class GameService {
 				resp.add(p.calcularEstrellas());
 				resp.add(p.calcularMonedas());
 			}
-			
+			usuarioRepo.save(u2);
 			return resp;	
 		}else {
+			usuarioRepo.save(u2);
 			return null;
 		}
+		
 	}
 	
 	public List<Puntos> puntosPartida(int idPartida,String identificador) {
@@ -543,7 +546,7 @@ public class GameService {
 	    public void run()
 	    {
 	    	long delay = 86400000;
-			long delayPrueba = 60000;
+			long delayPrueba = 600000;
 	        try {
 				Thread.sleep(delayPrueba);
 				System.out.println("TIEMPO TERMINADO PARTIDA:" +idPartida);
