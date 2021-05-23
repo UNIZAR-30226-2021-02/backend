@@ -133,8 +133,10 @@ public class GameService {
 		Usuario u = usuarioRepo.findByMail(identificador);
 		List<Partida> respuesta = new ArrayList<Partida>();
 		for (Partida p : u.getPartidas()) {
-			p.setNull();
-			respuesta.add(p);
+			if(!p.getEstado_().equals(DemoApplication.ACABADA)) {
+				p.setNull();
+				respuesta.add(p);
+			}
 		}
 		return respuesta;
 	}
@@ -378,10 +380,13 @@ public class GameService {
 			Puntos p = puntosRepo.getPuntosJugador(idPartida, identificador);
 			List<Integer> resp = new ArrayList<>();
 			if(puntosRepo.todosConsultado(idPartida)) {
-				partidaRepo.deleteRespuestasPartida(idPartida);
+				/*partidaRepo.deleteRespuestasPartida(idPartida);
 				partidaRepo.deleteJugadoresPartida(idPartida);
 				partidaRepo.deleteHilosPartida(idPartida);
-				partidaRepo.deletePartida(idPartida);
+				partidaRepo.deletePartida(idPartida);*/
+				Partida par = partidaRepo.findById(idPartida);
+				par.setEstado_(DemoApplication.ACABADA);
+				partidaRepo.save(par);
 				puntosRepo.delete(idPartida);
 			}if(p !=null) {
 				resp.add(p.calcularEstrellas());

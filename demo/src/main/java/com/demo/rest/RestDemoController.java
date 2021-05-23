@@ -112,7 +112,9 @@ public class RestDemoController {
 			u.setMail(mail);
 			
 			
+
 			  MessageDigest digest = null;
+
 			try {
 				digest = MessageDigest.getInstance("SHA-512");
 			} catch (NoSuchAlgorithmException e1) {
@@ -159,7 +161,9 @@ public class RestDemoController {
 		System.out.println(usuario.getPassword());
 		if(u !=null){
 			
+
 			  MessageDigest digest = null;
+
 				try {
 					digest = MessageDigest.getInstance("SHA-512");
 				} catch (NoSuchAlgorithmException e1) {
