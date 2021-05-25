@@ -276,24 +276,22 @@ public class GameService {
 		
 		if(turnoDespues > turnoAntes) {
 			ponerTimer(p.getId());
-		}
-		if(p.getEstado_().equals(DemoApplication.VOTANDO)&&!p.isIni()) {
-			
-			
-			System.out.println("INICIALIZAMOS");
-			p.setIni(true);
-			partidaRepo.save(p);
-			puntosRepo.ini(p);
-		}
-		if(h==null) {
+		}if(h==null) {
 			return false;
 		}else {
 			r.setHilo(h);
 			respuestaRepo.save(r);
 			hiloRepo.save(h);
+			if(p.getEstado_().equals(DemoApplication.VOTANDO)&&!p.isIni()) {
+				System.out.println("INICIALIZAMOS");
+				p.setIni(true);
+				puntosRepo.ini(p);
+			}
 			partidaRepo.save(p);
 			return true;
 		}
+		
+		
 	}
 	
 	public byte[] getImageResponse(int idFoto) {
