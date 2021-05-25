@@ -277,8 +277,12 @@ public class GameService {
 		if(turnoDespues > turnoAntes) {
 			ponerTimer(p.getId());
 		}
-		if(p.getEstado_().equals(DemoApplication.VOTANDO)) {
+		if(p.getEstado_().equals(DemoApplication.VOTANDO)&&!p.isIni()) {
+			
+			
 			System.out.println("INICIALIZAMOS");
+			p.setIni(true);
+			partidaRepo.save(p);
 			puntosRepo.ini(p);
 		}
 		if(h==null) {

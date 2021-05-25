@@ -65,11 +65,20 @@ public class Partida {
 	private int id_;
 	private String nombre_;
 	private int nJugadores_;
+	private boolean ini;
 	
 	
 	
 	
 	
+	
+
+	public boolean isIni() {
+		return ini;
+	}
+	public void setIni(boolean ini) {
+		this.ini = ini;
+	}
 
 	@ManyToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER) //Antes era EAGER (con lazy van los puntos)
 	@JoinTable(
