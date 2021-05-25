@@ -104,8 +104,10 @@ public class GameService {
 						Invitaciones i = invitacionesRepo.findByPartidaAndInvitado(partida,u);
 						System.out.println(i);
 						
-						invitacionesRepo.delete(i);
+						
+						
 						partidaRepo.save(partida);
+						invitacionesRepo.delete(i);
 						System.out.println("Añadido correctamente");
 						return true;
 					}else {
@@ -133,10 +135,8 @@ public class GameService {
 		Usuario u = usuarioRepo.findByMail(identificador);
 		List<Partida> respuesta = new ArrayList<Partida>();
 		for (Partida p : u.getPartidas()) {
-			if(!p.getEstado_().equals(DemoApplication.ACABADA)) {
-				p.setNull();
-				respuesta.add(p);
-			}
+			p.setNull();
+			respuesta.add(p);
 		}
 		return respuesta;
 	}
@@ -239,7 +239,7 @@ public class GameService {
 		Partida p = partidaRepo.findById(idPartida);
 		if(p.getHost_().getMail().equals(identificador) && p !=null) {
 			//Eres el host
-			if(p.getEstado_().equals(DemoApplication.ESPERANDO)) {
+			if(p.getEstado_().equals(DemoApplication.ESPERANDO) && p.getnJugadores_() >= DemoApplication.MIN_JUGADORES) {
 				//Esta sin empezar
 				p.empezarPartida();
 				partidaRepo.save(p);
@@ -247,6 +247,9 @@ public class GameService {
 				invitacionesRepo.deleteAll(invitacionesRepo.findByPartida(p)); //Eliminamos invitaciones pendientes
 				//Notificar a todos de que ha empezado 
 				return 0;
+			}else if (p.getnJugadores_() < DemoApplication.MIN_JUGADORES){
+				//No se ha alcanzado el mínimo de jugadores
+				return 3;
 			}
 			else {
 				//Ya está empezada
@@ -375,23 +378,28 @@ public class GameService {
 	}
 
 	public List<Integer> puntosJugador(int idPartida, String identificador) {
-		Usuario u2 = new Usuario(usuarioRepo.findByMail(identificador));
+		Usuario u2 = usuarioRepo.findByMail(identificador);
+		//System.out.println(u2);
 		if(puntosRepo.todosVotado(idPartida) && partidaRepo.findById(idPartida) != null) {
 			Puntos p = puntosRepo.getPuntosJugador(idPartida, identificador);
+			System.out.println(usuarioRepo.findByMail(identificador).getPassword());
 			List<Integer> resp = new ArrayList<>();
 			if(puntosRepo.todosConsultado(idPartida)) {
-				/*partidaRepo.deleteRespuestasPartida(idPartida);
+				partidaRepo.deleteRespuestasPartida(idPartida);
 				partidaRepo.deleteJugadoresPartida(idPartida);
 				partidaRepo.deleteHilosPartida(idPartida);
-				partidaRepo.deletePartida(idPartida);*/
-				Partida par = partidaRepo.findById(idPartida);
-				par.setEstado_(DemoApplication.ACABADA);
-				partidaRepo.save(par);
+				partidaRepo.deletePartida(idPartida);
+				//Partida par = partidaRepo.findById(idPartida);
+				//par.setEstado_(DemoApplication.ACABADA);
+				//partidaRepo.save(par);
 				puntosRepo.delete(idPartida);
 			}if(p !=null) {
 				resp.add(p.calcularEstrellas());
 				resp.add(p.calcularMonedas());
 			}
+			u2.setPuntos(u2.getpGracioso()+p.getpGracioso_(), u2.getpListo()+p.getpListo_(), u2.getpDibujo()+p.getpDibujo_(),
+					     u2.getEstrellas()+p.calcularEstrellas(), u2.getMonedas()+p.calcularMonedas());
+			
 			usuarioRepo.save(u2);
 			return resp;	
 		}else {
@@ -405,15 +413,6 @@ public class GameService {
 		if(/*puntosRepo.todosVotado(idPartida) &&*/ partidaRepo.findById(idPartida) != null) { //Si han votado todos
 			
 			List<Puntos> p = puntosRepo.getPuntosPartida(idPartida,identificador);
-			
-			if(puntosRepo.todosConsultado(idPartida)) {
-				/*
-				partidaRepo.deleteRespuestasPartida(idPartida);
-				partidaRepo.deleteJugadoresPartida(idPartida);
-				partidaRepo.deleteHilosPartida(idPartida);
-				partidaRepo.deletePartida(idPartida);*/
-				//puntosRepo.delete(idPartida);
-			}
 			return p;
 		}else {
 			//no han votado todos o nos hemos funao la partida
