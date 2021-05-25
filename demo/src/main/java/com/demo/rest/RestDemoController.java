@@ -473,6 +473,8 @@ public class RestDemoController {
 		}
 		else if(1==aux){ //Partida empezada
 			return new ResponseEntity<String>(HttpStatus.SERVICE_UNAVAILABLE); //503
+		}else if(3==aux){ //No se llega al minimo
+			return new ResponseEntity<String>(HttpStatus.LOCKED); //423
 		}else { //No eres el host
 			return new ResponseEntity<String>(HttpStatus.EXPECTATION_FAILED);
 		}

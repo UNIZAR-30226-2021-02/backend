@@ -135,10 +135,8 @@ public class GameService {
 		Usuario u = usuarioRepo.findByMail(identificador);
 		List<Partida> respuesta = new ArrayList<Partida>();
 		for (Partida p : u.getPartidas()) {
-			if(!p.getEstado_().equals(DemoApplication.ACABADA)) {
-				p.setNull();
-				respuesta.add(p);
-			}
+			p.setNull();
+			respuesta.add(p);
 		}
 		return respuesta;
 	}
@@ -241,7 +239,7 @@ public class GameService {
 		Partida p = partidaRepo.findById(idPartida);
 		if(p.getHost_().getMail().equals(identificador) && p !=null) {
 			//Eres el host
-			if(p.getEstado_().equals(DemoApplication.ESPERANDO)) {
+			if(p.getEstado_().equals(DemoApplication.ESPERANDO) && p.getnJugadores_() >= DemoApplication.MIN_JUGADORES) {
 				//Esta sin empezar
 				p.empezarPartida();
 				partidaRepo.save(p);
@@ -249,6 +247,9 @@ public class GameService {
 				invitacionesRepo.deleteAll(invitacionesRepo.findByPartida(p)); //Eliminamos invitaciones pendientes
 				//Notificar a todos de que ha empezado 
 				return 0;
+			}else if (p.getnJugadores_() < DemoApplication.MIN_JUGADORES){
+				//No se ha alcanzado el mínimo de jugadores
+				return 3;
 			}
 			else {
 				//Ya está empezada

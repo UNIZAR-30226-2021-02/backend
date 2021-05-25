@@ -16,10 +16,11 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class DemoApplication {
 
 	public static final int  MAX_JUGADORES = 10;
+	public static final int  MIN_JUGADORES = 3;
 	public static String ESPERANDO = "esperando";
 	public static String JUGANDO = "jugando";
 	public static String VOTANDO = "votando";
-	public static String ACABADA = "acabada";
+	//public static String ACABADA = "acabada";
 	
 	public static void main(String[] args){
 		
