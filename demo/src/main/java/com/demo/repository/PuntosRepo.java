@@ -135,13 +135,13 @@ public class PuntosRepo {
 	
 	
 	public Puntos getPuntosJugador(int idPartida, String idUsuario) {
-		Usuario u = new Usuario();
+		//Usuario u = new Usuario();
 		for (Puntos p : puntos_) {
 			if(p.getIdPartida_()==idPartida && p.getIdUsuario_().getMail().equals(idUsuario)) {
 				p.setConsultado(true);
-				u = usuarioRepo.findByMail(p.getIdUsuario_().getMail());
-				u.setNull();
-				p.setIdUsuario_(u);
+				//u = usuarioRepo.findByMail(p.getIdUsuario_().getMail());
+				//u.setNull();
+				//p.setIdUsuario_(u);
 				return p;
 			}
 		}
@@ -197,14 +197,14 @@ public class PuntosRepo {
 		List<Puntos> borrados = new ArrayList<Puntos>();
 		for(Puntos p : puntos_) {
 			if(p.getIdPartida_()==idPartida) {
-				Usuario u = usuarioRepo.findByMail(p.getIdUsuario_().getMail());
-				System.out.println(p.getIdUsuario_());
+				//Usuario u = usuarioRepo.findByMail(p.getIdUsuario_().getMail());
+				System.out.println(p.getIdUsuario_());/*
 				u.setpGracioso(u.getpGracioso()+p.getpGracioso_());
 				u.setpListo(u.getpListo()+p.getpListo_());
 				u.setpDibujo(u.getpDibujo()+p.getpDibujo_());
 				u.setEstrellas(u.getEstrellas()+p.calcularEstrellas());
 				u.setMonedas(u.getMonedas()+p.calcularMonedas());
-				usuarioRepo.save(u);
+				usuarioRepo.save(u);*/
 				borrados.add(p);			
 			}
 		}

@@ -140,8 +140,8 @@ public class Usuario {
 	@ManyToMany(fetch = FetchType.EAGER)
 		@JoinTable(
 		        name = "desbloqueadas",
-		        joinColumns = @JoinColumn(name = "foto", nullable = false),
-		        inverseJoinColumns = @JoinColumn(name="usuario", nullable = false)
+		        joinColumns = @JoinColumn(name = "usuario", nullable = false),
+		        inverseJoinColumns = @JoinColumn(name="foto", nullable = false)
 		    )
 
 		private List<Foto> fotos = new ArrayList<>();
@@ -390,5 +390,6 @@ public class Usuario {
 		this.role = u.role;
 		this.estrellas = u.estrellas;
 		this.fotos = u.fotos;
+		this.amigo = u.amigo;
 	}
 }
