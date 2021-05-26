@@ -153,7 +153,6 @@ public class RestDemoController {
 	public ResponseEntity<Usuario> login(@RequestBody Usuario usuario) {
 	
 		Usuario u = usuarioRepo.findByMail(usuario.getMail());
-		System.out.println(usuario.getPassword());
 		if(u !=null){
 			
 
@@ -178,8 +177,6 @@ public class RestDemoController {
 				service.loadUserByUsername(u.getNombre());
 				
 				System.out.println("Logeado correctamente");
-				System.out.println(u.getPassword());
-				System.out.println(usuario.getPassword());
 				
 						String token = jwt.getJWTToken(u.getMail());
 
@@ -224,7 +221,6 @@ public class RestDemoController {
 		String mail = usuario.getMail();
 		Usuario amigo = usuarioRepo.findByMail(mail);
 		Usuario tu = usuarioRepo.findByMail(identificador);
-		System.out.println(identificador);
 		
 		
 		
@@ -244,7 +240,6 @@ public class RestDemoController {
 		String mail = usuario.getMail();
 		Usuario amigo = usuarioRepo.findByMail(mail);
 		Usuario tu = usuarioRepo.findByMail(identificador);
-		System.out.println(identificador);
 		
 		
 		tu.deletePeticion(amigo);
@@ -279,7 +274,6 @@ public class RestDemoController {
 		String nombreUsuario = usuario.getMail();
 		Usuario destino = usuarioRepo.findByMail(nombreUsuario);
 		Usuario tu = usuarioRepo.findByMail(identificador);
-		System.out.println(identificador);
 		
 		
 		if(nombreUsuario.equals(identificador)) {
@@ -304,9 +298,6 @@ public class RestDemoController {
 		}else {
 			return new ResponseEntity<Usuario>(HttpStatus.METHOD_NOT_ALLOWED);
 		}
-
-		
-		
 	}
 	
 	
@@ -317,7 +308,6 @@ public class RestDemoController {
 		String nombreUsuario = usuario.getMail();
 		Usuario amigo = usuarioRepo.findByMail(nombreUsuario);
 		Usuario tu = usuarioRepo.findByMail(identificador);
-		System.out.println(identificador);
 		
 		
 		
@@ -346,7 +336,6 @@ public class RestDemoController {
 		String fotoo = "/profilePictures/"+idFoto;
 		InputStream in = getClass().getResourceAsStream(fotoo);
 		if(in!=null) {
-		System.out.println(fotoo);
 		byte[] image = IOUtils.toByteArray(in);
 
 		return new ResponseEntity<byte[]>(image,HttpStatus.OK);

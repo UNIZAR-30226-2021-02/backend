@@ -172,7 +172,6 @@ public class Partida {
 	
 	public int getHiloJugador(String jugador) {
 		for(int i=0;i<nJugadores_;i++) {
-			System.out.println(hilos_[i].getJugadorInicial_().getMail());
 			if(hilos_[i].getJugadorInicial_().getMail().equals(jugador)) {
 				return i;
 				

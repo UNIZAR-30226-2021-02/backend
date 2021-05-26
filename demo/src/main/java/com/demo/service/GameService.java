@@ -213,11 +213,7 @@ public class GameService {
 		System.out.println("el usuario "+u.getNombre()+" tiene "+u.getnAmigos()+" amigos");
 		System.out.println("La lista de amigos tiene size:"+amigos.size());
 		for(Usuario a: amigos) {
-			System.out.println("Amigo: " +a.getNombre());
-		}
-		for(Usuario a: amigos) {
 			if(!p.isUser(a.getMail())) {
-				System.out.println("Amigo no en partida: " +a.getNombre());
 				a.setNull();
 				respuesta.add(a);
 			}

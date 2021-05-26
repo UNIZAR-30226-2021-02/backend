@@ -75,8 +75,6 @@ public class PuntosRepo {
 		int bien = 0;
 		Puntos p1 = null,p2 = null;
 		for (Puntos p : puntos_) {
-			System.out.println(p.getIdPartida_());
-			System.out.println(p.getIdUsuario_().getMail());
 			if(p.getIdPartida_()==idPartida && p.getIdUsuario_().getMail().equals(idUsuario)) {
 				p1 = p;
 				bien++;
@@ -85,7 +83,6 @@ public class PuntosRepo {
 				bien++;
 			}
 			if (bien==2) {
-				System.out.println("añado listo");
 				p1.sumarPListo(1);
 				p2.setVotadoListo(true);
 				return true;
@@ -153,8 +150,6 @@ public class PuntosRepo {
 		List<Usuario> jugadores = p.getJugadores_();
 		for(Usuario u : jugadores) {
 			Puntos puntos = new Puntos(idPartida,u);
-			System.out.println(puntos.getIdPartida_());
-			System.out.println(puntos.getIdUsuario_().getMail());
 			puntos_.add(puntos);
 		}
 	}
@@ -163,7 +158,6 @@ public class PuntosRepo {
 		for(Puntos p : puntos_) {
 			if(p.getIdPartida_()==idPartida) {
 				if(!p.votadoTodo()) {
-					System.out.println(p.votadoTodo());
 					return false;
 				}
 			}
@@ -176,12 +170,11 @@ public class PuntosRepo {
 		for(Puntos p : puntos_) {
 			if(p.getIdPartida_()==idPartida) {
 				if(!p.isConsultado()) {
-					System.out.println(p.votadoTodo());
 					return false;
 				}
 			}
 		}
-		System.out.println("Toca funar puntos");
+		System.out.println("Todos han consultado");
 		return true;
 		
 	}
@@ -191,14 +184,11 @@ public class PuntosRepo {
 	
 	
 	public void delete(int idPartida) {
-		for(Puntos p : puntos_) {
-			System.out.println(p.getIdUsuario_()+"--"+p.getIdPartida_());
-		}
 		List<Puntos> borrados = new ArrayList<Puntos>();
 		for(Puntos p : puntos_) {
 			if(p.getIdPartida_()==idPartida) {
 				//Usuario u = usuarioRepo.findByMail(p.getIdUsuario_().getMail());
-				System.out.println(p.getIdUsuario_());/*
+				/*
 				u.setpGracioso(u.getpGracioso()+p.getpGracioso_());
 				u.setpListo(u.getpListo()+p.getpListo_());
 				u.setpDibujo(u.getpDibujo()+p.getpDibujo_());
@@ -209,9 +199,6 @@ public class PuntosRepo {
 			}
 		}
 		puntos_.removeAll(borrados);
-		for(Puntos p1 : puntos_) {
-			System.out.println(p1.getIdUsuario_()+"--"+p1.getIdPartida_());
-		}
 	}
 	
 	public boolean votadoJugador(int idPartida, String identificador) {

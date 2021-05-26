@@ -84,7 +84,7 @@ public class Usuario {
 		this.nAmigos = nAmigos;
 	}
 
-	@ManyToMany(fetch = FetchType.EAGER,cascade = CascadeType.ALL)
+	@ManyToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
 	@JoinTable(
 	        name = "amigos",
 	        joinColumns = @JoinColumn(name = "mailUsuario", nullable = false),
@@ -107,7 +107,6 @@ public class Usuario {
 		 List<Usuario> peticiones = new ArrayList<>();
 			if(this.peticion != null) {
 				for(Usuario a : peticion) {
-					a.printUser();
 					Usuario u = new Usuario();
 					u.setMail(a.getMail());
 					u.setNombre(a.getNombre());
