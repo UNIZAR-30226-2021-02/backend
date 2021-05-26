@@ -144,7 +144,7 @@ public class Partida {
 			return null;
 		}else {
 			hilos_[j].addRespuesta(respuesta);
-			System.out.println("Se añade la respuesta de "+inicial.getNombre()+" al hilo "+hilos_[j]+" en el turno "+turno_);
+			System.out.println("Se añade la respuesta de "+inicial.getNombre()+" al hilo "+j+" en el turno "+turno_);
 			opTurno();
 			return hilos_[j];
 		}

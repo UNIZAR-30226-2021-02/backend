@@ -210,8 +210,12 @@ public class GameService {
 		Usuario u = usuarioRepo.findByMail(identificador);
 		List<Usuario> amigos = u.getAmigo();
 		List<Usuario> respuesta = new ArrayList<>();
+		System.out.println("el usuario "+u.getNombre()+" tiene "+u.getnAmigos()+" amigos");
+		
 		for(Usuario a: amigos) {
 			System.out.println("Amigo: " +a.getNombre());
+		}
+		for(Usuario a: amigos) {
 			if(!p.isUser(a.getMail())) {
 				System.out.println("Amigo no en partida: " +a.getNombre());
 				a.setNull();
@@ -289,6 +293,10 @@ public class GameService {
 	
 	public Respuesta getResponse(String identificador, int idPartida) {
 		Partida p = partidaRepo.findById(idPartida);
+		if(!p.getEstado_().equals(DemoApplication.JUGANDO)) {
+			//No esta empezada
+			return null;
+		}
 		if(p.getEstado_().equals(DemoApplication.VOTANDO)&& puntosRepo.votadoJugador(idPartida,identificador)) {
 			return new Respuesta(-4);
 		}

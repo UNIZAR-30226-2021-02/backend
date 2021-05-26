@@ -531,6 +531,9 @@ public class RestDemoController {
 	public ResponseEntity<Respuesta> getResponse(@RequestHeader String identificador, @RequestHeader int idPartida){
 		
 		Respuesta response = game.getResponse(identificador,idPartida);
+		if(response == null) {
+			return new ResponseEntity<Respuesta>(HttpStatus.EXPECTATION_FAILED);
+		}
 		return new ResponseEntity<Respuesta>(response,HttpStatus.OK);	
 	}
 	
