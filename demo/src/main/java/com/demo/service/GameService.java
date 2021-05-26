@@ -293,7 +293,7 @@ public class GameService {
 	
 	public Respuesta getResponse(String identificador, int idPartida) {
 		Partida p = partidaRepo.findById(idPartida);
-		if(!p.getEstado_().equals(DemoApplication.JUGANDO)) {
+		if(p.getEstado_().equals(DemoApplication.ESPERANDO)) {
 			//No esta empezada
 			return null;
 		}

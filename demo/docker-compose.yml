@@ -2,7 +2,7 @@ version: '3'
 
 services:
   app:
-    image: 'proyectokalboware/app:v1.11.5'
+    image: 'proyectokalboware/app:v1.11.6'
     ports:
             - "443:8080"
 
