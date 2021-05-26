@@ -1,6 +1,7 @@
 package com.demo.model;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -64,6 +65,7 @@ public class Hilo {
 	}
 
 	public List<Respuesta> getRespuestas_() {
+		respuestas_.sort(Comparator.comparingInt(Respuesta::getId_));
 		return respuestas_;
 	}
 
@@ -83,4 +85,6 @@ public class Hilo {
 	public int getSize() {
 		return this.respuestas_.size();
 	}
+	
+	
 }

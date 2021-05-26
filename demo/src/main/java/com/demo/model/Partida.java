@@ -164,7 +164,7 @@ public class Partida {
 			System.out.println("El jugador "+inicial.getNombre()+ " ya ha jugado este turno");
 			return null;
 		}else {
-			System.out.println("El jugador "+inicial.getNombre()+ " va a recibir la respuesta del hilo "+j);
+			System.out.println("El jugador "+inicial.getNombre()+ " va a recibir la respuesta del hilo "+j+" en el turno "+turno_);
 			return hilos_[j];
 		}
 	}

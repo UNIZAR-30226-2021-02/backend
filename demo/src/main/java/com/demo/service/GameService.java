@@ -211,7 +211,7 @@ public class GameService {
 		List<Usuario> amigos = u.getAmigo();
 		List<Usuario> respuesta = new ArrayList<>();
 		System.out.println("el usuario "+u.getNombre()+" tiene "+u.getnAmigos()+" amigos");
-		
+		System.out.println("La lista de amigos tiene size:"+amigos.size());
 		for(Usuario a: amigos) {
 			System.out.println("Amigo: " +a.getNombre());
 		}

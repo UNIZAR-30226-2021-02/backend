@@ -105,6 +105,12 @@ public class Respuesta {
 	
 	public Respuesta() {};
 
-
+	public int compareTo(Respuesta r) {
+	    if (id_ == r.id_) {
+	      return 0;
+	    }
+	    return id_.compareTo(r.id_);
+	  }
+	
 	
 }
