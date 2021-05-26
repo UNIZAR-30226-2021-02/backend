@@ -56,10 +56,6 @@ public class GameService {
 	
 	
 	public void ponerTimer(int idPartida) {
-			
-			
-			
-			System.out.println("LLAMAMOS A PONER TIMER");
 			MyThread t = threads.get(idPartida);
 			if(t!=null) {
 				System.out.println("Despertamos el thread");
@@ -67,10 +63,6 @@ public class GameService {
 			}
 			t = new MyThread("nombre",idPartida);
 			threads.put(idPartida, t);	
-			
-		
-			
-			
 		}
 	
 
@@ -99,13 +91,8 @@ public class GameService {
 					if(! partida.isUser(identificador)) {
 						Usuario u = usuarioRepo.findByMail(identificador);
 						partida.addJugador(u);
-											
-						
 						Invitaciones i = invitacionesRepo.findByPartidaAndInvitado(partida,u);
-						System.out.println(i);
-						
-						
-						
+						//System.out.println(i);
 						partidaRepo.save(partida);
 						invitacionesRepo.delete(i);
 						System.out.println("Añadido correctamente");
@@ -178,7 +165,7 @@ public class GameService {
 		
 		Invitaciones i = invitacionesRepo.findByPartidaAndInvitado(p,u);
 		if(i == null) {
-			System.out.println("Sejodio");
+			System.out.println("No existe esa invitacion");
 		}
 		invitacionesRepo.delete(i);
 	
@@ -224,11 +211,12 @@ public class GameService {
 		List<Usuario> amigos = u.getAmigo();
 		List<Usuario> respuesta = new ArrayList<>();
 		for(Usuario a: amigos) {
+			System.out.println("Amigo: " +a.getNombre());
 			if(!p.isUser(a.getMail())) {
+				System.out.println("Amigo no en partida: " +a.getNombre());
 				a.setNull();
 				respuesta.add(a);
 			}
-		
 		}
 		return respuesta;
 	}
@@ -263,7 +251,6 @@ public class GameService {
 	
 	public boolean addRespuesta(int idPartida, String autor,byte[] contenido,boolean dibujo, String frase){
 		Respuesta r;
-		System.out.println(contenido);
 		Partida p=partidaRepo.findById(idPartida);
 		Usuario u = usuarioRepo.findByMail(autor);
 		r= new Respuesta(u,contenido,dibujo,frase);
@@ -275,6 +262,7 @@ public class GameService {
 		int turnoDespues = p.getTurno();
 		
 		if(turnoDespues > turnoAntes) {
+			System.out.println("Ponemos timer en partida: "+idPartida);
 			ponerTimer(p.getId());
 		}if(h==null) {
 			return false;
@@ -283,7 +271,7 @@ public class GameService {
 			respuestaRepo.save(r);
 			hiloRepo.save(h);
 			if(p.getEstado_().equals(DemoApplication.VOTANDO)&&!p.isIni()) {
-				System.out.println("INICIALIZAMOS");
+				System.out.println("Inicializamos puntos de la partida: "+idPartida);
 				p.setIni(true);
 				puntosRepo.ini(p);
 			}
@@ -301,7 +289,6 @@ public class GameService {
 	
 	public Respuesta getResponse(String identificador, int idPartida) {
 		Partida p = partidaRepo.findById(idPartida);
-		System.out.println(p.getTurno());
 		if(p.getEstado_().equals(DemoApplication.VOTANDO)&& puntosRepo.votadoJugador(idPartida,identificador)) {
 			return new Respuesta(-4);
 		}
@@ -343,7 +330,6 @@ public class GameService {
 			}
 			return resultado;
 		}else {
-			System.out.println("CAGASTE");
 			return false;
 		}
 }
@@ -358,7 +344,6 @@ public class GameService {
 				//p.setEstado_(DemoApplication.ACABADA);
 				partidaRepo.save(p);
 			}
-			System.out.println("hoola");
 			return resultado;
 		}else {
 			return false;
@@ -384,7 +369,6 @@ public class GameService {
 		//System.out.println(u2);
 		if(puntosRepo.todosVotado(idPartida) && partidaRepo.findById(idPartida) != null) {
 			Puntos p = puntosRepo.getPuntosJugador(idPartida, identificador);
-			System.out.println(usuarioRepo.findByMail(identificador).getPassword());
 			List<Integer> resp = new ArrayList<>();
 			if(puntosRepo.todosConsultado(idPartida)) {
 				partidaRepo.deleteRespuestasPartida(idPartida);
@@ -457,7 +441,6 @@ public class GameService {
 		Foto f = fotoRepo.findByIdFoto(idFoto);
 		
 		if(u.getMonedas()>=f.getPrecio()&&u.noComprada(f)) {
-			
 			u.setMonedas(u.getMonedas()-f.getPrecio());
 			u.addFoto(f);
 			usuarioRepo.save(u);
@@ -470,7 +453,6 @@ public class GameService {
 	public boolean cambiarFoto(String identificador, String idFoto) {
 		Usuario u = usuarioRepo.findByMail(identificador);
 		Foto f = fotoRepo.findByIdFoto(idFoto);
-		
 		if(!u.noComprada(f)) {
 			u.setFotPerf(idFoto);
 			usuarioRepo.save(u);
@@ -486,22 +468,14 @@ public class GameService {
 	public void ponerRespuestasDefault(int idPartida) {
 		Partida p = partidaRepo.findById(idPartida);
 		for(Usuario u: p.getJugadores_()) {
-					
 			if(!p.turnoJugado(u.getMail())) {
-				Respuesta r;
+				System.out.println(u.getNombre()+" inserta respuestaDefault en partida: " +p.getNombre()+ " con id:"+idPartida);
 				if(p.getTurno()%2==0) {
-						
 					addRespuesta(p.getId(),u.getMail(),null,false,"Nadie ha respondido");
-			
-				}
-				else {
-					
+				}else {	
 					addRespuesta(p.getId(),u.getMail(),null,true,null);
-				
 				}
-				
 			}
-	
 		}	
 	}
 	
@@ -556,17 +530,10 @@ public class GameService {
 	        try {
 				Thread.sleep(delayPrueba);
 				System.out.println("TIEMPO TERMINADO PARTIDA:" +idPartida);
-				
-				
 				ponerRespuestasDefault(idPartida);
-				
-				
-				
 			} catch (InterruptedException e) {
 				System.out.println("Nos lo hemos funao");
-				
 			}
-	        	        	        
 	    }
 	  
 	    // for stopping the thread

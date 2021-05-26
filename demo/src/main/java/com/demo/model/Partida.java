@@ -135,17 +135,16 @@ public class Partida {
 		int i = getHiloJugador(idUser);
 		if(i==-1) {
 			//El jugador no pertenece a la partida (no tiene hilo)
+			System.out.println("El jugador no esta en la partida, devuelvo hilo null");
 			return null;
 		}
 		int j = (i+turno_)%nJugadores_;
-		System.out.println("------");
-		System.out.println("HiloJug:"+i+"  HiloTurno:"+j+"  Turno:"+turno_);
-		System.out.println("------");
 		if(hilos_[j].getSize()>turno_) {
-			System.out.println("Hilo size mayor :"+hilos_[j].getSize());
+			System.out.println("El tamaño del hilo "+j+ " es mayor que el turno ("+hilos_[j].getSize()+" > "+turno_+")");
 			return null;
 		}else {
 			hilos_[j].addRespuesta(respuesta);
+			System.out.println("Se añade la respuesta de "+inicial.getNombre()+" al hilo "+hilos_[j]+" en el turno "+turno_);
 			opTurno();
 			return hilos_[j];
 		}
@@ -157,15 +156,15 @@ public class Partida {
 		int i = getHiloJugador(idUser);
 		if(i==-1) {
 			//El jugador no pertenece a la partida (no tiene hilo)
+			System.out.println("El jugador "+inicial.getNombre()+" no está en la partida");
 			return null;
 		}
 		int j = (i+turno_)%nJugadores_;
-		System.out.println("------");
-		System.out.println("HiloJug:"+i+"  HiloTurno:"+j+"  Turno:"+turno_);
-		System.out.println("------");
 		if(turnoJugado(idUser)) {
+			System.out.println("El jugador "+inicial.getNombre()+ " ya ha jugado este turno");
 			return null;
 		}else {
+			System.out.println("El jugador "+inicial.getNombre()+ " va a recibir la respuesta del hilo "+j);
 			return hilos_[j];
 		}
 	}
@@ -175,7 +174,6 @@ public class Partida {
 		for(int i=0;i<nJugadores_;i++) {
 			System.out.println(hilos_[i].getJugadorInicial_().getMail());
 			if(hilos_[i].getJugadorInicial_().getMail().equals(jugador)) {
-				System.out.println("Hilo inicial:"+i);
 				return i;
 				
 			}
@@ -292,17 +290,12 @@ public class Partida {
 				this.estado_=DemoApplication.VOTANDO;
 				return;
 			}
+			int aux = turno_;
 			turno_++; //AVISAR A LOS JUGADORES
-		
 			
+			System.out.println("Avanzamos turno: "+aux+" > "+turno_);
 			
-			
-			
-			    
-			
-		}
-		
-		
+		}	
 	}
 	
 	public void empezarPartida() {
@@ -319,10 +312,7 @@ public class Partida {
 
 	public boolean turnoJugado(String idUser) {
 		int i = getHiloJugador(idUser);
-		System.out.println("Hilo del jugador:"+i);
 		int j = (i+turno_)%nJugadores_;
-		System.out.println("Hilo de este turno:"+j);
-		//System.out.println(hilos_[j].getSize());
 		if(hilos_[j].getSize()>turno_) {
 			return true;
 		}else {

@@ -137,7 +137,7 @@ public class Usuario {
 		this.invitaciones = invitaciones;
 	}
 
-	@ManyToMany(fetch = FetchType.EAGER)
+	@ManyToMany(fetch = FetchType.LAZY) //Antes era EAGER
 		@JoinTable(
 		        name = "desbloqueadas",
 		        joinColumns = @JoinColumn(name = "usuario", nullable = false),

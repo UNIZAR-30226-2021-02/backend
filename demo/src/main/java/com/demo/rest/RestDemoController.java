@@ -106,15 +106,10 @@ public class RestDemoController {
 		Usuario u = new Usuario();
 		String nombreUsuario = usuario.getNombre();
 		String mail = usuario.getMail();
-		System.out.println(mail);
 		if(usuarioRepo.findByMail(mail)==null&&usuarioRepo.findByNombre(nombreUsuario)==null) {
 			u.setNombre(nombreUsuario);
 			u.setMail(mail);
-			
-			
-
 			  MessageDigest digest = null;
-
 			try {
 				digest = MessageDigest.getInstance("SHA-512");
 			} catch (NoSuchAlgorithmException e1) {
@@ -137,7 +132,7 @@ public class RestDemoController {
 			u.setToken(usuario.getToken());
 			usuarioRepo.save(u);
 			game.comprarFoto(mail,"foto0.png");
-			System.out.println("Como el usuario no existe, se crea");
+			System.out.println("El usuario no existe, se crea");
 			
 			String token = jwt.getJWTToken(mail);
 			u.setToken(token);
@@ -145,7 +140,7 @@ public class RestDemoController {
 		
 		}
 		else {
-			System.out.println("El usuario ya existe, por lo que no lo creamos");
+			System.out.println("El usuario ya existe, no lo creamos");
 			
 			return new ResponseEntity<Usuario>(HttpStatus.EXPECTATION_FAILED);
 		}
@@ -185,7 +180,6 @@ public class RestDemoController {
 				System.out.println("Logeado correctamente");
 				System.out.println(u.getPassword());
 				System.out.println(usuario.getPassword());
-				System.out.println("---");
 				
 						String token = jwt.getJWTToken(u.getMail());
 
@@ -193,7 +187,6 @@ public class RestDemoController {
 						u.setNull();
 						tokenRepo.addToken(u.getMail(), token);
 						tokenRepo.printTokens();
-						System.out.println("----------------");
 						return new ResponseEntity<Usuario>(u,HttpStatus.OK);
 						
 			}
@@ -538,7 +531,6 @@ public class RestDemoController {
 	public ResponseEntity<Respuesta> getResponse(@RequestHeader String identificador, @RequestHeader int idPartida){
 		
 		Respuesta response = game.getResponse(identificador,idPartida);
-		System.out.println("PUES LLEGAMOS A DEVOLVER");
 		return new ResponseEntity<Respuesta>(response,HttpStatus.OK);	
 	}
 	
