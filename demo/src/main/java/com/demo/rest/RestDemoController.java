@@ -105,6 +105,7 @@ public class RestDemoController {
 		usuario.printUser();
 		Usuario u = new Usuario();
 		String nombreUsuario = usuario.getNombre();
+		if(nombreUsuario.length()>15) return new ResponseEntity<Usuario>(HttpStatus.METHOD_NOT_ALLOWED);		
 		String mail = usuario.getMail();
 		if(usuarioRepo.findByMail(mail)==null&&usuarioRepo.findByNombre(nombreUsuario)==null) {
 			u.setNombre(nombreUsuario);
@@ -369,6 +370,7 @@ public class RestDemoController {
 		
 		Usuario u = usuarioRepo.findByMail(identificador);
 		String nuevoNombre = usuario.getNombre();
+		if(nuevoNombre.length()>15) return new ResponseEntity<Usuario>(HttpStatus.METHOD_NOT_ALLOWED);
 		if(usuarioRepo.findByNombre(nuevoNombre)==null && nuevoNombre != null) {
 			u.setNombre(nuevoNombre);
 			usuarioRepo.save(u);
