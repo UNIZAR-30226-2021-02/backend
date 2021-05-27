@@ -386,9 +386,12 @@ public class GameService {
 			}if(p !=null) {
 				resp.add(p.calcularEstrellas());
 				resp.add(p.calcularMonedas());
-			}
-			u2.setPuntos(u2.getpGracioso()+p.getpGracioso_(), u2.getpListo()+p.getpListo_(), u2.getpDibujo()+p.getpDibujo_(),
+			}if(p.isConsultado()==false) {
+				p.setConsultado(true);
+				u2.setPuntos(u2.getpGracioso()+p.getpGracioso_(), u2.getpListo()+p.getpListo_(), u2.getpDibujo()+p.getpDibujo_(),
 					     u2.getEstrellas()+p.calcularEstrellas(), u2.getMonedas()+p.calcularMonedas());
+			}
+			
 			
 			usuarioRepo.save(u2);
 			return resp;	

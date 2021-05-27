@@ -135,7 +135,6 @@ public class PuntosRepo {
 		//Usuario u = new Usuario();
 		for (Puntos p : puntos_) {
 			if(p.getIdPartida_()==idPartida && p.getIdUsuario_().getMail().equals(idUsuario)) {
-				p.setConsultado(true);
 				//u = usuarioRepo.findByMail(p.getIdUsuario_().getMail());
 				//u.setNull();
 				//p.setIdUsuario_(u);
