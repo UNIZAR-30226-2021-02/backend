@@ -535,7 +535,7 @@ public class GameService {
 	    	long delay = 86400000;
 			long delayPrueba = 600000;
 	        try {
-				Thread.sleep(delayPrueba);
+				Thread.sleep(delay);
 				System.out.println("TIEMPO TERMINADO PARTIDA:" +idPartida);
 				ponerRespuestasDefault(idPartida);
 			} catch (InterruptedException e) {
